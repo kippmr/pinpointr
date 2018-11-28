@@ -1,6 +1,8 @@
 Your workflow should look like the following:
     - Switch to your dev-branch
         - Code a bunch of stuff
+        - Add for tracking: 
+            - git add * 
     - git commit -m "commit message"
     - git push
     - pull request to merge into all-dev (this can be done on the github webpage, a link should be provided for you after you push)
