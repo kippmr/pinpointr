@@ -66,32 +66,90 @@ With an ever-expanding campus it is difficult for custodial staff to know where 
 \end{block}
 
 \begin{block}{Pinpointr}
+What is Pinpointr?
+\begin{itemize}
+\item Integrated solution for managing waste on campus
+\item Tools for anyone on campus to report environmental hazards by sending a photo
+\item Map of hazard locations and alerts sent to appropriate staff to deal with the hazards
+\end{itemize}
+Software Goals
+\begin{itemize}
+\item Classify type of hazard, and get a location from a received image
+\item Plot image location on map if it is within campus bounds
+\item Alert faculty of issue 
+\end{itemize}
+Overall Goals
+\begin{itemize}
+\item Decrease response time for dealing with environmental hazards
+\item Provided a better work metric for janitorial staff
+\item Identify problem areas around campus, so steps can be taken to add more waste disposal options
+\item Identify common sources of waste that originate on campus, so steps can be taken to reduce unnecessary packaging or transition to more environmentally friendly options
+\item Reduce the amount of waste on campus by promoting awareness amongst the user base
+\end{itemize}
+\end{block}
+
+\begin{block}{Flowchart}
 
 \end{block}
 
-\begin{block}{Object Recognition with TensorFlow}
-
-\end{block}
-
-\begin{block}{Example 1}
-
+\begin{block}{User Adoption}
+Phase 1
+\begin{itemize}
+\item Beta version of an app for uploading and classifying photos, locating them on a map
+\item Small team of testers to determine the ease of use of the app, identify bugs on the users side
+\end{itemize}
+Phase 2
+\begin{itemize}
+\item Release revised Pinpointr app 
+\item A small team of janitorial staff testing the software to see if it makes their work easier or more efficient, and identifying any existing bugs or improvements that can be made on the staff side
+\end{itemize}
+Phase 3
+\begin{itemize}
+\item Multiple platforms for sending pictures (Text, Twitter, App)
+\item Greater adoption by janitorial staff
+\end{itemize}
+Phase 4
+\begin{itemize}
+\item Promotion and incentives for downloading the app and reporting environmental hazards, increasing the user base
+\item Use derived metrics from the app to inform and improve purchasing decisions for other staff on campus
+\end{itemize}
 \end{block}
 \end{textblock}
 
 
 
 \begin{textblock}{7.25}(8.25,3.1)
-\begin{block}{User Adoption}
-
+\begin{block}{Object Recognition with TensorFlow}
+Tensor Flow
+\begin{itemize}
+\item Built by Google Brain, Tensorflow is an open-source combines several machine learning and deep learning models and algorithms.
+\item C++ back end, Python front end.
+\end{itemize}
+MobileNets
+\begin{itemize}
+\item TFLite (“Tensorflow Lite”) models such as MobileNets provide low-latency, on-device machine learning inference requiring minimal storage space, optimal for mobile devices. 
+\item The model is stored client-side (Android/iOS app) in a single .PB graph file, allowing image classification without server-side processing. 
+\item MobileNets model provides a lightweight, yet powerful model with training methodology based on convolutional neural network architecture.
+\end{itemize}
+TensorBoard
+\begin{itemize}
+\item Data visualization platform for model training. Below, “softmax” represents the final output layer, providing the final object categorization and probability. The bottleneck nodes to the right represent a series of layers created during the training process. 
+\end{itemize}
 \end{block}
-
 
 \begin{block}{Data Science}
 
 \end{block}
 
 \begin{block}{Conclusions \& Future Work}
-
+\begin{itemize}
+\item Created a working AI prototype that can classify differences between glass, plastic, metal cans based on only a small data set.
+\item Display points on map, categorize points in sections of campus or by buildings
+\item Display graduated colour charts to find hot spots around campus
+\item Dynamic heatmaps based on submitted data 
+\item Uses ESRI and ArcGIS services and maps 
+\item Leaflet.js mapping API based interface
+\end{itemize}
 \end{block}
 
 \begin{block}{Acknowledgements}
