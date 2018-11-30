@@ -5,6 +5,7 @@
 \usepackage{graphicx} %for including images
 \graphicspath{{figs/}} %location of images
 \usepackage{wrapfig} %wrap text around the images
+\usepackage{lipsum} %wrap text around the images
 \usepackage{listingsutf8}    %package for code environment; use this instead of verbatim to get automatic line break; use this instead of listings to get (•)
 \usepackage{amsmath}
 \usepackage{gensymb}
@@ -128,32 +129,48 @@ Tensor Flow
 MobileNets
 \begin{itemize}
 \item TFLite (“Tensorflow Lite”) models such as MobileNets provide low-latency, on-device machine learning inference requiring minimal storage space, optimal for mobile devices. 
-\item The model is stored client-side (Android/iOS app) in a single .PB graph file, allowing image classification without server-side processing. 
 \item MobileNets model provides a lightweight, yet powerful model with training methodology based on convolutional neural network architecture.
 \end{itemize}
+\begin{figure}[htbp] %  figure placement: here, top, bottom, or page
+\begin{subfigure}{0.95\textwidth}
+   \centering
+   \includegraphics[height=10cm]{softmax.png}
+   \caption*{\textit{Figure 1:} “softmax” represents the final output layer, providing the final object categorization and probability. The bottleneck nodes to the right represent a series of layers created during the training process.}
+   \label{fig:softmax}
+\end{subfigure}
+\end{figure}
 TensorBoard
 \begin{itemize}
-\item Data visualization platform for model training. Below, “softmax” represents the final output layer, providing the final object categorization and probability. The bottleneck nodes to the right represent a series of layers created during the training process. 
+\item Data visualization tool for model training. Provides a platform for continuous monitoring of model accuracy. 
 \end{itemize}
-\end{block}
-
-\begin{block}{Data Science}
-
+\begin{figure}[htbp] %  figure placement: here, top, bottom, or page
+\begin{subfigure}{0.95\textwidth}
+   \centering
+   \includegraphics[height=10cm]{interface.png}
+   \caption*{\textit{Figure 2:} Tensorboard Interface:  As the training dataset grows and the number of training sessions increases, the accuracy of the model approaches 1, while cross entropy approaches 0.}
+   \label{fig:interface}
+\end{subfigure}
+\end{figure}
 \end{block}
 
 \begin{block}{Conclusions \& Future Work}
+\begin{figure}[htbp] %  figure placement: here, top, bottom, or page
+\begin{subfigure}{0.45\textwidth}
 \begin{itemize}
-\item Created a working AI prototype that can classify differences between glass, plastic, metal cans based on only a small data set.
+\item Created a working AI prototype that can classify differences between glass and plastics based on only a small data set.
 \item Display points on map, categorize points in sections of campus or by buildings
 \item Display graduated colour charts to find hot spots around campus
 \item Dynamic heatmaps based on submitted data 
 \item Uses ESRI and ArcGIS services and maps 
 \item Leaflet.js mapping API based interface
 \end{itemize}
-\end{block}
-
-\begin{block}{Acknowledgements}
-
+\end{subfigure}
+\begin{subfigure}{0.45\textwidth}
+   \centering
+   \includegraphics[height=14.5cm]{pinpointr-map.jpg}
+   \label{fig:map}
+\end{subfigure}
+\end{figure}
 \end{block}
 
 \begin{block}{References}
@@ -176,13 +193,13 @@ TensorBoard
 \end{comment}
 \begin{figure}[htbp]
 \centering
-\includegraphics[height=5cm]{fireball-logo.png}
+\includegraphics[height=5cm]{googlebrain-logo.png}
 \hspace{1cm}
-\includegraphics[height=5cm]{fireball-logo.png}
+\includegraphics[height=5cm]{tensorflow-logo.png}
 \hspace{1cm}
-\includegraphics[height=5cm]{fireball-logo.png}
+\includegraphics[height=5cm]{python-logo.png}
 \hspace{1cm}
-\includegraphics[height=5cm]{fireball-logo.png}
+\includegraphics[height=5cm]{esri-logo.png}
 \end{figure}
 \end{textblock}
 
