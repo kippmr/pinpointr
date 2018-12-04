@@ -66,7 +66,7 @@
 \end{textblock}
 
 \begin{textblock}{3.5}(0.5, 3.1)
-\begin{block}{Introduction}
+\begin{block}{Introduction to Problem}
 Over 2000 Metric tonnes of waste was generated on campus in 2017. To reduce the amount of waste disposed of improperly it’s important to have everyone on campus participate \par
 
 Issues from full garbage cans to broken water fountains can increase the amount of waste generated. \par
@@ -74,7 +74,7 @@ Issues from full garbage cans to broken water fountains can increase the amount 
 To make reporting any environmental hazards or facilities issues on campus easier, we created Pinpointr, an integrated solution for managing waste on campus. 
 \end{block}
 
-\begin{block}{What is Pinpointr?}
+\begin{block}{Solution: Pinpointr}
 Pinpointr is an app that allows anyone on campus to document an issue on campus with a single photo and a button press. The app uses machine learning technology and geolocation to figure out where and what the issue is. From there, it sends an alert to facilities services, so they can create a work order to deal with the issue. It also includes the ability to scan QR codes placed on facilities around campus, in order to report issues with specific trash cans, water fountains, etc.
 \end{block}
 
@@ -89,7 +89,8 @@ Phase 1
 Phase 2
 \begin{itemize}
 \item Release revised Pinpointr app 
-\item A small team of janitorial staff testing the software to see if it makes their work easier or more efficient, and identifying any existing bugs or improvements that can be made on the staff side
+\item A small team of janitorial staff testing the software to see if it makes their work easier or more efficient
+\item Identifying any existing bugs or improvements that can be made on the staff side
 \end{itemize}
 Phase 3
 \begin{itemize}
@@ -116,42 +117,29 @@ Phase 4
 \end{itemize}
 \end{block}
 
-\begin{block}{Conclusions \& Future Work}
+\begin{block}{Other Tools}
 \begin{figure}[htbp] %  figure placement: here, top, bottom, or page
 \begin{itemize}
-\item Create working AI prototype that classifies differences between different waste materials based on only a small data set.
-\item Display points on map, categorize points in sections of campus or by buildings
+\item Need tools to provide visualization of hazards and be deployed over the web
+\item Use ArcGIS and Leaflet to place points on map, categorize points in sections of campus or by buildings
 \begin{figure}
    \centering
-   \includegraphics[height=14.5cm]{pinpointr-map.jpg}
+   \includegraphics[height=20cm]{pinpointr-map.jpg}
    \label{fig:map}
 \end{figure}
-\item Display graduated colour charts to find hot spots around campus
-\item Dynamic heatmaps based on submitted data 
-\item Use ESRI and ArcGIS services and maps 
-\item Leaflet.js mapping API based interface
+\item ESRI provides a ArcGIS javascript API for applying location-based analytics and loading results to the web
+\item Leaflet provides and open-source javascript library for mobile-friendly interactive maps
 \end{itemize}
 \end{figure}
 \end{block}
 
-\begin{block}{References}
-\setbeamertemplate{bibliography item}{\insertbiblabel}
-\bibliographystyle{ieeetr}
-{\scriptsize
-\bibliography{bib}}
-\end{block}
+%\begin{block}{References}
+%\setbeamertemplate{bibliography item}{\insertbiblabel}
+%\bibliographystyle{ieeetr}
+%{\scriptsize
+%\bibliography{bib}}
+%\end{block}
 
-\begin{comment}
-%these aren't in any particular style, it's just the basic idea
-\begin{block}{References}
-\setbeamertemplate{bibliography item}{\insertbiblabel}
-\bibliographystyle{ieeetr}
-{\scriptsize
-\bibliography{bib}}
-\end{block}
-\vspace{-1.8mm}
-%will need some more graphics to thank the various people
-\end{comment}
 \begin{figure}[htbp]
 \centering
 \includegraphics[height=5cm]{googlebrain-logo.png}
@@ -177,12 +165,12 @@ Phase 4
 \begin{block}{Object Recognition with TensorFlow}
 Tensor Flow
 \begin{itemize}
-\item Built by Google Brain, Tensorflow is an open-source combines several machine learning and deep learning models and algorithms.
+\item Built by Google Brain, TensorFlow is an open-source combines several machine learning and deep learning models and algorithms.
 \item C++ back end, Python front end.
 \end{itemize}
 MobileNets
 \begin{itemize}
-\item TFLite (“Tensorflow Lite”) models such as MobileNets provide low-latency, on-device machine learning inference requiring minimal storage space, optimal for mobile devices. 
+\item TFLite (“TensorFlow Lite”) models such as MobileNets provide low-latency, on-device machine learning inference requiring minimal storage space, optimal for mobile devices. 
 \item MobileNets model provides a lightweight, yet powerful model with training methodology based on convolutional neural network architecture.
 \end{itemize}
 \begin{figure}[htbp] %  figure placement: here, top, bottom, or page
