@@ -66,8 +66,8 @@
 \end{textblock}
 
 \begin{textblock}{3.5}(0.5, 3.1)
-\begin{block}{Introduction to Problem}
-Over 2000 Metric tonnes of waste was generated on campus in 2017. To reduce the amount of waste disposed of improperly it’s important to have everyone on campus participate \par
+\begin{block}{Problem: Waste on Campus}
+Over 2000 Metric tonnes of waste was generated on campus in 2017 \cite{mcmasterwaste}. To reduce the amount of waste disposed of improperly it’s important to have everyone on campus participate. \par
 
 Issues from full garbage cans to broken water fountains can increase the amount of waste generated. \par
 
@@ -75,31 +75,33 @@ To make reporting any environmental hazards or facilities issues on campus easie
 \end{block}
 
 \begin{block}{Solution: Pinpointr}
-Pinpointr is an app that allows anyone on campus to document an issue on campus with a single photo and a button press. The app uses machine learning technology and geolocation to figure out where and what the issue is. From there, it sends an alert to facilities services, so they can create a work order to deal with the issue. It also includes the ability to scan QR codes placed on facilities around campus, in order to report issues with specific trash cans, water fountains, etc.
+Pinpointr is an app that allows anyone to document an issue on campus with a single photo and a button press. \par
+The app uses machine learning technology and geolocation to figure out where and what the issue is. From there, it sends an alert to facilities services, so they can create a work order to deal with the issue. \par
+ It also includes the ability to scan QR codes placed on facilities around campus, in order to report issues with specific trash cans, water fountains, etc.
 \end{block}
 
 
 %Could probably cut this down quite a bit
-\begin{block}{User Adoption}
-Phase 1
+\begin{block}{User Adoption Strategy}
+Phase 1 (January 2019)
 \begin{itemize}
-\item Beta version of an app for uploading and classifying photos, locating them on a map
+\item Beta version of app with basic functionality (Upload and Classify photos, display location on map)
 \item Small team of testers to determine the ease of use of the app, identify bugs on the users side
 \end{itemize}
-Phase 2
+Phase 2 (February 2019)
 \begin{itemize}
-\item Release revised Pinpointr app 
-\item A small team of janitorial staff testing the software to see if it makes their work easier or more efficient
-\item Identifying any existing bugs or improvements that can be made on the staff side
+\item Revised Pinpointr app including QR code recognition 
+\item Place QR codes on facilities that may need servicing (Trash bins, water fountains)
+\item A small team of custodial staff testing the software to see if it makes their work easier and more efficient, identify bugs on the staff side
 \end{itemize}
-Phase 3
+Phase 3 (Late February)
 \begin{itemize}
 \item Multiple platforms for sending pictures (Text, Twitter, App)
-\item Greater adoption by janitorial staff
+\item Greater adoption by custodial staff
 \end{itemize}
-Phase 4
+Phase 4 (March 2019)
 \begin{itemize}
-\item Promotion and incentives for downloading the app and reporting environmental hazards, increasing the user base
+\item Promotion, incentives for downloading the app and reporting environmental hazards
 \item Use derived metrics from the app to inform and improve purchasing decisions for other staff on campus
 \end{itemize}
 \end{block}
@@ -110,35 +112,32 @@ Phase 4
 \begin{block}{Overall Goals}
 \begin{itemize}
 \item Decrease response time for dealing with environmental hazards and broken facilities
-\item Provide better work metrics for custodians
 \item Identify problem areas around campus, so steps can be taken to add more waste disposal options
 \item Identify common sources of waste that originate on campus, so steps can be taken to reduce unnecessary packaging or transition to more environmentally friendly options
-\item Reduce the amount of waste on campus by promoting awareness amongst the user base
+\item Reduce the amount of waste on campus by having users participate in keeping the campus clean
 \end{itemize}
 \end{block}
 
 \begin{block}{Other Tools}
-\begin{figure}[htbp] %  figure placement: here, top, bottom, or page
+Tools to help display hazards and their location on the Pinpointr website
 \begin{itemize}
-\item Need tools to provide visualization of hazards and be deployed over the web
-\item Use ArcGIS and Leaflet to place points on map, categorize points in sections of campus or by buildings
-\begin{figure}
-   \centering
-   \includegraphics[height=20cm]{pinpointr-map.jpg}
-   \label{fig:map}
-\end{figure}
-\item ESRI provides a ArcGIS javascript API for applying location-based analytics and loading results to the web
-\item Leaflet provides and open-source javascript library for mobile-friendly interactive maps
+\item ArcGIS and Leaflet to place points on map, categorize points in sections of campus or by buildings
+\item ESRI to provide a ArcGIS javascript API for applying location-based analytics and loading results to the web
+\item Leaflet to provide an open-source javascript library for mobile-friendly interactive maps
 \end{itemize}
-\end{figure}
 \end{block}
 
-%\begin{block}{References}
-%\setbeamertemplate{bibliography item}{\insertbiblabel}
-%\bibliographystyle{ieeetr}
-%{\scriptsize
-%\bibliography{bib}}
-%\end{block}
+\begin{block}{Improvements on Existing Software}
+Litterati is an app with a similar purpose. It tracks litter collected by its users on a map, using user submitted tags to group litter based on the brand and material. The collected data has been used succesfully to justify changes in environmental policy at parks and purchasing decisions at schools \cite{litterati}. /par
+To improve and differentiate our software, we use computer vision to classify the litter rather than relying on user submitted tags. We also integrate alerts into our map feature, allowing us to work directly with custodial staff to clean up our campus.
+\end{block}
+
+\begin{block}{References}
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+\bibliographystyle{ieeetr}
+{\scriptsize
+\bibliography{bib}}
+\end{block}
 
 \begin{figure}[htbp]
 \centering
@@ -162,7 +161,7 @@ Phase 4
 
 
 \begin{textblock}{7.25}(4.375,7.1)
-\begin{block}{Image Classification & Object Recognition with TensorFlow}
+\begin{block}{Image Classification And Object Recognition with TensorFlow}
 TensorFlow
 \begin{itemize}
 \item Built by GoogleBrain, combines several machine-learning models and algorithms into an open-source library.
