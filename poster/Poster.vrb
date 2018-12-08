@@ -1,0 +1,152 @@
+
+\begin{textblock}{2}(0.7,1)
+\includegraphics[height=8.5cm]{englogo.png}
+\end{textblock}
+
+\begin{textblock}{2}(12.7,0.80)
+\includegraphics[height=10.5cm]{fireball-logo.png}
+\end{textblock}
+
+\begin{textblock}{8}(4,1)
+\titlepage
+\end{textblock}
+
+\begin{textblock}{7}(4.25,3.1)
+\begin{figure}[htbp] %  figure placement: here, top, bottom, or page
+ \centering
+\includegraphics[height=20cm]{flowchart.png}
+\end{figure}
+\end{textblock}
+
+\begin{textblock}{3.5}(0.5, 3.1)
+\begin{block}{Introduction to Problem}
+Over 2000 Metric tonnes of waste was generated on campus in 2017. To reduce the amount of waste disposed of improperly it’s important to have everyone on campus participate \par
+
+Issues from full garbage cans to broken water fountains can increase the amount of waste generated. \par
+
+To make reporting any environmental hazards or facilities issues on campus easier, we created Pinpointr, an integrated solution for managing waste on campus.
+\end{block}
+
+\begin{block}{Solution: Pinpointr}
+Pinpointr is an app that allows anyone on campus to document an issue on campus with a single photo and a button press. The app uses machine learning technology and geolocation to figure out where and what the issue is. From there, it sends an alert to facilities services, so they can create a work order to deal with the issue. It also includes the ability to scan QR codes placed on facilities around campus, in order to report issues with specific trash cans, water fountains, etc.
+\end{block}
+
+
+%Could probably cut this down quite a bit
+\begin{block}{User Adoption}
+Phase 1
+\begin{itemize}
+\item Beta version of an app for uploading and classifying photos, locating them on a map
+\item Small team of testers to determine the ease of use of the app, identify bugs on the users side
+\end{itemize}
+Phase 2
+\begin{itemize}
+\item Release revised Pinpointr app
+\item A small team of janitorial staff testing the software to see if it makes their work easier or more efficient
+\item Identifying any existing bugs or improvements that can be made on the staff side
+\end{itemize}
+Phase 3
+\begin{itemize}
+\item Multiple platforms for sending pictures (Text, Twitter, App)
+\item Greater adoption by janitorial staff
+\end{itemize}
+Phase 4
+\begin{itemize}
+\item Promotion and incentives for downloading the app and reporting environmental hazards, increasing the user base
+\item Use derived metrics from the app to inform and improve purchasing decisions for other staff on campus
+\end{itemize}
+\end{block}
+
+\end{textblock}
+
+\begin{textblock}{3.5}(12, 3.1)
+\begin{block}{Overall Goals}
+\begin{itemize}
+\item Decrease response time for dealing with environmental hazards and broken facilities
+\item Provide better work metrics for custodians
+\item Identify problem areas around campus, so steps can be taken to add more waste disposal options
+\item Identify common sources of waste that originate on campus, so steps can be taken to reduce unnecessary packaging or transition to more environmentally friendly options
+\item Reduce the amount of waste on campus by promoting awareness amongst the user base
+\end{itemize}
+\end{block}
+
+\begin{block}{Other Tools}
+\begin{figure}[htbp] %  figure placement: here, top, bottom, or page
+\begin{itemize}
+\item Need tools to provide visualization of hazards and be deployed over the web
+\item Use ArcGIS and Leaflet to place points on map, categorize points in sections of campus or by buildings
+\begin{figure}
+   \centering
+   \includegraphics[height=20cm]{pinpointr-map.jpg}
+   \label{fig:map}
+\end{figure}
+\item ESRI provides a ArcGIS javascript API for applying location-based analytics and loading results to the web
+\item Leaflet provides and open-source javascript library for mobile-friendly interactive maps
+\end{itemize}
+\end{figure}
+\end{block}
+
+%\begin{block}{References}
+%\setbeamertemplate{bibliography item}{\insertbiblabel}
+%\bibliographystyle{ieeetr}
+%{\scriptsize
+%\bibliography{bib}}
+%\end{block}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[height=5cm]{googlebrain-logo.png}
+\hspace{1cm}
+\includegraphics[height=5cm]{tensorflow-logo.png}
+\hspace{1cm}
+\includegraphics[height=5cm]{python-logo.png}
+\hspace{1cm}
+\includegraphics[height=5cm]{esri-logo.png}
+\end{figure}
+
+\end{textblock}
+
+\begin{textblock}{7.25}(0.5,7.1)
+
+
+
+\end{textblock}
+
+
+
+\begin{textblock}{7.25}(4.375,7.1)
+\begin{block}{Object Recognition with TensorFlow}
+Tensor Flow
+\begin{itemize}
+\item Built by Google Brain, TensorFlow is an open-source combines several machine learning and deep learning models and algorithms.
+\item C++ back end, Python front end.
+\end{itemize}
+MobileNets
+\begin{itemize}
+\item TFLite (“TensorFlow Lite”) models such as MobileNets provide low-latency, on-device machine learning inference requiring minimal storage space, optimal for mobile devices.
+\item MobileNets model provides a lightweight, yet powerful model with training methodology based on convolutional neural network architecture.
+\end{itemize}
+\begin{figure}[htbp] %  figure placement: here, top, bottom, or page
+\begin{subfigure}{0.95\textwidth}
+   \centering
+   \includegraphics[height=10cm]{softmax.png}
+   \caption*{\textit{Figure 1:} “softmax” represents the final output layer, providing the final object categorization and probability. The bottleneck nodes to the right represent a series of layers created during the training process.}
+   \label{fig:softmax}
+\end{subfigure}
+\end{figure}
+TensorBoard
+\begin{itemize}
+\item Data visualization tool for model training. Provides a platform for continuous monitoring of model accuracy.
+\end{itemize}
+\begin{figure}[htbp] %  figure placement: here, top, bottom, or page
+\begin{subfigure}{0.95\textwidth}
+   \centering
+   \includegraphics[height=10cm]{interface.png}
+   \caption*{\textit{Figure 2:} Tensorboard Interface:  As the training dataset grows and the number of training sessions increases, the accuracy of the model approaches 1, while cross entropy approaches 0.}
+   \label{fig:interface}
+\end{subfigure}
+\end{figure}
+\end{block}
+\end{textblock}
+
+
