@@ -13,7 +13,7 @@ https://www.tensorflow.org/api_docs/
 - React frontend recieves data via API calls from backend
 - frontend displays Leaflet.js map with ArcGIS
 
-#How to commit
+# How to commit
 Your workflow should look like the following: 
 - Switch to your dev-branch 
 - Code a bunch of stuff 
