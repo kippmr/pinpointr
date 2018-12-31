@@ -26,8 +26,7 @@ Your workflow should look like the following:
 How do I get my branch up to speed when all-dev changes? 
 - git checkout all-dev 
 - git pull 
-- git checkout 
-- dev 
+- git checkout [YOUR BRANCH NAME]
 - git merge all-dev
 
 DO NOT COMMIT TO MASTER OR EVEN THINK ABOUT MASTER. AT THE END OF ALL SPRINTS WE WILL MERGE TO MASTER
