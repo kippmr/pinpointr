@@ -11,7 +11,7 @@ namespace pinpointr.Models
         public RDSContext(DbContextOptions<RDSContext> options) : base(options)
         {
         }
-        public DbSet<user> user { get; set; }
+        public DbSet<User> User { get; set; }
 
     }
 }
