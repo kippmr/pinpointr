@@ -10,19 +10,19 @@ namespace pinpointr.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : Controller
+    public class SubmissionController : Controller
     {
         // initialize database connection
         private readonly RDSContext _context;
-        public UserController(RDSContext context)
+        public SubmissionController(RDSContext context)
         {
             _context = context;
         }
         
         [HttpGet("[action]")]
-        public IEnumerable<User> GetAllUsers()
+        public IEnumerable<Submission> GetAllSubmissions()
         {
-            return _context.User.ToList();
+            return _context.Submission.ToList();
         }
     }
 }
