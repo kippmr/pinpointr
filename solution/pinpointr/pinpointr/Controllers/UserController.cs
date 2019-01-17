@@ -19,10 +19,32 @@ namespace pinpointr.Controllers
             _context = context;
         }
         
+        [HttpGet("[action]/{id}")]
+        public async Task<ActionResult<User>> GetUser(int id)
+        {
+            User user = await _context.User.FindAsync(id);
+
+            if (user == null) {
+                return NotFound();
+            }
+
+            return user;
+        }
+        
         [HttpGet("[action]")]
         public IEnumerable<User> GetAllUsers()
         {
             return _context.User.ToList();
+        }
+        
+        [HttpPut("[action]")]
+        public IActionResult PutUser(User user)
+        {
+            
+            _context.User.Add(user);
+            _context.SaveChanges();
+
+            return CreatedAtAction("GetUser", new { id = 0 }, user);
         }
     }
 }
