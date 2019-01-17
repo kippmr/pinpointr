@@ -19,10 +19,32 @@ namespace pinpointr.Controllers
             _context = context;
         }
         
+        [HttpGet("[action]/{id}")]
+        public async Task<ActionResult<Submission>> GetSubmission(int id)
+        {
+            Submission submission = await _context.Submission.FindAsync(id);
+
+            if (submission == null) {
+                return NotFound();
+            }
+
+            return submission;
+        }
+        
         [HttpGet("[action]")]
         public IEnumerable<Submission> GetAllSubmissions()
         {
             return _context.Submission.ToList();
+        }
+        
+        [HttpPut("[action]")]
+        public IActionResult PutSubmission(Submission submission)
+        {
+            
+            _context.Submission.Add(submission);
+            _context.SaveChanges();
+
+            return CreatedAtAction("GetSubmission", new { id = 0 }, submission);
         }
     }
 }
