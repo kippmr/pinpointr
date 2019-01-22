@@ -6,18 +6,31 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using pinpointr.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
 
 namespace pinpointr.Helpers {
     public class AmazonS3Service
     {
-       private static String accessKey = "YOUR_ACCESS_KEY_ID";
-       private static String accessSecret = "YOUR_SECRET_ACCESS_KEY";
-       private static String bucket = "YOUR_S3_BUCKET";
 
        public static async Task<UploadPhotoModel> UploadObject(IFormFile file)
-       {
+        {
+
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json").Build();
+
+
+            BucketConnection _bucket = new BucketConnection
+            {
+                access_key = config["BucketConnection:access_key"],
+                access_secret = config["BucketConnection:access_secret"],
+                bucket = config["BucketConnection:bucket"]
+            };
+                Debug.WriteLine(_bucket.access_secret);
+
            // connecting to the client
-           var client = new AmazonS3Client(accessKey, accessSecret, Amazon.RegionEndpoint.EUCentral1);
+           var client = new AmazonS3Client(_bucket.access_key, _bucket.access_secret, Amazon.RegionEndpoint.USEast2);
 
            // get the file and convert it to the byte[]
            byte[] fileBytes = new Byte[file.Length];
@@ -32,7 +45,7 @@ namespace pinpointr.Helpers {
            {
                var request = new PutObjectRequest
                {
-                   BucketName = bucket,
+                   BucketName = _bucket.bucket,
                    Key = fileName,
                    InputStream = stream,
                    ContentType = file.ContentType,

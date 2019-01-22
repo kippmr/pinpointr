@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ namespace pinpointr.Controllers
     {
         // initialize database connection
         private readonly RDSContext _context;
+
         public SubmissionController(RDSContext context)
         {
             _context = context;
@@ -49,12 +51,9 @@ namespace pinpointr.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> UploadSubmissionImage() 
+        public async Task<IActionResult> UploadSubmissionImage(IFormFile file) 
         {
-            // I'm getting file inside Request object
-            var file = this.Request.Form.Files[0];
-
-            // File valodation, must be image
+            // File validation, must be image
             if (!file.ContentType.Contains("image"))
             {
                 return BadRequest();
