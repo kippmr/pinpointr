@@ -1,4 +1,3 @@
-using NpgsqlTypes;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -6,28 +5,14 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using pinpointr.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 
 namespace pinpointr.Helpers {
     public class AmazonS3Service
     {
 
-       public static async Task<UploadPhotoModel> UploadObject(IFormFile file)
+       public static async Task<UploadPhotoModel> UploadObject(IFormFile file, BucketConnection _bucket)
         {
-
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json").Build();
-
-
-            BucketConnection _bucket = new BucketConnection
-            {
-                access_key = config["BucketConnection:access_key"],
-                access_secret = config["BucketConnection:access_secret"],
-                bucket = config["BucketConnection:bucket"]
-            };
-                Debug.WriteLine(_bucket.access_secret);
 
            // connecting to the client
            var client = new AmazonS3Client(_bucket.access_key, _bucket.access_secret, Amazon.RegionEndpoint.USEast2);
@@ -57,7 +42,7 @@ namespace pinpointr.Helpers {
 
            if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
            {
-               // this model is up to you, in my case I have to use it following;
+               // success
                return new UploadPhotoModel
                {
                    success = true,
@@ -66,7 +51,7 @@ namespace pinpointr.Helpers {
            }
            else
            {
-               // this model is up to you, in my case I have to use it following;
+               // fail
                return new UploadPhotoModel
                {
                    success = false,
