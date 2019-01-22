@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using pinpointr.Models;
+using pinpointr.Helpers;
 
 namespace pinpointr.Controllers
 {
@@ -45,6 +46,24 @@ namespace pinpointr.Controllers
             _context.SaveChanges();
 
             return CreatedAtAction("GetSubmission", new { id = 0 }, submission);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> UploadSubmissionImage() 
+        {
+            // I'm getting file inside Request object
+            var file = this.Request.Form.Files[0];
+
+            // File valodation, must be image
+            if (!file.ContentType.Contains("image"))
+            {
+                return BadRequest();
+            }
+
+            // Call the upload service
+            var imageResponse = await AmazonS3Service.UploadObject(file);
+
+            return Ok();
         }
     }
 }
