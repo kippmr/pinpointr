@@ -83,7 +83,7 @@ namespace pinpointr.Controllers
             _context.Submission.Add(submission);
             _context.SaveChanges();
 
-            return CreatedAtAction("GetSubmission", new { id = 0 }, submission);
+            return CreatedAtAction("GetSubmission", new { submission.id }, submission);
         }
 
         /// <summary>

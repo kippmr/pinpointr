@@ -8,17 +8,29 @@ using pinpointr.Models;
 
 namespace pinpointr.Controllers
 {
+    /// <summary>
+    /// UserController responsible for handling user endpoints
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : Controller
     {
         // initialize database connection
         private readonly RDSContext _context;
+        /// <summary>
+        /// Create database connection
+        /// </summary>
+        /// <param name="context"></param>
         public UserController(RDSContext context)
         {
             _context = context;
         }
         
+        /// <summary>
+        /// Get a single user given their id
+        /// </summary>
+        /// <param name="id">unique id of user</param>
+        /// <returns>Single User</returns>
         [HttpGet("[action]/{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -31,12 +43,21 @@ namespace pinpointr.Controllers
             return user;
         }
         
+        /// <summary>
+        /// Get list of all users
+        /// </summary>
+        /// <returns>List of Users</returns>
         [HttpGet("[action]")]
         public IEnumerable<User> GetAllUsers()
         {
             return _context.User.ToList();
         }
         
+        /// <summary>
+        /// Add user to database
+        /// </summary>
+        /// <param name="user">contains expected user values</param>
+        /// <returns>Created user</returns>
         [HttpPut("[action]")]
         public IActionResult PutUser(User user)
         {
@@ -44,7 +65,7 @@ namespace pinpointr.Controllers
             _context.User.Add(user);
             _context.SaveChanges();
 
-            return CreatedAtAction("GetUser", new { id = 0 }, user);
+            return CreatedAtAction("GetUser", new { user.id }, user);
         }
     }
 }
