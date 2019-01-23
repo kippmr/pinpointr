@@ -27,6 +27,11 @@ namespace pinpointr
             services.AddDbContext<RDSContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
+            //// Add functionality to inject IOptions<T>
+            //services.AddOptions();
+            ////Add BucketConnection object so it may be injected
+            //services.Configure<BucketConnection>(Configuration.GetSection("BucketConnection"));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // Register the Swagger generator, defining 1 or more Swagger documents

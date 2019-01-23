@@ -12,6 +12,7 @@ namespace pinpointr.Models
         {
         }
         public DbSet<User> User { get; set; }
+        public DbSet<Submission> Submission { get; set; }
 
     }
 }
