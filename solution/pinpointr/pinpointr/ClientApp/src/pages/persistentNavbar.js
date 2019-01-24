@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
@@ -91,10 +91,6 @@ class persistentNavbar extends React.Component {
         this.setState({ open: false });
     };
 
-    log = (text) => {
-        console.log(text);
-    };
-
     render() {
         const { classes, theme } = this.props;
         const { open } = this.state;
@@ -138,13 +134,21 @@ class persistentNavbar extends React.Component {
                     </div>
                     <Divider />
                     <List>
-
+                        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                            <ListItem button key={text}>
+                                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                                <ListItemText primary={text} />
+                            </ListItem>
+                        ))}
                     </List>
                     <Divider />
                     <List>
-                        <ListItem button key='Stats'>
-                            <ListItemText primary='Stats' />
-                        </ListItem>
+                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                            <ListItem button key={text}>
+                                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                                <ListItemText primary={text} />
+                            </ListItem>
+                        ))}
                     </List>
                 </Drawer>
                 <main
