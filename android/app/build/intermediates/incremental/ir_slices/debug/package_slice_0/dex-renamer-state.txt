@@ -1,0 +1,4 @@
+#Thu Jan 24 16:01:33 EST 2019
+base.0=/Users/brandonronald/Desktop/4ZP6-Project/android/tflite/app/build/intermediates/transforms/dexMerger/debug/0
+path.0=classes.dex
+renamed.0=classes.dex
