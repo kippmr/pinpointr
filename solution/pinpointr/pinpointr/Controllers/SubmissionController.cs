@@ -70,18 +70,32 @@ namespace pinpointr.Controllers
         {
             return _context.Submission.ToList();
         }
-        
+
         /// <summary>
         /// Add a submission to the database
+        /// Uploads an image to S3 bucket using unique identifier
         /// </summary>
         /// <param name="submission">contains expected submission values</param>
+        /// <param name="file">image to be uploaded</param>
         /// <returns>Created submission</returns>
-        [HttpPut("[action]")]
-        public IActionResult PutSubmission(Submission submission)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> PostSubmission(Submission submission, IFormFile file)
         {
-            
+            // File validation, must be image
+            if (!file.ContentType.Contains("image"))
+            {
+                return BadRequest();
+            }
+
+            // create unique file name and add to submission entry
+            string fileName = Guid.NewGuid().ToString();
+            submission.image = fileName;
+
             _context.Submission.Add(submission);
             _context.SaveChanges();
+
+
+            var imageResponse = await AmazonS3Service.UploadObject(fileName, file, _bucket);
 
             return CreatedAtAction("GetSubmission", new { submission.id }, submission);
         }
@@ -100,8 +114,11 @@ namespace pinpointr.Controllers
                 return BadRequest();
             }
 
+            // create unique file name and add to submission entry
+            string fileName = Guid.NewGuid().ToString();
+
             // Call the upload service
-            var imageResponse = await AmazonS3Service.UploadObject(file, _bucket);
+            var imageResponse = await AmazonS3Service.UploadObject(fileName, file, _bucket);
 
             return Ok();
         }
