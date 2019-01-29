@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using pinpointr.Models;
 using pinpointr.Helpers;
+using System.Diagnostics;
 
 namespace pinpointr.Controllers
 {
@@ -72,55 +73,42 @@ namespace pinpointr.Controllers
         }
 
         /// <summary>
-        /// Add a submission to the database
-        /// Uploads an image to S3 bucket using unique identifier
+        /// Post submission to S3 bucket and create database entry
         /// </summary>
-        /// <param name="submission">contains expected submission values</param>
+        /// <param name="user_id">id of user submitting</param>
+        /// <param name="coordinates">lat/lon</param>
+        /// <param name="altitude"></param>
+        /// <param name="tags">tags from tensorflow</param>
         /// <param name="file">image to be uploaded</param>
-        /// <returns>Created submission</returns>
+        /// <returns></returns>
         [HttpPost("[action]")]
-        public async Task<IActionResult> PostSubmission(Submission submission, IFormFile file)
+        public async Task<IActionResult> PostSubmission([FromHeader] List<double> coordinates, [FromHeader] List<string> tags, 
+            IFormFile file, [FromHeader] int user_id = 0, [FromHeader] double altitude = 0) 
         {
             // File validation, must be image
             if (!file.ContentType.Contains("image"))
-            {
-                return BadRequest();
-            }
+                return BadRequest("File uploaded must be an image");
+            if (coordinates.Count() != 2)
+                return BadRequest("Must have two coordinates");
 
-            // create unique file name and add to submission entry
-            string fileName = Guid.NewGuid().ToString();
-            submission.image = fileName;
+            Submission submission = new Submission()
+            {
+                user_id = user_id,
+                image = Guid.NewGuid().ToString(),
+                coordinates = new NpgsqlTypes.NpgsqlPoint(coordinates[0], coordinates[1]),
+                altitude = altitude,
+                tags = tags,
+                gen_est = DateTime.Now
+            };
 
             _context.Submission.Add(submission);
+
             _context.SaveChanges();
 
-
-            var imageResponse = await AmazonS3Service.UploadObject(fileName, file, _bucket);
+            // Call the upload service
+            var imageResponse = await AmazonS3Service.UploadObject(submission.image, file, _bucket);
 
             return CreatedAtAction("GetSubmission", new { submission.id }, submission);
-        }
-
-        /// <summary>
-        /// Uploads an image to S3 bucket using unique identifier
-        /// </summary>
-        /// <param name="file">image to be uploaded</param>
-        /// <returns>Success</returns>
-        [HttpPost("[action]")]
-        public async Task<IActionResult> UploadSubmissionImage(IFormFile file) 
-        {
-            // File validation, must be image
-            if (!file.ContentType.Contains("image"))
-            {
-                return BadRequest();
-            }
-
-            // create unique file name and add to submission entry
-            string fileName = Guid.NewGuid().ToString();
-
-            // Call the upload service
-            var imageResponse = await AmazonS3Service.UploadObject(fileName, file, _bucket);
-
-            return Ok();
         }
     }
 }
