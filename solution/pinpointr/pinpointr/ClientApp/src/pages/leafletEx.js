@@ -23,11 +23,11 @@ function LoadLeaflet() {
                 >
                     <TileLayer
                         attribution={stamenTonerAttr}
-                        url={openStreetMapTiles}
+                        url={stamenTonerTiles}
                     />
                 </Map>
             </div>
         );
 }
 
-export default withStyles(styles)(LoadLeaflet);
+export default LoadLeaflet;
