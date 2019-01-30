@@ -14,7 +14,8 @@
     "rimraf": "^2.6.3",
     "leaflet": "^1.4.0",
     "esri-leaflet": "^2.2.3",
-    "recharts": "latest"
+    "recharts": "latest",
+    "react-leaflet": "latest"
   },
   "scripts": {
     "start": "rimraf ./build && react-scripts start",
