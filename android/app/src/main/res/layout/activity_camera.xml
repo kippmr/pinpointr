@@ -14,12 +14,12 @@
  limitations under the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_centerInParent="true"
-    >
+    android:layout_centerInParent="true">
 
     <RelativeLayout
         android:id="@+id/screenLayout_Camera"
@@ -42,8 +42,8 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
-            android:background="?android:attr/listChoiceIndicatorSingle"
             android:clickable="true" />
+
 
     </RelativeLayout>
 
@@ -69,28 +69,64 @@
             android:layout_height="wrap_content"
             />
 
+        <RelativeLayout
+            android:id="@+id/buttonPanel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="120dp">
+
+
         <Button
             android:id="@+id/btnBack"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_width="115dp"
+            android:layout_height="60dp"
             android:layout_alignParentBottom="true"
-
             android:layout_alignParentLeft="true"
-            android:layout_marginBottom="20dp"
             android:layout_marginLeft="20dp"
             android:text="Back"
             android:clickable="true" />
 
-        <Button
-            android:id="@+id/btnSend"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvLabels"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginBottom="60dp"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginRight="20dp"
-            android:text="Send"
-            android:clickable="true" />
+            android:background="@color/control_background"
+            android:visibility="invisible"/>
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/bottom_app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                app:navigationIcon="@drawable/baseline_menu_white_24"/>
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnNavBar_Main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="28dp"
+                android:src="@drawable/baseline_add_white_24"
+                app:layout_anchor="@id/bottom_app_bar" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </RelativeLayout>
 

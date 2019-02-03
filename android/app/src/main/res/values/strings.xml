@@ -21,7 +21,12 @@
     <string name="toggle_turn_on">NN:On</string>
     <string name="toggle_turn_off">NN:Off</string>
     <string name="toggle">Use NNAPI</string>
-
+    <string name="action_favorite">Mark Favorite</string>
+    <string name="action_search">Search</string>
+    <string name="action_settings">Settings</string>
+    <string name="nav_item1">1</string>
+    <string name="nav_item2">1</string>
+    <string name="nav_item3">1</string>
     <string name="title_activity_photo_review">PhotoReviewActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>

@@ -1,16 +1,33 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/brandonronald/Desktop/4ZP6-Project/android/tflite/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml",
+            "outputFile": "/Users/brandonronald/Documents/GitHub/pinpointr/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml",
             "map": [
                 {
-                    "source": "/Users/brandonronald/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.2.0.aar/a0f50a67b47f57d1336414a6386cd7de/res/values-night-v8/values-night-v8.xml",
+                    "source": "/Users/brandonronald/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0-alpha01.aar/0ffc2f15306c1031fdf901756b1f67ee/res/values-night-v8/values-night-v8.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8",
                         "startColumns": "4,4,4,4,4,4,4",
                         "startOffsets": "55,125,209,293,389,491,593",
                         "endColumns": "69,83,83,95,101,101,93",
                         "endOffsets": "120,204,288,384,486,588,682"
+                    }
+                },
+                {
+                    "source": "/Users/brandonronald/.gradle/caches/transforms-1/files-1.1/material-1.1.0-alpha03.aar/9d7a4b9ffd94894f5f6da4b527e7b3b8/res/values-night-v8/values-night-v8.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "55,143,245,347,461,581,701",
+                        "endColumns": "87,101,101,113,119,119,111",
+                        "endOffsets": "138,240,342,456,576,696,808"
+                    },
+                    "to": {
+                        "startLines": "9,10,11,12,13,14,15",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "687,775,877,979,1093,1213,1333",
+                        "endColumns": "87,101,101,113,119,119,111",
+                        "endOffsets": "770,872,974,1088,1208,1328,1440"
                     }
                 }
             ]

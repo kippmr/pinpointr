@@ -20,29 +20,55 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v13.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+//import android.support.v13.app.ActivityCompat;
+
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+
 
 /** Main {@code Activity} class for the Camera app. */
-public class CameraActivity extends Activity {
+public class CameraActivity extends Activity implements MyRecyclerViewAdapter.ItemClickListener{
 
+    /* Screen Controls */
     ImageView imgView_Camera;
     ImageView imgView_Review;
-
     RelativeLayout screenLayout_Camera;
     RelativeLayout screenLayout_Review;
+    RelativeLayout buttonPanel;
 
     Button btnCamera;
     Button btnBack;
-    Button btnSend;
+
+
+
+    FloatingActionButton btnNavBar_Main;
 
     TextView tvLabels;
+    RecyclerView recyclerView;
+
+    ImageData imgData;
+
+    MyRecyclerViewAdapter adapter;
+
+    boolean showLabels;
+
+
 
     public static final int REQUEST_IMAGE = 100;
     public static final int REQUEST_PERMISSION = 200;
@@ -63,18 +89,11 @@ public class CameraActivity extends Activity {
                     .replace(R.id.container, camera2BasicFragment)
                     .commit();
         }
+
+
         locateControls();
-
-
-
-
-        // check permissions
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-                PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    REQUEST_PERMISSION);
-        }
-
+        checkUserPermissions();
+        showLabels = false;
 
         // set button onclick events
         btnCamera.setOnClickListener(new View.OnClickListener() {
@@ -84,12 +103,35 @@ public class CameraActivity extends Activity {
             }
         });
 
+
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switchToCameraScreen();
             }
         });
+
+        btnNavBar_Main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLabels();
+            }
+        });
+
+        ArrayList<String> imgLabels = new ArrayList<>();
+        //TODO move recyclerView data binding to takePhoto() stage
+        imgLabels.add("Label1");
+        imgLabels.add("Label2");
+        imgLabels.add("Label3");
+        imgLabels.add("Label4");
+        imgLabels.add("Label5");
+
+        // set up the RecyclerView
+        recyclerView = findViewById(R.id.rvLabels);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new MyRecyclerViewAdapter(this, imgLabels);
+        adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
 
         // TODO - send button click listener
     }
@@ -102,9 +144,57 @@ public class CameraActivity extends Activity {
         screenLayout_Review = findViewById(R.id.screenLayout_Review);
         btnCamera = findViewById(R.id.btnCamera);
         btnBack = findViewById(R.id.btnBack);
-        btnSend = findViewById(R.id.btnSend);
+
         tvLabels = findViewById(R.id.tvLabels);
+        buttonPanel = findViewById(R.id.buttonPanel);
+        btnNavBar_Main = findViewById(R.id.btnNavBar_Main);
     }
+
+    private void checkUserPermissions(){
+        // check permissions
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_PERMISSION);
+        }
+    }
+
+    private void showLabels(){
+        showLabels = !showLabels;
+        if(showLabels){
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+        else{
+            recyclerView.setVisibility(View.INVISIBLE);
+        }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = this.getMenuInflater();
+        inflater.inflate(R.menu.bottomappbar_menu, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        //TODO nav menu bar item click handler (handle by id)
+        if (item.getItemId() == btnNavBar_Main.getId()){
+
+        }
+
+        return true;
+    }
+
+
+
+    @Override
+    public void onItemClick(View view, int position) {
+        //Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+    }
+
+
 
     private void switchToReviewScreen(){
         screenLayout_Review.setVisibility(View.VISIBLE);
@@ -112,6 +202,7 @@ public class CameraActivity extends Activity {
     }
 
     private void switchToCameraScreen(){
+
         screenLayout_Camera.setVisibility(View.VISIBLE);
         screenLayout_Review.setVisibility(View.INVISIBLE);
     }
@@ -122,20 +213,64 @@ public class CameraActivity extends Activity {
         imgView_Review.setImageBitmap(imgCapture);
     }
 
-    private void setReviewLabels(Camera2BasicFragment fragment){
-        // TODO: this doesn't work
-        //tvLabels.setText(fragment.GetClassifierText());
-    }
+//    private void addLabel(String text, int uniqueID){
+//        // TODO: this doesn't work
+//        //tvLabels.setText(fragment.GetClassifierText());
+//
+//
+//        CheckedTextView ctvLabel = new CheckedTextView(this);
+//        ctvLabel.setChecked(true);
+//        ctvLabel.setText(text);
+//        ctvLabel.setId(uniqueID);
+//        ctvLabel.setTextSize(26);
+//
+//        if (ctvLabel != null) {
+//            ctvLabel.setChecked(false);
+//            ctvLabel.setCheckMarkDrawable(android.R.drawable.checkbox_off_background);
+//
+//            ctvLabel.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    ctvLabel.setChecked(!ctvLabel.isChecked());
+//                    ctvLabel.setCheckMarkDrawable(ctvLabel.isChecked() ? android.R.drawable.checkbox_on_background : android.R.drawable.checkbox_off_background);
+//
+////                    String msg = getString(R.string.pre_msg) + " " + (checkedTextView.isChecked() ? getString(R.string.checked) : getString(R.string.unchecked));
+////                    Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//        }
+//
+//        // Set the label's layout with margins on the side and bottom
+//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//        lp.setMargins(20,5,20,5);
+//        labelList.addView(ctvLabel, lp);
+//
+//
+//    }
 
 
+//    private void clearLabels(){
+//        // TODO clear all labels from labelsList
+//        if((labelList).getChildCount() > 0)
+//            labelList.removeAllViews();
+//    }
+
+
+
+    // capture the
     private void takePhoto(){
 
         // Make a copy of the Camera2BasicFragment as is
         Camera2BasicFragment camera2BasicFragment_copy = camera2BasicFragment;
-        setReviewImage(camera2BasicFragment_copy);
-        //setReviewLabels(camera2BasicFragment_copy);
+
+        Bitmap imgCapture = camera2BasicFragment_copy.getTextureView().getBitmap();
+        imgView_Review.setImageBitmap(imgCapture);
 
 
+        //List<String> imgLabels = Arrays.asList("Label1", "Label2", "Label3", "Label 4");
+
+
+        //addAllLabelsToListView(imgLabels);
         switchToReviewScreen();
     }
 
