@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using pinpointrAPI.Models;
+using pinpointrAPI.Helpers;
 
 namespace pinpointrAPI.Controllers
 {
@@ -18,10 +18,16 @@ namespace pinpointrAPI.Controllers
         [HttpGet]
         public ActionResult<string> Get()
         {
-            uh.getConnectionInfo();
             return "false";
         }
 
+        // POST /api/upload
+        [HttpPost]
+        public ActionResult<bool> Post(IFormFile in_file)
+        {
+            uh.uploadBlob(in_file);
+            return true;
+        }
 
     }
 }

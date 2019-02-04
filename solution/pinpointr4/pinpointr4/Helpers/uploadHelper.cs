@@ -5,40 +5,49 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
-namespace pinpointrAPI.Models
+namespace pinpointrAPI.Helpers
 {
     public class uploadHelper
     {
-        public void getConnectionInfo()
+
+        public bool uploadBlob(IFormFile in_file)
         {
-            Console.WriteLine(System.IO.Directory.GetCurrentDirectory());
             CloudStorageAccount storageAccount = null;
             CloudBlobContainer blobContainer = null;
-            string storageConnectionInfo = getAZBConnectionString();
-            Console.WriteLine(storageConnectionInfo);
-            if (CloudStorageAccount.TryParse(storageConnectionInfo, out storageAccount))
+            CloudBlobClient blobClient = null;
+            CloudBlockBlob blockBlob = null;
+            bool uploadStatus = false;
+            bool checkStatus = false;
+
+            Console.WriteLine("Recieved request to upload blob");
+            string connectionString = getAZBConnectionString();
+            Console.WriteLine("Attempting to connect to Azure blob storage with: {0}", connectionString);
+            if (CloudStorageAccount.TryParse(connectionString, out storageAccount))
             {
-                Console.WriteLine("Recieved valid connection info");
-                CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
-                blobContainer = Task.Run(async () => { return await makeContainer(cloudBlobClient); }).Result;
-                string localPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                string localFileName = "quicktest" + Guid.NewGuid().ToString() + ".txt";
-
-                using (StreamWriter sw = new StreamWriter(localPath + localFileName))
+                Console.WriteLine("Connection string is valid");
+                blobClient = storageAccount.CreateCloudBlobClient();
+                blobContainer = Task.Run(async () => { return await makeContainer(blobClient); }).Result;
+                Console.WriteLine("Uploading {0} to {1}", in_file.Name, blobContainer.Name);
+                blockBlob = blobContainer.GetBlockBlobReference(in_file.Name);
+                uploadStatus = Task.Run(async () => { return await uploadStream(blockBlob, in_file.OpenReadStream()); }).Result;
+                if (uploadStatus)
                 {
-                    sw.WriteLine("This is a test file");
+                    Task.Run(async () => { return await listBlobs(blobContainer); });
                 }
-                Console.WriteLine("Uploading to blob storage as '{0}'", localFileName);
-                CloudBlockBlob blockBlob = blobContainer.GetBlockBlobReference(localFileName);
-                bool status = Task.Run(async () => { return await uploadFile(blockBlob, localPath + localFileName); }).Result;
-                status = Task.Run(async () => { return await listBlobs(blobContainer); }).Result;
-                   
-
             } else
             {
                 Console.WriteLine("Invalid connection string");
+                return false;
             }
+            return uploadStatus;
+        }
+
+        public async Task<bool> uploadStream(CloudBlockBlob in_blockBlob, Stream in_fs)
+        {
+            await in_blockBlob.UploadFromStreamAsync(in_fs);
+            return true;
         }
 
         private string getAZBConnectionString()
@@ -84,7 +93,7 @@ namespace pinpointrAPI.Models
         private async Task<CloudBlobContainer> makeContainer(CloudBlobClient in_blobClient)
         {
             Console.WriteLine("attempting to create a new container");
-            CloudBlobContainer blobContainer = in_blobClient.GetContainerReference("testblob" + Guid.NewGuid().ToString());
+            CloudBlobContainer blobContainer = in_blobClient.GetContainerReference("upload" + Guid.NewGuid().ToString());
             await blobContainer.CreateAsync();
             //Set blob permissions
             BlobContainerPermissions permissions = new BlobContainerPermissions
