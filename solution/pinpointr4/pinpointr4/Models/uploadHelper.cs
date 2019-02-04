@@ -12,9 +12,10 @@ namespace pinpointrAPI.Models
     {
         public void getConnectionInfo()
         {
+            Console.WriteLine(System.IO.Directory.GetCurrentDirectory());
             CloudStorageAccount storageAccount = null;
             CloudBlobContainer blobContainer = null;
-            string storageConnectionInfo = "DefaultEndpointsProtocol=https;AccountName=pinpointrdata;AccountKey=aU3gQg5W+WGKVNq8bAY3gLHBU1YJrp873krfXZ97nevmBdVDaE8wXgDHgnBSHSdI2e2x1e5Ki8HSkeUs+n5TbA==;EndpointSuffix=core.windows.net";
+            string storageConnectionInfo = getAZBConnectionString();
             Console.WriteLine(storageConnectionInfo);
             if (CloudStorageAccount.TryParse(storageConnectionInfo, out storageAccount))
             {
@@ -38,6 +39,21 @@ namespace pinpointrAPI.Models
             {
                 Console.WriteLine("Invalid connection string");
             }
+        }
+
+        private string getAZBConnectionString()
+        {
+            List<string> lines = new List<string>();
+            string line;
+            using (StreamReader sr = new StreamReader("cred.data"))
+            {
+                while ((line = sr.ReadLine()) != null)
+                {
+                    lines.Add(line);
+                    Console.WriteLine(line);
+                }
+            }
+            return lines[0];
         }
 
         private async Task<bool> listBlobs(CloudBlobContainer in_blobContainer)

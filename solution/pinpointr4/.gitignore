@@ -259,3 +259,7 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+#appsettings.json
+/pinpointr4/appsettings.json
+/pinpointr4/cred.data
