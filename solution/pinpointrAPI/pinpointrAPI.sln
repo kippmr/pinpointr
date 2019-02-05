@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pinpointrAPI", "pinpointr4\pinpointrAPI.csproj", "{3174CBC1-D10D-4EC7-B954-1B7DCAE7AB65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pinpointrAPI", "pinpointrAPI\pinpointrAPI.csproj", "{3174CBC1-D10D-4EC7-B954-1B7DCAE7AB65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -261,5 +261,5 @@ __pycache__/
 *.pyc
 
 #appsettings.json
-/pinpointr4/appsettings.json
-/pinpointr4/cred.data
+/pinpointrAPI/appsettings.json
+/pinpointrAPI/cred.data

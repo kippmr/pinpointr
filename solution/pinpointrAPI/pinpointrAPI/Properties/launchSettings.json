@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "pinpointr4": {
+    "pinpointrAPI": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/values",
