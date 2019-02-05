@@ -102,7 +102,7 @@ namespace pinpointrAPI.Controllers
             }
 
             // Call the upload service
-            var imageResponse = await AmazonS3Service.UploadObject(file, _bucket);
+            var imageResponse = await S3Helper.UploadObject(file, _bucket);
 
             return Ok();
         }

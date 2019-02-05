@@ -10,8 +10,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Swagger;
+using pinpointrAPI.Models;
+using Microsoft.EntityFrameworkCore;
+using System.IO;
 
-namespace pinpointr4
+namespace pinpointrAPI
 {
     public class Startup
     {
@@ -25,7 +29,26 @@ namespace pinpointr4
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json").Build();
+
+            // Add framework services.
+            services.AddDbContext<RDSContext>(options =>
+            options.UseNpgsql(config["ConnectionStrings:DefaultConnection"]));
+
+            //// Add functionality to inject IOptions<T>
+            //services.AddOptions();
+            ////Add BucketConnection object so it may be injected
+            //services.Configure<BucketConnection>(Configuration.GetSection("BucketConnection"));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +66,16 @@ namespace pinpointr4
             app.UseHttpsRedirection();
             app.UseMvc();
             app.UseStaticFiles();
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
         }
     }
 }
