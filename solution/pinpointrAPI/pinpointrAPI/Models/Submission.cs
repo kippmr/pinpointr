@@ -13,7 +13,8 @@ namespace pinpointrAPI.Models
         public string image { get; set; }
         public NpgsqlPoint coordinates { get; set; }
         public double? altitude { get; set; }
-        public List<string> tags { get; set; }
+        public bool was_completed { get; set; }
+        public DateTime obs_est { get; set; }
         public DateTime gen_est { get; set; }
     }
 }
