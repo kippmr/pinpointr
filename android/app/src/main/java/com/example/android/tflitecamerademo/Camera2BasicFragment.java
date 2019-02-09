@@ -601,7 +601,7 @@ public class Camera2BasicFragment extends Fragment
                 // Auto focus should be continuous for camera preview.
                 previewRequestBuilder.set(
                     CaptureRequest.CONTROL_AF_MODE,
-                    CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
+                    CaptureRequest.CONTROL_AF_MODE_OFF);
 
                 // Finally, we start displaying the camera preview.
                 previewRequest = previewRequestBuilder.build();

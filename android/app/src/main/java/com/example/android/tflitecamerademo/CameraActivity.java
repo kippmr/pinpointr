@@ -17,6 +17,10 @@ package com.example.android.tflitecamerademo;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Service;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -28,6 +32,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
+import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,10 +43,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import android.util.Log;
+
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.io.*;
+import java.util.*;
 
 /** Main {@code Activity} class for the Camera app. */
 public class CameraActivity extends Activity implements MyRecyclerViewAdapter.ItemClickListener{
@@ -72,9 +83,12 @@ public class CameraActivity extends Activity implements MyRecyclerViewAdapter.It
 
     public static final int REQUEST_IMAGE = 100;
     public static final int REQUEST_PERMISSION = 200;
+    public static final int REQUEST_LOCATION = 300;
+
     private String imageFilePath = "";
 
     private Camera2BasicFragment camera2BasicFragment;
+    private LocationActivity locationactivity = null;
 
 
     @Override
@@ -89,7 +103,6 @@ public class CameraActivity extends Activity implements MyRecyclerViewAdapter.It
                     .replace(R.id.container, camera2BasicFragment)
                     .commit();
         }
-
 
         locateControls();
         checkUserPermissions();
@@ -155,6 +168,12 @@ public class CameraActivity extends Activity implements MyRecyclerViewAdapter.It
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
                 PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_PERMISSION);
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_PERMISSION);
         }
     }
@@ -256,7 +275,8 @@ public class CameraActivity extends Activity implements MyRecyclerViewAdapter.It
 //    }
 
 
-
+    File galleryFolder = null;
+    private SendClassificationData dataSender;
     // capture the
     private void takePhoto(){
 
@@ -264,7 +284,34 @@ public class CameraActivity extends Activity implements MyRecyclerViewAdapter.It
         Camera2BasicFragment camera2BasicFragment_copy = camera2BasicFragment;
 
         Bitmap imgCapture = camera2BasicFragment_copy.getTextureView().getBitmap();
+        savePhoto(imgCapture);
         imgView_Review.setImageBitmap(imgCapture);
+
+        if (locationactivity == null) {
+            Intent locnIntent = new Intent(CameraActivity.this, LocationActivity.class);
+            startActivityForResult(locnIntent, REQUEST_LOCATION);
+        }
+
+
+
+        Intent sendDataIntent = new Intent(CameraActivity.this, SendClassificationData.class);
+        ServiceConnection conn = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                dataSender = ((SendClassificationData.MyBinder) service).getService();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+
+            }
+        };
+
+        if (bindService(sendDataIntent, conn, 0)) {
+            dataSender.SendImage(new ImageData(imgCapture, lastPhotoLongitude, lastPhotoLatitude, lastPhotoAltitude, null, null, false));
+        } else {
+            Log.d("DataBinding", "Could not bind to data sender service");
+        };
 
 
         //List<String> imgLabels = Arrays.asList("Label1", "Label2", "Label3", "Label 4");
@@ -273,6 +320,72 @@ public class CameraActivity extends Activity implements MyRecyclerViewAdapter.It
         //addAllLabelsToListView(imgLabels);
         switchToReviewScreen();
     }
+
+
+
+    private void savePhoto(Bitmap img){
+        FileOutputStream outputPhoto = null;
+        if (galleryFolder == null) {
+            createImageGallery();
+        }
+        try {
+            outputPhoto = new FileOutputStream(createImageFile(galleryFolder));
+            img.compress(Bitmap.CompressFormat.PNG, 100, outputPhoto);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+//          return;
+        }
+    }
+
+    private File createImageFile(File galleryFolder) throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "image_" + timeStamp + "_";
+        return File.createTempFile(imageFileName, ".jpg", galleryFolder);
+
+    }
+
+    private void createImageGallery() {
+        File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        galleryFolder = new File(storageDirectory, getResources().getString(R.string.app_name));
+        if (!galleryFolder.exists()) {
+            boolean wasCreated = galleryFolder.mkdirs();
+            if (!wasCreated) {
+                Log.e("CapturedImages", "Failed to create directory");
+            }
+        }
+    }
+
+    double lastPhotoLongitude = 0;
+    double lastPhotoLatitude = 0;
+    double lastPhotoAltitude = 0;
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+       if (requestCode == REQUEST_IMAGE) {
+          if (resultCode == RESULT_OK) {
+          }
+          else if (resultCode == RESULT_CANCELED) {
+          }
+      }
+      else if (requestCode ==REQUEST_LOCATION) {
+          if (resultCode == RESULT_OK) {
+              Bundle locnDataBundle = data.getExtras();
+              if (!locnDataBundle.isEmpty()) {
+                  double[] locnArray = locnDataBundle.getDoubleArray("location");
+                  lastPhotoLongitude = locnArray[0];
+                  lastPhotoLatitude = locnArray[1];
+                  lastPhotoAltitude = locnArray[2];
+              }
+
+
+          }
+          else if (resultCode == RESULT_CANCELED) {
+          }
+       }
+  }
 
     //**********************************************************************************************
     // </ TODO - CODE FOR DELEGATING TO ANDROID CAMERA & SAVING IMG FILE LOCALLY
