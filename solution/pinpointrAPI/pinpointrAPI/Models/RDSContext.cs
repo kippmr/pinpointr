@@ -13,6 +13,16 @@ namespace pinpointrAPI.Models
         }
         public DbSet<User> User { get; set; }
         public DbSet<Submission> Submission { get; set; }
+        public DbSet<Tag> Tag { get; set; }
+
+        /// <summary>
+        /// Tag has a composite primary key, therefore fluent API must be used
+        /// </summary>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Tag>()
+                .HasKey(t => new { t.submission_id, t.name });
+        }
 
     }
 }

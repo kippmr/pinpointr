@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -73,38 +74,82 @@ namespace pinpointrAPI.Controllers
         }
 
         /// <summary>
-        /// Add a submission to the database
-        /// </summary>
-        /// <param name="submission">contains expected submission values</param>
-        /// <returns>Created submission</returns>
-        [HttpPut("[action]")]
-        public IActionResult PutSubmission(Submission submission)
-        {
-
-            _context.Submission.Add(submission);
-            _context.SaveChanges();
-
-            return CreatedAtAction("GetSubmission", new { submission.id }, submission);
-        }
-
-        /// <summary>
-        /// Uploads an image to S3 bucket using unique identifier
+        /// Uploads image to the S3 bucket
         /// </summary>
         /// <param name="file">image to be uploaded</param>
-        /// <returns>Success</returns>
+        /// <returns>unique id of image to connect to a submission</returns>
         [HttpPost("[action]")]
-        public async Task<IActionResult> UploadSubmissionImage(IFormFile file)
+        public async Task<IActionResult> PostImage(IFormFile file)
         {
             // File validation, must be image
             if (!file.ContentType.Contains("image"))
-            {
-                return BadRequest();
-            }
+                return BadRequest("File uploaded must be an image");
+            
+            var image_url = Guid.NewGuid().ToString();
 
             // Call the upload service
-            var imageResponse = await S3Helper.UploadObject(file, _bucket);
+            var imageResponse = await S3Helper.UploadObject(image_url, file, _bucket);
+            
+            if (imageResponse.success)
+                return Ok(imageResponse.file_name);
+            return BadRequest("Image was not uploaded");
+        }
 
-            return Ok();
+        /// <summary>
+        /// Post submission and link tags through foriegn key
+        /// </summary>
+        /// <param name="user_id">id of submitting user</param>
+        /// <param name="coordinates">lon/lat of submission</param>
+        /// <param name="tags">tags of submission</param>
+        /// <param name="image_url">url of image that was previously uploaded</param>
+        /// <param name="altitude">altitude of submission</param>
+        /// <param name="is_completed">is the issue already completed</param>
+        /// <returns>GET request of created submission</returns>
+        [HttpPost("[action]")]
+        public async Task<IActionResult> PostSubmission([FromHeader] int user_id, [FromHeader] List<double> coordinates, 
+        [FromBody] List<Tag> tags,
+        [FromHeader] string image_url = null, [FromHeader] double altitude = 0, [FromHeader] bool is_completed = false)
+        {
+            // Validate coord format
+            if (coordinates.Count() != 2)
+                return BadRequest("Must have two coordinates");
+            if (tags.Count() == 0)
+                return BadRequest("Must have at least one tag");
+
+            Submission submission = new Submission()
+            {
+                user_id = user_id,
+                image_url = image_url,
+                coordinates = new NpgsqlTypes.NpgsqlPoint(coordinates[0], coordinates[1]),
+                altitude = altitude,
+                is_completed = is_completed
+            };
+            
+            _context.Submission.Add(submission);
+
+            try 
+            {
+                await _context.SaveChangesAsync();
+            } catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+            // give all distinct tags the submission_id
+            List<Tag> distinct_tags = tags.GroupBy(x => x.name).Select(y => y.First()).ToList();
+            distinct_tags.Distinct().AsParallel().ForAll( tag => { tag.submission_id = submission.id; });
+
+            _context.Tag.AddRange(distinct_tags);
+
+            try 
+            {
+                await _context.SaveChangesAsync();
+            } catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+            return CreatedAtAction("GetSubmission", new { submission.id }, submission);
         }
     }
 }
