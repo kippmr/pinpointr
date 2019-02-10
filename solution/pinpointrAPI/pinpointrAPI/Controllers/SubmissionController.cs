@@ -82,7 +82,7 @@ namespace pinpointrAPI.Controllers
         public ActionResult<IEnumerable<Tag>> GetTags(int id)
         {
             IEnumerable<Tag> tags = _context.Tag.Where((Tag tag) => tag.submission_id == id);
-            if (tags != null || tags.Count() != 0)
+            if (tags == null || tags.Count() == 0)
                 return BadRequest("No tag information for that submission");
             return Ok(tags);
         }
