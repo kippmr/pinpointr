@@ -108,6 +108,7 @@ public class CameraActivity extends Activity implements MyRecyclerViewAdapter.It
         checkUserPermissions();
         showLabels = false;
 
+
         // set button onclick events
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +147,23 @@ public class CameraActivity extends Activity implements MyRecyclerViewAdapter.It
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
+
+        if (locationactivity == null) {
+            Intent locnIntent = new Intent(CameraActivity.this, LocationActivity.class);
+            startActivityForResult(locnIntent, REQUEST_LOCATION);
+        }
+        if (dataSender == null) {
+            Intent dataSenderIntent = new Intent(CameraActivity.this, SendClassificationData.class);
+            startService(dataSenderIntent);
+        }
+        Intent sendDataIntent = new Intent(CameraActivity.this, SendClassificationData.class);
+
+        if (bindService(sendDataIntent, conn, 0)) {
+
+        } else {
+            Log.d("DataBinding", "Could not bind to data sender service");
+        };
+
         // TODO - send button click listener
     }
 
@@ -165,17 +183,17 @@ public class CameraActivity extends Activity implements MyRecyclerViewAdapter.It
 
     private void checkUserPermissions(){
         // check permissions
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-                PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    REQUEST_PERMISSION);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.INTERNET,
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_NETWORK_STATE}, REQUEST_PERMISSION);
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_PERMISSION);
-        }
     }
 
     private void showLabels(){
@@ -277,6 +295,17 @@ public class CameraActivity extends Activity implements MyRecyclerViewAdapter.It
 
     File galleryFolder = null;
     private SendClassificationData dataSender;
+    private ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            dataSender = ((SendClassificationData.MyBinder)service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
     // capture the
     private void takePhoto(){
 
@@ -287,31 +316,15 @@ public class CameraActivity extends Activity implements MyRecyclerViewAdapter.It
         savePhoto(imgCapture);
         imgView_Review.setImageBitmap(imgCapture);
 
-        if (locationactivity == null) {
-            Intent locnIntent = new Intent(CameraActivity.this, LocationActivity.class);
-            startActivityForResult(locnIntent, REQUEST_LOCATION);
-        }
 
 
 
-        Intent sendDataIntent = new Intent(CameraActivity.this, SendClassificationData.class);
-        ServiceConnection conn = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                dataSender = ((SendClassificationData.MyBinder) service).getService();
-            }
 
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-
-            }
-        };
-
-        if (bindService(sendDataIntent, conn, 0)) {
-            dataSender.SendImage(new ImageData(imgCapture, lastPhotoLongitude, lastPhotoLatitude, lastPhotoAltitude, null, null, false));
+        if (dataSender != null) {
+            dataSender.SendSubmission( new ImageData(imgCapture, lastPhotoLongitude, lastPhotoLatitude, lastPhotoAltitude, null, null, false));
         } else {
-            Log.d("DataBinding", "Could not bind to data sender service");
-        };
+            Log.e("CameraActivity", "Data service not bound or started");
+        }
 
 
         //List<String> imgLabels = Arrays.asList("Label1", "Label2", "Label3", "Label 4");

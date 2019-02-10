@@ -1,4 +1,0 @@
-#Sat Feb 02 15:52:01 EST 2019
-base.0=/Users/brandonronald/Documents/GitHub/pinpointr/android/app/build/intermediates/transforms/dexMerger/debug/10
-path.0=classes.dex
-renamed.0=classes.dex

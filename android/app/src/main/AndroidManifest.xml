@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <uses-feature android:name="android.hardware.camera2.autofocus" />
     <uses-feature
         android:name="android.hardware.camera"
@@ -20,10 +19,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Base.Theme.MaterialComponents">
-        <service
-            android:name=".SendClassificationData"
-            android:enabled="true"
-            android:exported="true"></service>
+
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -47,12 +43,12 @@
         <activity
             android:name=".LocationActivity"
             android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
+        <service
+            android:name=".SendClassificationData"
+            android:enabled="true"
+            android:exported="true">
+        </service>
             android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
             android:enabled="true" />
     </application>
