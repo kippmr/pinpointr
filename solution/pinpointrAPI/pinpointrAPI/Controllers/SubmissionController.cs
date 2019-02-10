@@ -74,6 +74,20 @@ namespace pinpointrAPI.Controllers
         }
 
         /// <summary>
+        /// Get tags for a single submission
+        /// </summary>
+        /// <param name="id">id of submission</param>
+        /// <returns>List of tags</returns>
+        [HttpGet("[action]/{id}")]
+        public ActionResult<IEnumerable<Tag>> GetTags(int id)
+        {
+            IEnumerable<Tag> tags = _context.Tag.Where((Tag tag) => tag.submission_id == id);
+            if (tags != null || tags.Count() != 0)
+                return BadRequest("No tag information for that submission");
+            return Ok(tags);
+        }
+
+        /// <summary>
         /// Uploads image to the S3 bucket
         /// </summary>
         /// <param name="file">image to be uploaded</param>
