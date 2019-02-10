@@ -11,8 +11,14 @@ namespace pinpointrAPI.Helpers
 {
     public class S3Helper
     {
-
-        public static async Task<UploadPhotoModel> UploadObject(IFormFile file, BucketConnection _bucket)
+/// <summary>
+        /// Uploads file to S3 bucket connection
+        /// </summary>
+        /// <param name="fileName">unique filename</param>
+        /// <param name="file">file to be uploaded</param>
+        /// <param name="_bucket">bucket connection</param>
+        /// <returns></returns>
+        public static async Task<UploadPhotoModel> UploadObject(string fileName, IFormFile file, BucketConnection _bucket)
         {
 
             // connecting to the client
@@ -21,9 +27,6 @@ namespace pinpointrAPI.Helpers
             // get the file and convert it to the byte[]
             byte[] fileBytes = new Byte[file.Length];
             file.OpenReadStream().Read(fileBytes, 0, Int32.Parse(file.Length.ToString()));
-
-            // create unique file name for prevent the mess
-            var fileName = Guid.NewGuid() + file.FileName;
 
             PutObjectResponse response = null;
 

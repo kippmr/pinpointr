@@ -10,8 +10,9 @@ namespace pinpointrAPI.Models
         public int id { get; set; }
         public string username { get; set; }
         public string password { get; set; }
-        public int? student_id { get; set; }
-        public int? employee_id { get; set; }
-        public string email { get; set; }
+        public int? student_id { get; set; } = null;
+        public int? employee_id { get; set; } = null;
+        public string email { get; set; } = null;
+        public int points { get; set; } = 0;
     }
 }
