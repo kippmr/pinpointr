@@ -15,11 +15,11 @@
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerInParent="true">
+
 
     <RelativeLayout
         android:id="@+id/screenLayout_Camera"
@@ -35,14 +35,16 @@
             android:contentDescription="Image View"
             tools:context="com.example.android.tflitecamerademo.CameraActivity" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnCamera"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
-            android:clickable="true" />
+            android:src="@drawable/camera_icon_96"
+            android:clickable="true"
+            android:background="@null"/>
 
 
     </RelativeLayout>
@@ -76,17 +78,17 @@
             android:layout_marginBottom="120dp">
 
 
-        <Button
+        <ImageButton
             android:id="@+id/btnBack"
-            android:layout_width="115dp"
-            android:layout_height="60dp"
-            android:layout_alignParentBottom="true"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src="@drawable/close_2_96"
+            android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="20dp"
-            android:text="Back"
-            android:clickable="true" />
-
-
+            android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:background="@null"/>
 
         </RelativeLayout>
 
@@ -95,15 +97,6 @@
             android:layout_height="wrap_content">
 
         </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvLabels"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_marginBottom="60dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/control_background"
-            android:visibility="invisible"/>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -115,22 +108,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                app:navigationIcon="@drawable/baseline_menu_white_24"/>
+                android:backgroundTint="@color/bottomNavigationBarColor"
+                android:tint="@android:color/white"
+                app:navigationIcon="@drawable/tags_white_96"/>
 
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnNavBar_Main"
+                android:id="@+id/btnNavBar_Send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="28dp"
-                android:src="@drawable/baseline_add_white_24"
-                app:layout_anchor="@id/bottom_app_bar" />
+                android:src="@drawable/send_96"
+                app:layout_anchor="@id/bottom_app_bar"
+                app:backgroundTint="@color/navBarSecondary"/>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </RelativeLayout>
-
-
 
 </RelativeLayout>
 

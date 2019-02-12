@@ -17,5 +17,9 @@
     <color name="control_background">#d8545454</color>
     <color name="layout_background">#FFFFFFFF</color>
     <color name="black_overlay">#66000000</color>
-    <color name="colorPrimary">#66000000</color>
+    <color name="navigationBarColor">#d8545454</color>
+    <color name="bottomNavigationBarColor">#840644</color>
+    <color name="navBarSecondary">#f6bd5d</color>
+    <color name="colorPrimaryDark">#333333</color>
+    <color name="colorPrimary">#999999</color>
 </resources>

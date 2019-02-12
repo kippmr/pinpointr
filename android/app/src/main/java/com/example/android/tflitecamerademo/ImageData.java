@@ -2,6 +2,7 @@ package com.example.android.tflitecamerademo;
 
 import android.graphics.Bitmap;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 public class ImageData {
@@ -16,7 +17,8 @@ public class ImageData {
     // Did the user verify the labels (or just send?)
     public boolean UserVerified;
 
-    public ImageData(){
+    public ImageData(Bitmap bitmapImage){
+        this.bitmapImage = bitmapImage;
 
     }
 

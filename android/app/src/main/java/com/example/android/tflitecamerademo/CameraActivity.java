@@ -16,65 +16,61 @@ limitations under the License.
 package com.example.android.tflitecamerademo;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-//import android.support.v13.app.ActivityCompat;
-
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 
 /** Main {@code Activity} class for the Camera app. */
-public class CameraActivity extends Activity implements MyRecyclerViewAdapter.ItemClickListener{
+public class CameraActivity extends AppCompatActivity {
 
     /* Screen Controls */
-    ImageView imgView_Camera;
+    ImageView textureView_Camera;
     ImageView imgView_Review;
+
     RelativeLayout screenLayout_Camera;
     RelativeLayout screenLayout_Review;
     RelativeLayout buttonPanel;
 
-    Button btnCamera;
-    Button btnBack;
+    BottomAppBar bottomAppBar;
 
-
-
-    FloatingActionButton btnNavBar_Main;
+    ImageButton btnCamera;
+    ImageButton btnBack;
+    FloatingActionButton btnNavBar_Send;
 
     TextView tvLabels;
-    RecyclerView recyclerView;
+
 
     ImageData imgData;
-
-    MyRecyclerViewAdapter adapter;
-
-    boolean showLabels;
-
-
-
     public static final int REQUEST_IMAGE = 100;
     public static final int REQUEST_PERMISSION = 200;
     private String imageFilePath = "";
 
     private Camera2BasicFragment camera2BasicFragment;
+
+    // Tag for error logging
+    private static final String TAG = CameraActivity.class.getSimpleName();
+
+    private enum ScreenTransition{
+        ToReview,
+        ToPreview
+    }
 
 
     @Override
@@ -90,64 +86,43 @@ public class CameraActivity extends Activity implements MyRecyclerViewAdapter.It
                     .commit();
         }
 
-
         locateControls();
         checkUserPermissions();
-        showLabels = false;
-
-        // set button onclick events
-        btnCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                takePhoto();
-            }
-        });
-
-
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switchToCameraScreen();
-            }
-        });
-
-        btnNavBar_Main.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showLabels();
-            }
-        });
-
-        ArrayList<String> imgLabels = new ArrayList<>();
-        //TODO move recyclerView data binding to takePhoto() stage
-        imgLabels.add("Label1");
-        imgLabels.add("Label2");
-        imgLabels.add("Label3");
-        imgLabels.add("Label4");
-        imgLabels.add("Label5");
-
-        // set up the RecyclerView
-        recyclerView = findViewById(R.id.rvLabels);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyRecyclerViewAdapter(this, imgLabels);
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
-
-        // TODO - send button click listener
+        setSupportActionBar(bottomAppBar);
+        setButtonEventListeners();
     }
 
     private void locateControls(){
         // locate controls
-        imgView_Camera = findViewById(R.id.imgView_Camera);
-        imgView_Review = findViewById(R.id.imgView_Review);
-        screenLayout_Camera = findViewById(R.id.screenLayout_Camera);
-        screenLayout_Review = findViewById(R.id.screenLayout_Review);
-        btnCamera = findViewById(R.id.btnCamera);
-        btnBack = findViewById(R.id.btnBack);
+        try {
+            bottomAppBar = findViewById(R.id.bottom_app_bar);
+            textureView_Camera = findViewById(R.id.imgView_Camera);
+            imgView_Review = findViewById(R.id.imgView_Review);
+            screenLayout_Camera = findViewById(R.id.screenLayout_Camera);
+            screenLayout_Review = findViewById(R.id.screenLayout_Review);
+            btnCamera = findViewById(R.id.btnCamera);
+            btnBack = findViewById(R.id.btnBack);
+            tvLabels = findViewById(R.id.tvLabels);
+            buttonPanel = findViewById(R.id.buttonPanel);
+            btnNavBar_Send = findViewById(R.id.btnNavBar_Send);
+        } catch(Exception ex){
+            Log.e(TAG, "Exception caught when locating CameraActivity View's controls.");
+            ex.printStackTrace();
+        }
 
-        tvLabels = findViewById(R.id.tvLabels);
-        buttonPanel = findViewById(R.id.buttonPanel);
-        btnNavBar_Main = findViewById(R.id.btnNavBar_Main);
+    }
+
+    private void setButtonEventListeners(){
+        // set button onclick events
+        btnCamera.setOnClickListener((View v) -> {
+            takePhoto();
+        });
+        btnBack.setOnClickListener((View v) -> {
+            switchScreen(ScreenTransition.ToPreview);
+        });
+        btnNavBar_Send.setOnClickListener((View v) -> {
+            showLabels();
+        });
     }
 
     private void checkUserPermissions(){
@@ -160,15 +135,8 @@ public class CameraActivity extends Activity implements MyRecyclerViewAdapter.It
     }
 
     private void showLabels(){
-        showLabels = !showLabels;
-        if(showLabels){
-            recyclerView.setVisibility(View.VISIBLE);
-        }
-        else{
-            recyclerView.setVisibility(View.INVISIBLE);
-        }
+        // TODO show top labels and user editing controls
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -177,87 +145,31 @@ public class CameraActivity extends Activity implements MyRecyclerViewAdapter.It
         return true;
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        //TODO nav menu bar item click handler (handle by id)
-        if (item.getItemId() == btnNavBar_Main.getId()){
-
+        switch(item.getItemId()){
+            case android.R.id.home:
+                BottomNavigationDrawerFragment bottomNavDrawerFragment = new BottomNavigationDrawerFragment();
+                bottomNavDrawerFragment.show(this.getSupportFragmentManager(), bottomNavDrawerFragment.getTag());
+                break;
         }
+
+        //TODO other nav bar menu items
 
         return true;
     }
-
-
-
-    @Override
-    public void onItemClick(View view, int position) {
-        //Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+    // TODO - this should be a View transition, if sending an object to a new View is efficient enough (yikes)
+    private void switchScreen(ScreenTransition transition){
+        if(transition == ScreenTransition.ToReview){
+            screenLayout_Review.setVisibility(View.VISIBLE);
+            screenLayout_Camera.setVisibility(View.INVISIBLE);
+        }
+        else if(transition == ScreenTransition.ToPreview){
+            screenLayout_Camera.setVisibility(View.VISIBLE);
+            screenLayout_Review.setVisibility(View.INVISIBLE);
+        }
     }
-
-
-
-    private void switchToReviewScreen(){
-        screenLayout_Review.setVisibility(View.VISIBLE);
-        screenLayout_Camera.setVisibility(View.INVISIBLE);
-    }
-
-    private void switchToCameraScreen(){
-
-        screenLayout_Camera.setVisibility(View.VISIBLE);
-        screenLayout_Review.setVisibility(View.INVISIBLE);
-    }
-
-    private void setReviewImage(Camera2BasicFragment fragment){
-
-        Bitmap imgCapture = fragment.getTextureView().getBitmap();
-        imgView_Review.setImageBitmap(imgCapture);
-    }
-
-//    private void addLabel(String text, int uniqueID){
-//        // TODO: this doesn't work
-//        //tvLabels.setText(fragment.GetClassifierText());
-//
-//
-//        CheckedTextView ctvLabel = new CheckedTextView(this);
-//        ctvLabel.setChecked(true);
-//        ctvLabel.setText(text);
-//        ctvLabel.setId(uniqueID);
-//        ctvLabel.setTextSize(26);
-//
-//        if (ctvLabel != null) {
-//            ctvLabel.setChecked(false);
-//            ctvLabel.setCheckMarkDrawable(android.R.drawable.checkbox_off_background);
-//
-//            ctvLabel.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    ctvLabel.setChecked(!ctvLabel.isChecked());
-//                    ctvLabel.setCheckMarkDrawable(ctvLabel.isChecked() ? android.R.drawable.checkbox_on_background : android.R.drawable.checkbox_off_background);
-//
-////                    String msg = getString(R.string.pre_msg) + " " + (checkedTextView.isChecked() ? getString(R.string.checked) : getString(R.string.unchecked));
-////                    Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//        }
-//
-//        // Set the label's layout with margins on the side and bottom
-//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//        lp.setMargins(20,5,20,5);
-//        labelList.addView(ctvLabel, lp);
-//
-//
-//    }
-
-
-//    private void clearLabels(){
-//        // TODO clear all labels from labelsList
-//        if((labelList).getChildCount() > 0)
-//            labelList.removeAllViews();
-//    }
-
-
-
-    // capture the
     private void takePhoto(){
 
         // Make a copy of the Camera2BasicFragment as is
@@ -266,73 +178,8 @@ public class CameraActivity extends Activity implements MyRecyclerViewAdapter.It
         Bitmap imgCapture = camera2BasicFragment_copy.getTextureView().getBitmap();
         imgView_Review.setImageBitmap(imgCapture);
 
-
-        //List<String> imgLabels = Arrays.asList("Label1", "Label2", "Label3", "Label 4");
-
-
-        //addAllLabelsToListView(imgLabels);
-        switchToReviewScreen();
+        switchScreen(ScreenTransition.ToReview);
     }
-
-    //**********************************************************************************************
-    // </ TODO - CODE FOR DELEGATING TO ANDROID CAMERA & SAVING IMG FILE LOCALLY
-    //**********************************************************************************************
-//    private void openCameraIntent() {
-//        Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        if (pictureIntent.resolveActivity(getPackageManager()) != null) {
-//
-//            File photoFile = null;
-//            try {
-//                photoFile = createImageFile();
-//            }
-//            catch (IOException e) {
-//                e.printStackTrace();
-//                return;
-//            }
-//            Uri photoUri = FileProvider.getUriForFile(this, getPackageName() +".provider", photoFile);
-//            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-//            startActivityForResult(pictureIntent, REQUEST_IMAGE);
-//        }
-//    }
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//
-//        if (requestCode == REQUEST_PERMISSION && grantResults.length > 0) {
-//            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                Toast.makeText(this, "Thanks for granting Permission", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == REQUEST_IMAGE) {
-//            if (resultCode == RESULT_OK) {
-//                imgView_Camera.setImageURI(Uri.parse(imageFilePath));
-//
-//
-//            }
-//            else if (resultCode == RESULT_CANCELED) {
-//                Toast.makeText(this, "You cancelled the operation", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
-//    private File createImageFile() throws IOException{
-//
-//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-//        String imageFileName = "IMG_" + timeStamp + "_";
-//        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-//        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-//        imageFilePath = image.getAbsolutePath();
-//
-//        return image;
-//    }
-    //**********************************************************************************************
-    // TODO - CODE FOR DELEGATING TO ANDROID CAMERA />
-    //**********************************************************************************************
-
 
 
 }

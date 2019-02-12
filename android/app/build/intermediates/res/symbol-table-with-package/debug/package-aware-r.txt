@@ -785,6 +785,7 @@ color background_floating_material_light
 color background_material_dark
 color background_material_light
 color black_overlay
+color bottomNavigationBarColor
 color bright_foreground_disabled_material_dark
 color bright_foreground_disabled_material_light
 color bright_foreground_inverse_material_dark
@@ -798,6 +799,7 @@ color cardview_light_background
 color cardview_shadow_end_color
 color cardview_shadow_start_color
 color colorPrimary
+color colorPrimaryDark
 color control_background
 color design_bottom_navigation_shadow_color
 color design_box_stroke_color
@@ -907,6 +909,8 @@ color mtrl_textinput_focused_box_stroke_color
 color mtrl_textinput_hovered_box_stroke_color
 color mtrl_tint_filled_end_icon
 color mtrl_tint_outline_end_icon
+color navBarSecondary
+color navigationBarColor
 color notification_action_color_filter
 color notification_icon_bg_color
 color notification_material_background_media_default_color
@@ -1306,6 +1310,9 @@ drawable btn_radio_off_to_on_mtrl_animation
 drawable btn_radio_on_mtrl
 drawable btn_radio_on_to_off_mtrl_animation
 drawable camera_icon_96
+drawable close_2_96
+drawable close_96
+drawable delete_24
 drawable design_bottom_navigation_item_background
 drawable design_fab_background
 drawable design_ic_visibility
@@ -1321,6 +1328,7 @@ drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
 drawable ic_search_black_24dp
+drawable ic_take_photo
 drawable mtrl_popupmenu_background
 drawable mtrl_tabs_default_indicator
 drawable navigation_empty_icon
@@ -1336,6 +1344,16 @@ drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
+drawable send_24
+drawable send_96
+drawable send_img_24
+drawable tag_add_24
+drawable tag_remove_24
+drawable tag_window_24
+drawable tags_24
+drawable tags_2_96
+drawable tags_96
+drawable tags_white_96
 drawable tile
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
@@ -1416,8 +1434,6 @@ id alertTitle
 id all
 id always
 id anticipate
-id app_bar_fav
-id app_bar_search
 id app_bar_settings
 id asConfigured
 id async
@@ -1430,7 +1446,7 @@ id bottom_app_bar
 id bounce
 id btnBack
 id btnCamera
-id btnNavBar_Main
+id btnNavBar_Send
 id buttonPanel
 id cancel_action
 id center
@@ -1451,7 +1467,6 @@ id contentPanel
 id control
 id coordinator
 id cos
-id ctvLabel
 id custom
 id customPanel
 id cut
@@ -1565,7 +1580,6 @@ id right
 id right_icon
 id right_side
 id rounded
-id rvLabels
 id save_image_matrix
 id save_non_transition_alpha
 id save_scale_type
@@ -1758,7 +1772,6 @@ layout notification_template_media
 layout notification_template_media_custom
 layout notification_template_part_chronometer
 layout notification_template_part_time
-layout recyclerview_row
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
@@ -2044,6 +2057,7 @@ style Base_Widget_MaterialComponents_PopupMenu
 style Base_Widget_MaterialComponents_PopupMenu_Overflow
 style Base_Widget_MaterialComponents_TextInputEditText
 style Base_Widget_MaterialComponents_TextInputLayout
+style CameraTheme
 style CardView
 style CardView_Dark
 style CardView_Light

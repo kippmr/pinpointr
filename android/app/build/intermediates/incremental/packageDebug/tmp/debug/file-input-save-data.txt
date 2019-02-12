@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Sun Feb 03 15:59:24 EST 2019
+#Tue Feb 12 12:42:26 EST 2019
 17.baseType=DIRECTORY
 4.path=lib/arm64-v8a/libtensorflowlite_jni.so
 8.set=DEX

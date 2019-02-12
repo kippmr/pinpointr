@@ -1,20 +1,20 @@
 -- Merging decision tree log ---
 provider#androidx.core.content.FileProvider
-INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:25:9-33:20
+INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:22:9-30:20
 	android:grantUriPermissions
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:29:13-47
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:26:13-47
 	android:authorities
 		INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:27:13-60
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:24:13-60
 	android:exported
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:28:13-37
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:25:13-37
 	android:name
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:26:13-62
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:23:13-62
 manifest
-ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-51:12
-INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-51:12
-INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-51:12
-INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-51:12
+ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-48:12
+INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-48:12
+INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-48:12
+INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-48:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.0-alpha3] /Users/brandonronald/.gradle/caches/transforms-1/files-1.1/constraintlayout-2.0.0-alpha3.aar/e61ab0e87d043648863099f5f9d7a76a/AndroidManifest.xml:2:1-11:12
 MERGED from [com.google.android.material:material:1.1.0-alpha03] /Users/brandonronald/.gradle/caches/transforms-1/files-1.1/material-1.1.0-alpha03.aar/9d7a4b9ffd94894f5f6da4b527e7b3b8/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.appcompat:appcompat:1.1.0-alpha01] /Users/brandonronald/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0-alpha01.aar/0ffc2f15306c1031fdf901756b1f67ee/AndroidManifest.xml:17:1-22:12
@@ -53,57 +53,57 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0-alpha01] /Us
 MERGED from [com.amazonaws:aws-android-sdk-mobile-client:2.6.7] /Users/brandonronald/.gradle/caches/transforms-1/files-1.1/aws-android-sdk-mobile-client-2.6.7.aar/b065b298bb88d0e1fb4d87f7a5c5a51f/AndroidManifest.xml:2:1-4:12
 MERGED from [com.amazonaws:aws-android-sdk-auth-core:2.6.7] /Users/brandonronald/.gradle/caches/transforms-1/files-1.1/aws-android-sdk-auth-core-2.6.7.aar/7d5aab8d2116260ea55ac7aed5ca4bf6/AndroidManifest.xml:2:1-4:12
 MERGED from [org.tensorflow:tensorflow-lite:1.12.0] /Users/brandonronald/.gradle/caches/transforms-1/files-1.1/tensorflow-lite-1.12.0.aar/2cf2a3e0757a3a9b3c9573328d6d575d/AndroidManifest.xml:2:1-11:12
-INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-51:12
-INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-51:12
-INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-51:12
+INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-48:12
+INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-48:12
+INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-48:12
 	package
 		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:4:5-51
 		INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml
 		INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml
 	android:versionName
 		INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-51:12
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-48:12
 		INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml
 	xmlns:tools
 		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:3:5-51
 	android:versionCode
 		INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-51:12
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-48:12
 		INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml
 	xmlns:android
 		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:11-69
 uses-permission#android.permission.CAMERA
-ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:7:5-65
+ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:6:5-65
 	android:name
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:7:22-62
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:6:22-62
 uses-permission#android.permission.INTERNET
-ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:8:5-67
+ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:7:5-67
 	android:name
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:8:22-64
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:7:22-64
 uses-permission#android.permission.ACCESS_NETWORK_STATE
-ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:9:5-79
+ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:8:5-79
 	android:name
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:9:22-76
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:8:22-76
 uses-permission#android.permission.READ_EXTERNAL_STORAGE
-ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:10:5-80
+ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:9:5-80
 	android:name
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:10:22-77
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:9:22-77
 uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
-ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:11:5-81
+ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:10:5-81
 	android:name
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:11:22-78
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:10:22-78
 uses-feature#android.hardware.camera2.autofocus
-ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:13:5-71
+ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:12:5-71
 	android:name
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:13:19-68
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:12:19-68
 uses-feature#android.hardware.camera
-ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:14:5-16:35
+ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:13:5-15:35
 	android:required
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:16:9-32
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:15:9-32
 	android:name
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:15:9-47
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:14:9-47
 application
-ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:18:5-49:19
+ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:17:5-46:19
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.0-alpha3] /Users/brandonronald/.gradle/caches/transforms-1/files-1.1/constraintlayout-2.0.0-alpha3.aar/e61ab0e87d043648863099f5f9d7a76a/AndroidManifest.xml:9:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.0-alpha3] /Users/brandonronald/.gradle/caches/transforms-1/files-1.1/constraintlayout-2.0.0-alpha3.aar/e61ab0e87d043648863099f5f9d7a76a/AndroidManifest.xml:9:5-20
 MERGED from [com.google.android.material:material:1.1.0-alpha03] /Users/brandonronald/.gradle/caches/transforms-1/files-1.1/material-1.1.0-alpha03.aar/9d7a4b9ffd94894f5f6da4b527e7b3b8/AndroidManifest.xml:22:5-20
@@ -117,35 +117,35 @@ MERGED from [org.tensorflow:tensorflow-lite:1.12.0] /Users/brandonronald/.gradle
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.1.0-alpha04] /Users/brandonronald/.gradle/caches/transforms-1/files-1.1/core-1.1.0-alpha04.aar/49e736e3b91b6b07277e22724926fa48/AndroidManifest.xml:22:18-86
 	android:label
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:21:9-41
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:20:9-41
 	android:icon
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:20:9-45
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:19:9-45
 	android:allowBackup
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:19:9-35
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:18:9-35
 	android:theme
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:22:9-61
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:21:9-43
 activity#com.example.android.tflitecamerademo.CameraActivity
-ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:35:9-43:20
+ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:32:9-40:20
 	android:label
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:37:13-45
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:34:13-45
 	android:name
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:36:13-43
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:33:13-43
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:38:13-42:29
+ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:35:13-39:29
 action#android.intent.action.MAIN
-ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:39:17-69
+ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:36:17-69
 	android:name
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:39:25-66
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:36:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:41:17-77
+ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:38:17-77
 	android:name
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:41:27-74
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:38:27-74
 service#com.amazonaws.mobileconnectors.s3.transferutility.TransferService
-ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:45:9-47:38
+ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:42:9-44:38
 	android:enabled
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:47:13-35
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:44:13-35
 	android:name
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:46:13-93
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:43:13-93
 uses-sdk
 INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml
@@ -233,10 +233,10 @@ INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/ma
 		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml
 		INJECTED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml
 meta-data#android.support.FILE_PROVIDER_PATHS
-ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:30:13-32:54
+ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:27:13-29:54
 	android:resource
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:32:17-51
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:29:17-51
 	android:name
-		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:31:17-67
+		ADDED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:28:17-67
 uses-permission#android.permission.READ_PHONE_STATE
-IMPLIED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-51:12 reason: com.amazonaws.mobile.client has a targetSdkVersion < 4
+IMPLIED from /Users/brandonronald/Documents/GitHub/pinpointr/android/app/src/main/AndroidManifest.xml:2:1-48:12 reason: com.amazonaws.mobile.client has a targetSdkVersion < 4
