@@ -16,9 +16,15 @@ limitations under the License.
 package com.example.android.tflitecamerademo;
 
 import android.Manifest;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -71,6 +77,22 @@ public class CameraActivity extends AppCompatActivity {
         ToReview,
         ToPreview
     }
+    private Boolean locationServiceBound = false;
+    private LocationService locationService; //Reference to the location service
+    //Bind to the location service
+    private ServiceConnection locationServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service){
+            locationService = ((LocationService.LocationServiceBinder)service).getService();
+            locationService.StartLocationServices();
+            locationServiceBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            locationServiceBound = false;
+        }
+    };
 
 
     @Override
@@ -90,6 +112,27 @@ public class CameraActivity extends AppCompatActivity {
         checkUserPermissions();
         setSupportActionBar(bottomAppBar);
         setButtonEventListeners();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startLocationService();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (locationServiceConnection != null) {
+            unbindService(locationServiceConnection);
+        }
+    }
+
+    private void startLocationService() {
+        if (locationServiceBound == false) {
+            Intent locnIntent = new Intent(this, LocationService.class);
+            bindService(locnIntent, locationServiceConnection, Context.BIND_AUTO_CREATE);
+        }
     }
 
     private void locateControls(){
@@ -128,10 +171,16 @@ public class CameraActivity extends AppCompatActivity {
     private void checkUserPermissions(){
         // check permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-                PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                PackageManager.PERMISSION_GRANTED  ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) !=
+                        PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_PERMISSION);
         }
+
     }
 
     private void showLabels(){
@@ -177,6 +226,17 @@ public class CameraActivity extends AppCompatActivity {
 
         Bitmap imgCapture = camera2BasicFragment_copy.getTextureView().getBitmap();
         imgView_Review.setImageBitmap(imgCapture);
+
+        //Get the last known location for the photo
+        Double photoAlt;
+        Double photoLong;
+        Double photoLat;
+        Location photoLocation = locationService.getLocation();
+        if (photoLocation != null) {
+            photoAlt = photoLocation.getAltitude();
+            photoLong = photoLocation.getLongitude();
+            photoLat = photoLocation.getLatitude();
+        }
 
         switchScreen(ScreenTransition.ToReview);
     }
