@@ -18,6 +18,8 @@ package com.example.android.tflitecamerademo;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -41,8 +43,6 @@ import androidx.core.content.ContextCompat;
 public class CameraActivity extends AppCompatActivity {
 
     /* Screen Controls */
-    ImageView textureView_Camera;
-    ImageView imgView_Review;
 
     RelativeLayout screenLayout_Camera;
     RelativeLayout screenLayout_Review;
@@ -54,7 +54,6 @@ public class CameraActivity extends AppCompatActivity {
     ImageButton btnBack;
     FloatingActionButton btnNavBar_Send;
 
-    TextView tvLabels;
 
 
     ImageData imgData;
@@ -82,7 +81,7 @@ public class CameraActivity extends AppCompatActivity {
             camera2BasicFragment = Camera2BasicFragment.newInstance();
             getFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.container, camera2BasicFragment)
+                    .replace(R.id.screenLayout_Camera, camera2BasicFragment)
                     .commit();
         }
 
@@ -96,13 +95,11 @@ public class CameraActivity extends AppCompatActivity {
         // locate controls
         try {
             bottomAppBar = findViewById(R.id.bottom_app_bar);
-            textureView_Camera = findViewById(R.id.imgView_Camera);
-            imgView_Review = findViewById(R.id.imgView_Review);
+
             screenLayout_Camera = findViewById(R.id.screenLayout_Camera);
             screenLayout_Review = findViewById(R.id.screenLayout_Review);
             btnCamera = findViewById(R.id.btnCamera);
             btnBack = findViewById(R.id.btnBack);
-            tvLabels = findViewById(R.id.tvLabels);
             buttonPanel = findViewById(R.id.buttonPanel);
             btnNavBar_Send = findViewById(R.id.btnNavBar_Send);
         } catch(Exception ex){
@@ -175,10 +172,17 @@ public class CameraActivity extends AppCompatActivity {
         // Make a copy of the Camera2BasicFragment as is
         Camera2BasicFragment camera2BasicFragment_copy = camera2BasicFragment;
 
-        Bitmap imgCapture = camera2BasicFragment_copy.getTextureView().getBitmap();
-        imgView_Review.setImageBitmap(imgCapture);
+        Bitmap imgCapture = ARGBBitmap(camera2BasicFragment_copy.getTextureView().getBitmap());
+
+        Drawable d = new BitmapDrawable(getResources(), imgCapture);
+
+        screenLayout_Review.setBackground(d);
 
         switchScreen(ScreenTransition.ToReview);
+    }
+
+    private Bitmap ARGBBitmap(Bitmap img) {
+        return img.copy(Bitmap.Config.ARGB_8888,true);
     }
 
 

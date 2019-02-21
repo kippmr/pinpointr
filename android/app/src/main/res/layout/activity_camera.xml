@@ -28,13 +28,6 @@
         android:background="@color/layout_background"
         >
 
-        <ImageView xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/imgView_Camera"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="Image View"
-            tools:context="com.example.android.tflitecamerademo.CameraActivity" />
-
         <ImageButton
             android:id="@+id/btnCamera"
             android:layout_width="wrap_content"
@@ -44,7 +37,8 @@
             android:layout_marginBottom="20dp"
             android:src="@drawable/camera_icon_96"
             android:clickable="true"
-            android:background="@null"/>
+            android:background="@null"
+            android:elevation="100dp"/>
 
 
     </RelativeLayout>
@@ -57,25 +51,6 @@
         android:visibility="invisible"
         android:elevation="13dp"
         android:layout_alignParentTop="true">
-
-        <ImageView xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/imgView_Review"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-
-
-             />
-        <TextView
-            android:id="@+id/tvLabels"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-
-        <RelativeLayout
-            android:id="@+id/buttonPanel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="120dp">
 
 
         <ImageButton
@@ -90,13 +65,6 @@
             android:clickable="true"
             android:background="@null"/>
 
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-        </LinearLayout>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"

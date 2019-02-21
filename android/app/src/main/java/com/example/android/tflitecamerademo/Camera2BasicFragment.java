@@ -88,10 +88,10 @@ public class Camera2BasicFragment extends Fragment
   private ImageClassifier classifier;
 
   /** Max preview width that is guaranteed by Camera2 API */
-  private static final int MAX_PREVIEW_WIDTH = 1920;
+  private static final int MAX_PREVIEW_WIDTH = 2960;
 
   /** Max preview height that is guaranteed by Camera2 API */
-  private static final int MAX_PREVIEW_HEIGHT = 1080;
+  private static final int MAX_PREVIEW_HEIGHT = 1440;
 
   /**
    * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a {@link
@@ -133,6 +133,8 @@ public class Camera2BasicFragment extends Fragment
 
   /** The {@link android.util.Size} of camera preview. */
   private Size previewSize;
+
+
 
   /** {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its state. */
   private final CameraDevice.StateCallback stateCallback =
@@ -666,8 +668,8 @@ public class Camera2BasicFragment extends Fragment
 //    Bitmap bitmap =
 //        textureView.getBitmap(ImageClassifier.DIM_IMG_SIZE_X, ImageClassifier.DIM_IMG_SIZE_Y);
 //    //TODO this is where text is generated
-//    //String textToShow = classifier.classifyFrame(bitmap);
-//    String textToShow = "";
+//    String textToShow = classifier.classifyFrame(bitmap);
+//    //String textToShow = "";
 //    bitmap.recycle();
 //    showToast(textToShow);
   }

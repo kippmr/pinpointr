@@ -1519,8 +1519,6 @@ id icon
 id icon_group
 id ifRoom
 id image
-id imgView_Camera
-id imgView_Review
 id info
 id invisible
 id italic
@@ -1669,7 +1667,6 @@ id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
 id triangle
-id tvLabels
 id unchecked
 id uniform
 id unlabeled
@@ -1736,6 +1733,7 @@ layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_camera
+layout activity_test_screenshot
 layout custom_dialog
 layout design_bottom_navigation_item
 layout design_bottom_sheet_dialog

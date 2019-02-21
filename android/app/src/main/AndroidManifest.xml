@@ -43,6 +43,7 @@
             android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
             android:enabled="true" />
 
+        <activity android:name=".TestScreenshot"></activity>
     </application>
 
 </manifest>
