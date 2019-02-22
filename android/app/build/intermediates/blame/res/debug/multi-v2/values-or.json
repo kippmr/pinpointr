@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/brandonronald/Documents/GitHub/pinpointr/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-or/values-or.xml",
+            "outputFile": "/Users/brandonronald/Desktop/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-or/values-or.xml",
             "map": [
                 {
-                    "source": "/Users/brandonronald/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0-alpha01.aar/0ffc2f15306c1031fdf901756b1f67ee/res/values-or/values-or.xml",
+                    "source": "/Users/brandonronald/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0-alpha01.aar/5a798408416ba63a09e78f28ae2d1a6a/res/values-or/values-or.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -14,7 +14,7 @@
                     }
                 },
                 {
-                    "source": "/Users/brandonronald/.gradle/caches/transforms-1/files-1.1/core-1.1.0-alpha04.aar/49e736e3b91b6b07277e22724926fa48/res/values-or/values-or.xml",
+                    "source": "/Users/brandonronald/.gradle/caches/transforms-1/files-1.1/core-1.1.0-alpha04.aar/fed34b9aeab09668ba7d4dcc2d5b14c8/res/values-or/values-or.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

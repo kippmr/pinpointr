@@ -12,27 +12,30 @@ public final class R {
     public static final class attr {
         private attr() {}
 
-        public static final int button_style = 0x7f030068;
-        public static final int text = 0x7f03026c;
+        public static final int button_style = 0x7f030069;
+        public static final int text = 0x7f030272;
     }
     public static final class id {
         private id() {}
 
-        public static final int large = 0x7f0800a1;
-        public static final int small = 0x7f0800f4;
+        public static final int large = 0x7f0800a5;
+        public static final int small = 0x7f0800f9;
     }
     public static final class string {
         private string() {}
 
-        public static final int sign_in_canceled_message_format = 0x7f0e003b;
-        public static final int sign_in_failure_dialog_title = 0x7f0e003c;
-        public static final int sign_in_failure_message_format = 0x7f0e003d;
+        public static final int sign_in_canceled_message_format = 0x7f0e004d;
+        public static final int sign_in_failure_dialog_title = 0x7f0e004e;
+        public static final int sign_in_failure_message_format = 0x7f0e004f;
     }
     public static final class styleable {
         private styleable() {}
 
-        public static final int[] SignInButton = { 0x7f030068, 0x7f03026c };
-        public static final int SignInButton_button_style = 0;
-        public static final int SignInButton_text = 1;
+        public static final int[] SignInButton = { 0x7f030064, 0x7f030069, 0x7f0300b3, 0x7f030220, 0x7f030272 };
+        public static final int SignInButton_buttonSize = 0;
+        public static final int SignInButton_button_style = 1;
+        public static final int SignInButton_colorScheme = 2;
+        public static final int SignInButton_scopeUris = 3;
+        public static final int SignInButton_text = 4;
     }
 }

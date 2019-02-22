@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/brandonronald/Documents/GitHub/pinpointr/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v16/values-v16.xml",
+            "outputFile": "/Users/brandonronald/Desktop/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v16/values-v16.xml",
             "map": [
                 {
-                    "source": "/Users/brandonronald/.gradle/caches/transforms-1/files-1.1/core-1.1.0-alpha04.aar/49e736e3b91b6b07277e22724926fa48/res/values-v16/values-v16.xml",
+                    "source": "/Users/brandonronald/.gradle/caches/transforms-1/files-1.1/core-1.1.0-alpha04.aar/fed34b9aeab09668ba7d4dcc2d5b14c8/res/values-v16/values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -14,7 +14,7 @@
                     }
                 },
                 {
-                    "source": "/Users/brandonronald/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0-alpha01.aar/0ffc2f15306c1031fdf901756b1f67ee/res/values-v16/values-v16.xml",
+                    "source": "/Users/brandonronald/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0-alpha01.aar/5a798408416ba63a09e78f28ae2d1a6a/res/values-v16/values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

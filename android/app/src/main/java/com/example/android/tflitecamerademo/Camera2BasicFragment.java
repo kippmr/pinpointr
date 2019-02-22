@@ -668,8 +668,8 @@ public class Camera2BasicFragment extends Fragment
 //    Bitmap bitmap =
 //        textureView.getBitmap(ImageClassifier.DIM_IMG_SIZE_X, ImageClassifier.DIM_IMG_SIZE_Y);
 //    //TODO this is where text is generated
-//    String textToShow = classifier.classifyFrame(bitmap);
-//    //String textToShow = "";
+//    //String textToShow = classifier.classifyFrame(bitmap);
+//    String textToShow = "";
 //    bitmap.recycle();
 //    showToast(textToShow);
   }

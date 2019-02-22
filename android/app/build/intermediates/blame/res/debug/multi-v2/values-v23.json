@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/brandonronald/Documents/GitHub/pinpointr/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v23/values-v23.xml",
+            "outputFile": "/Users/brandonronald/Desktop/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v23/values-v23.xml",
             "map": [
                 {
-                    "source": "/Users/brandonronald/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0-alpha01.aar/0ffc2f15306c1031fdf901756b1f67ee/res/values-v23/values-v23.xml",
+                    "source": "/Users/brandonronald/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0-alpha01.aar/5a798408416ba63a09e78f28ae2d1a6a/res/values-v23/values-v23.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,19,32,33,34,38,39,40,41",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -15,7 +15,7 @@
                     }
                 },
                 {
-                    "source": "/Users/brandonronald/.gradle/caches/transforms-1/files-1.1/cardview-1.0.0.aar/e32038401a268eee4710ef4767ebc10b/res/values-v23/values-v23.xml",
+                    "source": "/Users/brandonronald/.gradle/caches/transforms-1/files-1.1/cardview-1.0.0.aar/81cd6cc3855d8645a558d395ea5674c5/res/values-v23/values-v23.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
