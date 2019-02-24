@@ -21,9 +21,17 @@
         android:label="@string/app_name"
         android:theme="@style/CameraTheme">
         <service
-            android:name=".LocationService"
+            android:name=".SendImageDataService"
             android:enabled="true"
             android:exported="true"></service>
+        <service
+            android:name=".SaveImageService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".LocationService"
+            android:enabled="true"
+            android:exported="true" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

@@ -17,6 +17,8 @@ package com.example.android.tflitecamerademo;
 
 import android.Manifest;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -74,11 +76,10 @@ public class CameraActivity extends AppCompatActivity {
         ToReview,
         ToPreview
     }
-
+    //Location Service Variables
     private Boolean locationServiceBound = false;
     private LocationService locationService; //Reference to the location service
-    //Bind to the location service
-    private ServiceConnection locationServiceConnection = new ServiceConnection() {
+    private ServiceConnection locationServiceConnection = new ServiceConnection() { //Bind to the location service
         @Override
         public void onServiceConnected(ComponentName name, IBinder service){
             locationService = ((LocationService.LocationServiceBinder)service).getService();
@@ -89,6 +90,38 @@ public class CameraActivity extends AppCompatActivity {
         @Override
         public void onServiceDisconnected(ComponentName name) {
             locationServiceBound = false;
+        }
+    };
+
+    //Save Image Service Variables
+    private Boolean saveImageServiceBound = false;
+    private SaveImageService saveImageService; //Reference to save image service
+    private ServiceConnection saveImageServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            saveImageService = ((SaveImageService.SaveImageServiceBinder) service).getService();
+            saveImageServiceBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            saveImageServiceBound = false;
+        }
+    };
+
+    //Send Image Data Service Variables
+    private Boolean sendImageDataServiceBound = false;
+    private SendImageDataService sendImageDataService; //Reference to send image data service
+    private ServiceConnection sendImageDataServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            sendImageDataService = ((SendImageDataService.SendImageDataServiceBinder)service).getService();
+            sendImageDataServiceBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            sendImageDataServiceBound = false;
         }
     };
 
@@ -111,7 +144,52 @@ public class CameraActivity extends AppCompatActivity {
         setSupportActionBar(bottomAppBar);
         setButtonEventListeners();
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+        //Start App Services
+        startLocationService();
+        startSaveImageService();
+        startSendImageDataService();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (locationServiceConnection != null) {
+            unbindService(locationServiceConnection);
+        }
+        if (saveImageServiceConnection!= null) {
+            unbindService(saveImageServiceConnection);
+        }
+        if (sendImageDataServiceConnection!= null) {
+            unbindService(sendImageDataServiceConnection);
+        }
+    }
+
+    //Bind Location services
+    private void startLocationService() {
+        if (locationServiceBound == false) {
+            Intent locnIntent = new Intent(this, LocationService.class);
+            bindService(locnIntent, locationServiceConnection, Context.BIND_AUTO_CREATE);
+        }
+    }
+
+    //Bind Image saving for file I/O
+    private void startSaveImageService() {
+        if (saveImageServiceBound == false ) {
+            Intent imgSaveIntent = new Intent(this, SaveImageService.class);
+            bindService(imgSaveIntent, saveImageServiceConnection, Context.BIND_AUTO_CREATE);
+        }
+    }
+    //Bind Image saving for file I/O
+    private void startSendImageDataService() {
+        if (sendImageDataServiceBound == false ) {
+            Intent imgSaveIntent = new Intent(this, SendImageDataService.class);
+            bindService(imgSaveIntent, sendImageDataServiceConnection, Context.BIND_AUTO_CREATE);
+        }
+    }
     private void locateControls(){
         // locate controls
         try {
@@ -197,23 +275,29 @@ public class CameraActivity extends AppCompatActivity {
 
         // Make a copy of the Camera2BasicFragment as is
         Camera2BasicFragment camera2BasicFragment_copy = camera2BasicFragment;
-
         Bitmap imgCapture = ARGBBitmap(camera2BasicFragment_copy.getTextureView().getBitmap());
 
         Drawable d = new BitmapDrawable(getResources(), imgCapture);
 
         screenLayout_Review.setBackground(d);
 
-        //Get the last known location for the photo
-        Double photoAlt;
-        Double photoLong;
-        Double photoLat;
-        Location photoLocation = locationService.getLocation();
-        if (photoLocation != null) {
-            photoAlt = photoLocation.getAltitude();
-            photoLong = photoLocation.getLongitude();
-            photoLat = photoLocation.getLatitude();
+        String outputPhotoPath = saveImageService.SaveImage(imgCapture);
+        if (outputPhotoPath != null) {
+            Log.d("FileSaving","Saved Photo succesfully");
         }
+
+        //Get the last known location for the photo
+        Location photoLocation = locationService.getLocation();
+
+        //Send the photo with or without location
+        if (photoLocation != null) {
+            ImageData data = new ImageData(imgCapture, photoLocation.getLongitude(), photoLocation.getLatitude(), photoLocation.getAltitude());
+            //sendImageDataService.SendImageData(data);
+        } else {
+            ImageData data = new ImageData(imgCapture);
+            //sendImageDataService.SendImageData(data);
+        }
+
 
         switchScreen(ScreenTransition.ToReview);
     }
@@ -221,7 +305,6 @@ public class CameraActivity extends AppCompatActivity {
     private Bitmap ARGBBitmap(Bitmap img) {
         return img.copy(Bitmap.Config.ARGB_8888,true);
     }
-
 
 }
 
