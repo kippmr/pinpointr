@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ImageData {
     // The image itself
-    private Bitmap image;
+    public Bitmap image;
     //Location data for the image
     private double longitude;
     private double latitude;
@@ -21,31 +21,52 @@ public class ImageData {
     public List<String> userCorrectedLabels;
     // Did the user verify the labels (or just send?)
     public boolean UserVerified;
+    //Blank if the user has not uploaded the image
+    public String URL = "";
 
 
 
     public ImageData(Bitmap img, double lon, double lat, double alt, List<String> modelLabels, List<String> userLabels, boolean verified){
-        image = img;
-        longitude = lon;
-        latitude = lat;
-        altitude = alt;
-        modelGeneratedLabels = modelLabels;
-        userCorrectedLabels = userLabels;
-        UserVerified = verified;
+        this.image = img;
+        this.longitude = lon;
+        this.latitude = lat;
+        this.altitude = alt;
+        this.modelGeneratedLabels = modelLabels;
+        this.userCorrectedLabels = userLabels;
+        this.UserVerified = verified;
     }
 
     public ImageData(Bitmap img, List<String> modelLabels, List<String> userLabels, boolean verified) {
-        new ImageData(img, 0, 0, 0, modelLabels, userLabels, verified);
+        this(img, 0, 0, 0, modelLabels, userLabels, verified);
     }
 
     public ImageData(Bitmap img, double lon, double lat, double alt){
-        new ImageData(img, lon, lat, alt, new ArrayList<String>(), new ArrayList<String>(), false);
+        this(img, lon, lat, alt, new ArrayList<String>(), new ArrayList<String>(), false);
 
     }
 
     public ImageData(Bitmap img){
-        new ImageData(img, 0, 0, 0, new ArrayList<String>(), new ArrayList<String>(), false);
+        this(img, 0, 0, 0, new ArrayList<String>(), new ArrayList<String>(), false);
 
     }
+
+    public void SetURL(String url) {
+        this.URL = url;
+    }
+
+
+    //For setting headers of request
+    public String PrintCoords() {
+        return (Double.toString(latitude) + "," + Double.toString(latitude));
+    }
+
+    public String PrintAltitude() {
+        return Double.toString(altitude);
+    }
+
+    public String GetImageURL() {
+        return URL;
+    }
+
 
 }

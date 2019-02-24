@@ -292,10 +292,10 @@ public class CameraActivity extends AppCompatActivity {
         //Send the photo with or without location
         if (photoLocation != null) {
             ImageData data = new ImageData(imgCapture, photoLocation.getLongitude(), photoLocation.getLatitude(), photoLocation.getAltitude());
-            //sendImageDataService.SendImageData(data);
+            sendImageDataService.SendImageData(data);
         } else {
             ImageData data = new ImageData(imgCapture);
-            //sendImageDataService.SendImageData(data);
+            sendImageDataService.SendImageData(data);
         }
 
 
