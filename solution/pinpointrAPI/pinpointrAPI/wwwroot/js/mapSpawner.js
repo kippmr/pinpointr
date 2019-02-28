@@ -1,13 +1,34 @@
-﻿var myMap;
+﻿var __map;
 
+var __startingCoords = [43.240, -79.848];
+var __zoomLevel = 5;
+var __shapefileLayers = [];
+var __activatedLayers = [];
+
+function addDebugButton() {
+    L.easyButton("Debug", function() {
+        console.log("Debug enabled");
+    },
+    "Enable debug/test mode").addTo(__map);
+}
 
 function initMapData() {
-    var myMap = L.map('map').setView([51.505, -0.009], 13);
-    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        subdomains: ['a', 'b', 'c']
-    }).addTo(myMap);
+    var __map = L.map('map').setView(__startingCoords, __zoomLevel);
+    console.log("map created")
+    L.esri.basemaplayer("Topographic").addTo(__map);
+    console.log("topographic layer added");
     console.log("Map initalized");
+}
+
+function main() {
+    getToken().then( function(tokenData) {
+        accessToken = JSON.parse(tokenData).access_token;
+        initMapData();
+
+        __map.invalidateSize();
+
+        addDebugButton();
+    });
 }
 
 initMapData();
