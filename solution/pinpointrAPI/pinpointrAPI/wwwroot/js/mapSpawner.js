@@ -31,7 +31,7 @@ var htmlTemplate = {
 }
 
 function addDebugButton() {
-    console.log(__map);
+    //console.log(__map);
     L.easyButton("D", function() {
         __debug = true;
     },
@@ -63,13 +63,13 @@ function makeImgUrl(s3UUID) {
 
 function getAllPoints() {
     var getPromise = $.get(allSubmissionURL, function (data, status) {
-        console.log(data);
+        //console.log(data);
     });
 
     var realPromise = Promise.resolve(getPromise);
     realPromise.then(function (val) {
-        console.log(val);
         for (i in val) {
+
             plotPoint(val[i]);
         }
     })
@@ -84,11 +84,8 @@ function getPoint(submissionID) {
     });
 }
 
-function test(data) {
-    console.log(data)
-}
-
 function getTags(submissionID) {
+    console.log(submissionID);
     var getPromise = $.get(getTagsURL + submissionID, function (data, status) { });
 
     var realPromise = Promise.resolve(getPromise);
@@ -98,23 +95,23 @@ function getTags(submissionID) {
 
 
 function plotPoint(submissionData) {
+
     currentPoint = submissionData;
+
     if (!currentPoint["is_completed"]) {
         var pointCoords = currentPoint["coordinates"];
-        var pos = [pointCoords["x"], pointCoords["y"]];
+        var pos = [pointCoords["y"], pointCoords["x"]];
 
         var newPoint = L.marker(pos);
 
         imgurl = makeImgUrl(currentPoint["image_url"]);
-        
         tagPromise = getTags(currentPoint["id"]);
-        //tagPromise = getTags(36);
-        var tags;
         var realPromise = Promise.resolve(tagPromise);
-        realPromise.then(function (val) {
 
+        realPromise.then(function (val) {
+            console.log(val);
             newPoint.bindPopup(htmlTemplate.imgWrap[0] + imgurl + htmlTemplate.imgWrap[1] + "<hr>" +
-                htmlTemplate.submissionID + currentPoint["id"] + "<br>" +
+                htmlTemplate.submissionID + val[0].submission_id + "<br>" +
                 htmlTemplate.userID + currentPoint["user_id"] + "<br>" +
                 htmlTemplate.genWrap + currentPoint["gen_est"] + "<br>" +
                 htmlTemplate.obsWrap + currentPoint["obs_est"] + "<br>" +
