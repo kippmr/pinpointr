@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -39,6 +40,10 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.PriorityQueue;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -60,7 +65,9 @@ public class CameraActivity extends AppCompatActivity {
     ImageButton btnBack;
     FloatingActionButton btnNavBar_Send;
 
+    TextView tvLabels;
 
+    ImageData imageData;
 
     ImageData imgData;
     public static final int REQUEST_IMAGE = 100;
@@ -201,6 +208,7 @@ public class CameraActivity extends AppCompatActivity {
             btnBack = findViewById(R.id.btnBack);
             buttonPanel = findViewById(R.id.buttonPanel);
             btnNavBar_Send = findViewById(R.id.btnNavBar_Send);
+            tvLabels = findViewById(R.id.labels);
         } catch(Exception ex){
             Log.e(TAG, "Exception caught when locating CameraActivity View's controls.");
             ex.printStackTrace();
@@ -273,38 +281,61 @@ public class CameraActivity extends AppCompatActivity {
     }
     private void takePhoto(){
 
-        // Make a copy of the Camera2BasicFragment as is
+        // TODO - implement actual object clone OR clone useful object attributes
         Camera2BasicFragment camera2BasicFragment_copy = camera2BasicFragment;
-        Bitmap imgCapture = ARGBBitmap(camera2BasicFragment_copy.getTextureView().getBitmap());
 
-        Drawable d = new BitmapDrawable(getResources(), imgCapture);
+        imageData = camera2BasicFragment_copy.getImageClassificationData();
+        setReviewScreenImage(camera2BasicFragment_copy);
 
-        screenLayout_Review.setBackground(d);
 
-        String outputPhotoPath = saveImageService.SaveImage(imgCapture);
-        if (outputPhotoPath != null) {
-            Log.d("FileSaving","Saved Photo succesfully");
+        // TODO - replace with filltagsmenu
+        String textToShow = "";
+        PriorityQueue<Map.Entry<String, Float>> sortedLabels = imageData.SortedLabels;
+        Iterator labelIterator = sortedLabels.iterator();
+        final int size = sortedLabels.size();
+        while(labelIterator.hasNext()) {
+            Map.Entry<String, Float> label = (Map.Entry<String, Float>)labelIterator.next();
+            String tag = label.getKey() + ", " + label.getValue();
+            textToShow += "\n"+tag;
         }
+        tvLabels.setText(textToShow);
 
+        if (imageData.image != null) {
+            String outputPhotoPath = saveImageService.SaveImage(imageData.image);
+            if (outputPhotoPath != null) {
+                Log.d("FileSaving","Saved Photo succesfully");
+            }
+        }
         //Get the last known location for the photo
         Location photoLocation = locationService.getLocation();
 
         //Send the photo with or without location
         if (photoLocation != null) {
-            ImageData data = new ImageData(imgCapture, photoLocation.getLongitude(), photoLocation.getLatitude(), photoLocation.getAltitude());
-            sendImageDataService.SendImageData(data);
+            //ImageData data = new ImageData(imageData.image, photoLocation.getLongitude(), photoLocation.getLatitude(), photoLocation.getAltitude());
+            imageData.SetLocation(photoLocation.getLongitude(), photoLocation.getLatitude(), photoLocation.getAltitude());
+            sendImageDataService.SendImageData(imageData);
         } else {
-            ImageData data = new ImageData(imgCapture);
-            sendImageDataService.SendImageData(data);
+            sendImageDataService.SendImageData(imageData);
         }
 
 
         switchScreen(ScreenTransition.ToReview);
     }
 
-    private Bitmap ARGBBitmap(Bitmap img) {
-        return img.copy(Bitmap.Config.ARGB_8888,true);
+    private void setReviewScreenImage(Camera2BasicFragment c2bf){
+        AutoFitTextureView textureView = c2bf.getTextureView();
+        Matrix m = c2bf.getTransformMatrix();
+        textureView.setTransform(m);
+        Bitmap bitmap = textureView.getBitmap();
+        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), textureView.getTransform(null), true);
+        Drawable d = new BitmapDrawable(getResources(), bitmap);
+        screenLayout_Review.setBackground(d);
+
     }
+
+//    private Bitmap ARGBBitmap(Bitmap img) {
+//        return img.copy(Bitmap.Config.ARGB_8888,true);
+//    }
 
 }
 

@@ -57,8 +57,8 @@ public class ImageClassifier {
 
   private static final int DIM_PIXEL_SIZE = 3;
 
-  static final int DIM_IMG_SIZE_X = 448;
-  static final int DIM_IMG_SIZE_Y = 448;
+  static final int DIM_IMG_SIZE_X = 224;
+  static final int DIM_IMG_SIZE_Y = 224;
 
   private static final int IMAGE_MEAN = 128;
   private static final float IMAGE_STD = 128.0f;
@@ -86,22 +86,22 @@ public class ImageClassifier {
   private static final float FILTER_FACTOR = 0.4f;
 
   private PriorityQueue<Map.Entry<String, Float>> sortedLabels =
-      new PriorityQueue<>(
-          RESULTS_TO_SHOW,
-          new Comparator<Map.Entry<String, Float>>() {
-            @Override
-            public int compare(Map.Entry<String, Float> o1, Map.Entry<String, Float> o2) {
-              return (o1.getValue()).compareTo(o2.getValue());
-            }
-          });
+          new PriorityQueue<>(
+                  RESULTS_TO_SHOW,
+                  new Comparator<Map.Entry<String, Float>>() {
+                    @Override
+                    public int compare(Map.Entry<String, Float> o1, Map.Entry<String, Float> o2) {
+                      return (o1.getValue()).compareTo(o2.getValue());
+                    }
+                  });
 
   /** Initializes an {@code ImageClassifier}. */
   ImageClassifier(Activity activity) throws IOException {
     tflite = new Interpreter(loadModelFile(activity));
     labelList = loadLabelList(activity);
     imgData =
-        ByteBuffer.allocateDirect(
-            4 * DIM_BATCH_SIZE * DIM_IMG_SIZE_X * DIM_IMG_SIZE_Y * DIM_PIXEL_SIZE);
+            ByteBuffer.allocateDirect(
+                    4 * DIM_BATCH_SIZE * DIM_IMG_SIZE_X * DIM_IMG_SIZE_Y * DIM_PIXEL_SIZE);
     imgData.order(ByteOrder.nativeOrder());
     labelProbArray = new float[1][labelList.size()];
     filterLabelProbArray = new float[FILTER_STAGES][labelList.size()];
@@ -109,10 +109,10 @@ public class ImageClassifier {
   }
 
   /** Classifies a frame from the preview stream. */
-  String classifyFrame(Bitmap bitmap) {
+  public ImageData classifyFrame(Bitmap bitmap) {
+    PriorityQueue<Map.Entry<String, Float>> labelQueue = new PriorityQueue<>();
     if (tflite == null) {
       Log.e(TAG, "Image classifier has not been initialized; Skipped.");
-      return "Uninitialized Classifier.";
     }
     convertBitmapToByteBuffer(bitmap);
     // Here's where the magic happens!!!
@@ -124,10 +124,16 @@ public class ImageClassifier {
     // smooth the results
     applyFilter();
 
-    // print the results
-    String textToShow = printTopKLabels();
-    textToShow = Long.toString(endTime - startTime) + "ms" + textToShow;
-    return textToShow;
+
+
+    ImageData imgData = new ImageData(){{
+      image = bitmap;
+      SortedLabels = getSortedLabelQueue();
+      ClassificationTimeMs = (endTime - startTime);
+
+    }};
+
+    return imgData;
   }
 
   void applyFilter(){
@@ -136,14 +142,14 @@ public class ImageClassifier {
     // Low pass filter `labelProbArray` into the first stage of the filter.
     for(int j=0; j<num_labels; ++j){
       filterLabelProbArray[0][j] += FILTER_FACTOR*(labelProbArray[0][j] -
-                                                   filterLabelProbArray[0][j]);
+              filterLabelProbArray[0][j]);
     }
     // Low pass filter each stage into the next.
     for (int i=1; i<FILTER_STAGES; ++i){
       for(int j=0; j<num_labels; ++j){
         filterLabelProbArray[i][j] += FILTER_FACTOR*(
                 filterLabelProbArray[i-1][j] -
-                filterLabelProbArray[i][j]);
+                        filterLabelProbArray[i][j]);
 
       }
     }
@@ -164,7 +170,7 @@ public class ImageClassifier {
   private List<String> loadLabelList(Activity activity) throws IOException {
     List<String> labelList = new ArrayList<String>();
     BufferedReader reader =
-        new BufferedReader(new InputStreamReader(activity.getAssets().open(LABEL_PATH)));
+            new BufferedReader(new InputStreamReader(activity.getAssets().open(LABEL_PATH)));
     String line;
     while ((line = reader.readLine()) != null) {
       labelList.add(line);
@@ -206,20 +212,22 @@ public class ImageClassifier {
   }
 
   /** Prints top-K labels, to be shown in UI as the results. */
-  private String printTopKLabels() {
+  private PriorityQueue<Map.Entry<String, Float>> getSortedLabelQueue() {
     for (int i = 0; i < labelList.size(); ++i) {
       sortedLabels.add(
-          new AbstractMap.SimpleEntry<>(labelList.get(i), labelProbArray[0][i]));
+              new AbstractMap.SimpleEntry<>(labelList.get(i), labelProbArray[0][i]));
       if (sortedLabels.size() > RESULTS_TO_SHOW) {
         sortedLabels.poll();
       }
     }
-    String textToShow = "";
-    final int size = sortedLabels.size();
-    for (int i = 0; i < size; ++i) {
-      Map.Entry<String, Float> label = sortedLabels.poll();
-      textToShow = String.format("\n%s: %4.2f",label.getKey(),label.getValue()) + textToShow;
-    }
-    return textToShow;
+    return sortedLabels;
   }
+
+//  String textToShow = "";
+//  final int size = sortedLabels.size();
+//    for (int i = 0; i < size; ++i) {
+//    Map.Entry<String, Float> label = sortedLabels.poll();
+//    textToShow = String.format("\n%s: %4.2f",label.getKey(),label.getValue()) + textToShow;
+//  }
+//    return textToShow;
 }

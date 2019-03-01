@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
 
 public class ImageData {
     // The image itself
@@ -23,6 +25,11 @@ public class ImageData {
     public boolean UserVerified;
     //Blank if the user has not uploaded the image
     public String URL = "";
+
+    public long ClassificationTimeMs;
+
+    public PriorityQueue<Map.Entry<String, Float>> SortedLabels;
+    public String errorString;
 
 
 
@@ -50,8 +57,16 @@ public class ImageData {
 
     }
 
+    public ImageData(){}
+
     public void SetURL(String url) {
         this.URL = url;
+    }
+
+    public void SetLocation(double lat, double lon, double alt) {
+        this.latitude = lat;
+        this.longitude = lon;
+        this.altitude = alt;
     }
 
 

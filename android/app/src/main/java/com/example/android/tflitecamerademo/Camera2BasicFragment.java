@@ -88,10 +88,12 @@ public class Camera2BasicFragment extends Fragment
   private ImageClassifier classifier;
 
   /** Max preview width that is guaranteed by Camera2 API */
-  private static final int MAX_PREVIEW_WIDTH = 2960;
+  private static final int MAX_PREVIEW_WIDTH = 1920;
 
   /** Max preview height that is guaranteed by Camera2 API */
-  private static final int MAX_PREVIEW_HEIGHT = 1440;
+  private static final int MAX_PREVIEW_HEIGHT = 1080;
+
+  private static Matrix transformMatrix;
 
   /**
    * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a {@link
@@ -482,6 +484,10 @@ public class Camera2BasicFragment extends Fragment
       if (!cameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
         throw new RuntimeException("Time out waiting to lock camera opening.");
       }
+//        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA ) != PackageManager.PERMISSION_GRANTED ) {
+//
+//            manager.openCamera(cameraId, stateCallback, backgroundHandler);
+//        }
       manager.openCamera(cameraId, stateCallback, backgroundHandler);
     } catch (CameraAccessException e) {
       e.printStackTrace();
@@ -537,7 +543,7 @@ public class Camera2BasicFragment extends Fragment
     synchronized (lock) {
       runClassifier = true;
     }
-    backgroundHandler.post(periodicClassify);
+    //backgroundHandler.post(periodicClassify);
   }
 
   /** Stops the background thread and its {@link Handler}. */
@@ -556,18 +562,18 @@ public class Camera2BasicFragment extends Fragment
   }
 
   /** Takes photos and classify them periodically. */
-  private Runnable periodicClassify =
-          new Runnable() {
-            @Override
-            public void run() {
-              synchronized (lock) {
-                if (runClassifier) {
-                  classifyFrame();
-                }
-              }
-              backgroundHandler.post(periodicClassify);
-            }
-          };
+//  private Runnable periodicClassify =
+//          new Runnable() {
+//            @Override
+//            public void run() {
+//              synchronized (lock) {
+//                if (runClassifier) {
+//                  classifyFrame();
+//                }
+//              }
+//              backgroundHandler.post(periodicClassify);
+//            }
+//          };
 
   /** Creates a new {@link CameraCaptureSession} for camera preview. */
   private void createCameraPreviewSession() {
@@ -639,53 +645,44 @@ public class Camera2BasicFragment extends Fragment
       return;
     }
     int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-    Matrix matrix = new Matrix();
+    transformMatrix = new Matrix();
     RectF viewRect = new RectF(0, 0, viewWidth, viewHeight);
     RectF bufferRect = new RectF(0, 0, previewSize.getHeight(), previewSize.getWidth());
     float centerX = viewRect.centerX();
     float centerY = viewRect.centerY();
     if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
       bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
-      matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL);
+      transformMatrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL);
       float scale =
               Math.max(
                       (float) viewHeight / previewSize.getHeight(),
                       (float) viewWidth / previewSize.getWidth());
-      matrix.postScale(scale, scale, centerX, centerY);
-      matrix.postRotate(90 * (rotation - 2), centerX, centerY);
+      transformMatrix.postScale(scale, scale, centerX, centerY);
+      transformMatrix.postRotate(90 * (rotation - 2), centerX, centerY);
     } else if (Surface.ROTATION_180 == rotation) {
-      matrix.postRotate(180, centerX, centerY);
+      transformMatrix.postRotate(180, centerX, centerY);
     }
-    textureView.setTransform(matrix);
+    textureView.setTransform(transformMatrix);
   }
 
-  /** Classifies a frame from the preview stream. */
-  private void classifyFrame() {
-//    if (classifier == null || getActivity() == null || cameraDevice == null) {
-//      showToast("Uninitialized Classifier or invalid context.");
-//      return;
-//    }
-//    Bitmap bitmap =
-//        textureView.getBitmap(ImageClassifier.DIM_IMG_SIZE_X, ImageClassifier.DIM_IMG_SIZE_Y);
-//    //TODO this is where text is generated
-//    //String textToShow = classifier.classifyFrame(bitmap);
-//    String textToShow = "";
-//    bitmap.recycle();
-//    showToast(textToShow);
-  }
-
-  public String GetClassifierText(){
+  public ImageData getImageClassificationData() {
+    ImageData imgData = new ImageData();
     if (classifier == null || getActivity() == null || cameraDevice == null) {
+      imgData.errorString = "Error classifying frame in Camera2BasicFragment";
 
-      return "Uninitialized Classifier or invalid context.";
+    } else {
+      configureTransform(previewSize.getWidth(),previewSize.getHeight());
+      Bitmap bitmap = textureView.getBitmap(ImageClassifier.DIM_IMG_SIZE_X, ImageClassifier.DIM_IMG_SIZE_Y);
+      imgData = classifier.classifyFrame(bitmap);
+      //bitmap.recycle();
     }
-    Bitmap bitmap =
-            textureView.getBitmap(ImageClassifier.DIM_IMG_SIZE_X, ImageClassifier.DIM_IMG_SIZE_Y);
-    //TODO this is where text is generated
-    String textToShow = classifier.classifyFrame(bitmap);
-    bitmap.recycle();
-    return textToShow;
 
+    return imgData;
+  }
+
+
+  public Matrix getTransformMatrix(){
+    return transformMatrix;
   }
 
   public AutoFitTextureView getTextureView(){

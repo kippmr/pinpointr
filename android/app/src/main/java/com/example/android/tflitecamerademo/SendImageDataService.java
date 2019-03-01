@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -109,15 +111,17 @@ public class SendImageDataService extends Service {
                 urlConnection.setRequestProperty("Accept-encoding", "gzip, deflate");
                 urlConnection.setRequestProperty("content-type", "application/json");
 
-
-
-                JSONObject testTag = new JSONObject();
-                testTag.put("name", "object");
-                testTag.put("user_submitted", "true");
-                testTag.put("ai_percentage", "100");
-
                 JSONArray tagsArray = new JSONArray();
-                tagsArray.put(testTag);
+                Iterator tagInfo = data.SortedLabels.iterator();
+                while (tagInfo.hasNext()) {
+                    Map.Entry<String, Float> tag = (Map.Entry<String, Float>) tagInfo.next();
+                    JSONObject testTag = new JSONObject();
+                    testTag.put("name", tag.getKey());
+                    testTag.put("user_submitted", "false");
+                    testTag.put("ai_percentage", tag.getValue());
+                    tagsArray.put(testTag);
+                }
+
                 String requestText = tagsArray.toString();
 
                 Log.e("Server", data.PrintCoords());
