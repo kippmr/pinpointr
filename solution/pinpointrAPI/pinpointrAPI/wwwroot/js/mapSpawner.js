@@ -107,8 +107,8 @@ function plotPoint(submissionData) {
 
         imgurl = makeImgUrl(currentPoint["image_url"]);
         
-        //tagPromise = getTags(currentPoint["id"]);
-        tagPromise = getTags(36);
+        tagPromise = getTags(currentPoint["id"]);
+        //tagPromise = getTags(36);
         var tags;
         var realPromise = Promise.resolve(tagPromise);
         realPromise.then(function (val) {
