@@ -42,7 +42,8 @@ public class SendImageDataService extends Service {
     }
     public boolean SendClassificationData(String imgUrl) {
         log.e("Classification","Received response " + imgUrl);
-        StringBuilder tags = new StringBuilder();
+        this.imgData.SetURL(imgUrl);
+/*        StringBuilder tags = new StringBuilder();
         if (imgData.modelGeneratedLabels != null && !imgData.modelGeneratedLabels.isEmpty()) {
             for (String tag : imgData.modelGeneratedLabels) { //Add the model generated tags
                 tags.append(tag + ",");
@@ -55,7 +56,7 @@ public class SendImageDataService extends Service {
         }
         if (tags.length() > 0) {
             tags.substring(0, tags.length() - 1); //Remove last comma in tags
-        }
+        }*/
         AsyncTask sendImageClassDataTask = new SendImageClassDataTask(imgData).execute();
         return true;
     }

@@ -72,7 +72,7 @@ public class ImageData {
 
     //For setting headers of request
     public String PrintCoords() {
-        return (Double.toString(latitude) + "," + Double.toString(latitude));
+        return (Double.toString(latitude) + "," + Double.toString(longitude));
     }
 
     public String PrintAltitude() {

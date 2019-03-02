@@ -312,7 +312,7 @@ public class CameraActivity extends AppCompatActivity {
         //Send the photo with or without location
         if (photoLocation != null) {
             //ImageData data = new ImageData(imageData.image, photoLocation.getLongitude(), photoLocation.getLatitude(), photoLocation.getAltitude());
-            imageData.SetLocation(photoLocation.getLongitude(), photoLocation.getLatitude(), photoLocation.getAltitude());
+            imageData.SetLocation(photoLocation.getLatitude(), photoLocation.getLongitude(), photoLocation.getAltitude());
             sendImageDataService.SendImageData(imageData);
         } else {
             sendImageDataService.SendImageData(imageData);
@@ -324,10 +324,10 @@ public class CameraActivity extends AppCompatActivity {
 
     private void setReviewScreenImage(Camera2BasicFragment c2bf){
         AutoFitTextureView textureView = c2bf.getTextureView();
-        Matrix m = c2bf.getTransformMatrix();
-        textureView.setTransform(m);
-        Bitmap bitmap = textureView.getBitmap();
-        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), textureView.getTransform(null), true);
+        //Matrix m = c2bf.getTransformMatrix();
+        //textureView.setTransform(m);
+        Bitmap bitmap = textureView.getBitmap(textureView.mRatioWidth, textureView.mRatioHeight);
+        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), textureView.getTransform(c2bf.getTransformMatrix()), true);
         Drawable d = new BitmapDrawable(getResources(), bitmap);
         screenLayout_Review.setBackground(d);
 
