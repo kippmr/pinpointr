@@ -98,9 +98,9 @@
             android:layout_width="match_parent"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:background="@color/colorPrimaryDark"
-            android:textColor="#FFFFFF"
-            android:text="Placeholder"
+            android:background="@color/colorPrimary"
+            android:textColor="#000000"
+            android:text="[FOR TESTING ONLY]"
             />
 
     </RelativeLayout>
