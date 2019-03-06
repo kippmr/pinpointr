@@ -100,7 +100,7 @@ function plotPoint(submissionData) {
 
     if (!currentPoint["is_completed"]) {
         var pointCoords = currentPoint["coordinates"];
-        var pos = [pointCoords["y"], pointCoords["x"]];
+        var pos = [pointCoords["x"], pointCoords["y"]];
 
         var newPoint = L.marker(pos);
 
