@@ -50,8 +50,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 
+
 /** Main {@code Activity} class for the Camera app. */
-public class CameraActivity extends AppCompatActivity {
+public class CameraActivity extends AppCompatActivity implements  ImageServiceCallbacks {
 
     /* Screen Controls */
 
@@ -69,7 +70,8 @@ public class CameraActivity extends AppCompatActivity {
 
     ImageData imageData;
 
-    ImageData imgData;
+    public boolean classifyLocally = false;
+
     public static final int REQUEST_IMAGE = 100;
     public static final int REQUEST_PERMISSION = 200;
     private String imageFilePath = "";
@@ -78,6 +80,8 @@ public class CameraActivity extends AppCompatActivity {
 
     // Tag for error logging
     private static final String TAG = CameraActivity.class.getSimpleName();
+
+
 
     private enum ScreenTransition{
         ToReview,
@@ -124,6 +128,7 @@ public class CameraActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             sendImageDataService = ((SendImageDataService.SendImageDataServiceBinder)service).getService();
             sendImageDataServiceBound = true;
+            sendImageDataService.setCallbacks(CameraActivity.this);
         }
 
         @Override
@@ -284,21 +289,20 @@ public class CameraActivity extends AppCompatActivity {
         // TODO - implement actual object clone OR clone useful object attributes
         Camera2BasicFragment camera2BasicFragment_copy = camera2BasicFragment;
 
-        imageData = camera2BasicFragment_copy.getImageClassificationData();
+
+        //If we are classifying remotely, we don't want to call local classification and we don't want to set the labels until we have received the classification data
+        if (classifyLocally) {
+            imageData = camera2BasicFragment_copy.getImageClassificationData();
+            // TODO - replace with filltagsmenu
+            SetLabels();
+        } else {
+            imageData = camera2BasicFragment_copy.getImageData();
+            ResetLabels();
+
+        }
         setReviewScreenImage(camera2BasicFragment_copy);
 
 
-        // TODO - replace with filltagsmenu
-        String textToShow = "";
-        PriorityQueue<Map.Entry<String, Float>> sortedLabels = imageData.SortedLabels;
-        Iterator labelIterator = sortedLabels.iterator();
-        final int size = sortedLabels.size();
-        while(labelIterator.hasNext()) {
-            Map.Entry<String, Float> label = (Map.Entry<String, Float>)labelIterator.next();
-            String tag = label.getKey() + ", " + label.getValue();
-            textToShow += "\n"+tag;
-        }
-        tvLabels.setText(textToShow);
 
         if (imageData.image != null) {
             String outputPhotoPath = saveImageService.SaveImage(imageData.image);
@@ -331,6 +335,27 @@ public class CameraActivity extends AppCompatActivity {
         Drawable d = new BitmapDrawable(getResources(), bitmap);
         screenLayout_Review.setBackground(d);
 
+    }
+
+    @Override
+    public void SetLabels() {
+        String textToShow = "";
+        PriorityQueue<Map.Entry<String, Float>> sortedLabels = imageData.SortedLabels;
+        Iterator labelIterator = sortedLabels.iterator();
+        while(labelIterator.hasNext()) {
+            Map.Entry<String, Float> label = (Map.Entry<String, Float>)labelIterator.next();
+            String tag = label.getKey() + ", " + label.getValue();
+            textToShow += "\n"+tag;
+        }
+        tvLabels.setText(textToShow);
+    }
+
+    public void ResetLabels() {
+        if (this.imageData != null && this.imageData.SortedLabels != null) {
+            this.imageData.SortedLabels.clear();
+        }
+        String textToShow = "";
+        tvLabels.setText(textToShow);
     }
 
 //    private Bitmap ARGBBitmap(Bitmap img) {

@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.AbstractMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
@@ -30,6 +31,31 @@ import javax.net.ssl.HttpsURLConnection;
 import static com.loopj.android.http.AsyncHttpClient.log;
 
 public class SendImageDataService extends Service {
+
+    //AWS Custom Vision Services Connection Strings
+    private final static String PREDICTION_SERVER = "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/ffdbd3a6-dda5-4c8c-9828-4b6653d17475";
+    private final static String PREDICTION_API = "/url";
+    private final static String PREDICTION_KEY = "611391a6e2b84ec89a68bed3492a7ffc";
+    private final static Float PREDICTION_THRESHOLD = 0.20f;
+
+    //Pinpointr Database Connection Strings
+    private final static String DB_SERVER = "https://pinpointr-test.azurewebsites.net";
+    private final static String DB_POST_IMAGE_API = "/api/Submission/PostImage";
+    private final static String DB_POST_SUBMISSION_API = "/api/Submission/PostSubmission";
+
+    private final static String S3_BUCKET_URL = "https://s3.us-east-2.amazonaws.com/pinpointrbucket/";
+
+    //Default file upload data (since IMGURL is created by the server)
+    private final static String IMG_NAME = "file";
+    private final static String IMG_FILE_NAME = "test.jpg";
+
+    //HTTP Client helper strings
+    private final static String CRLF = "\r\n";
+    private final static String TWOHYPHENS = "--";
+    private final static String BOUNDARY = "*****";
+
+    private ImageServiceCallbacks imgServiceCallbacks;
+
     public SendImageDataService() {
 
     }
@@ -40,24 +66,16 @@ public class SendImageDataService extends Service {
         AsyncTask sendImgTask = new SendImageTask(this).execute(this.imgData.image);
         return true;
     }
-    public boolean SendClassificationData(String imgUrl) {
-        log.e("Classification","Received response " + imgUrl);
-        this.imgData.SetURL(imgUrl);
-/*        StringBuilder tags = new StringBuilder();
-        if (imgData.modelGeneratedLabels != null && !imgData.modelGeneratedLabels.isEmpty()) {
-            for (String tag : imgData.modelGeneratedLabels) { //Add the model generated tags
-                tags.append(tag + ",");
-            }
-        }
-        if (imgData.modelGeneratedLabels != null && !imgData.userCorrectedLabels.isEmpty()) {
-            for (String tag : imgData.userCorrectedLabels) { //Add the user corrected tags
-                tags.append(tag + ",");
-            }
-        }
-        if (tags.length() > 0) {
-            tags.substring(0, tags.length() - 1); //Remove last comma in tags
-        }*/
+    public boolean SendClassificationData() {
+        log.d("ClassificationData","Received response " + this.imgData.GetImageURL());
         AsyncTask sendImageClassDataTask = new SendImageClassDataTask(imgData).execute();
+        return true;
+    }
+
+    public boolean GetRemoteClassificationInfo(String imgUrl) {
+        log.d("RemoteClassification","Sending Image data for image at URL " + S3_BUCKET_URL + imgUrl);
+        this.imgData.SetURL(imgUrl);
+        AsyncTask getRemoteClassificationInfoTask = new GetRemoteClassificationInfoTask(this).execute();
         return true;
     }
 
@@ -66,19 +84,17 @@ public class SendImageDataService extends Service {
         return new SendImageDataService.SendImageDataServiceBinder();
     }
 
+    public void setCallbacks(ImageServiceCallbacks i) {
+        imgServiceCallbacks = i;
+    }
+
     public class SendImageDataServiceBinder extends Binder {
         public SendImageDataService getService() {return SendImageDataService.this; }
     }
 
     private static class SendImageClassDataTask extends AsyncTask<Void, Void, String> {
 
-        String crlf = "\r\n";
-        String twoHyphens = "--";
-        String boundary = "*****";
-        private String serverUrl = "https://pinpointr-test.azurewebsites.net";
-        private String postSubmissionUrl = "/api/Submission/PostSubmission";
         private ImageData data;
-
         SendImageClassDataTask(ImageData data) {
             this.data = data;
         }
@@ -91,7 +107,7 @@ public class SendImageDataService extends Service {
             HttpsURLConnection urlConnection = null;
             URL url = null;
             try {
-                url = new URL(serverUrl + this.postSubmissionUrl);
+                url = new URL(DB_SERVER + DB_POST_SUBMISSION_API);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -125,28 +141,23 @@ public class SendImageDataService extends Service {
 
                 String requestText = tagsArray.toString();
 
-                Log.e("Server", data.PrintCoords());
-                Log.e("Server", data.GetImageURL());
-                Log.e("Server", data.PrintAltitude());
-                Log.e("Server", requestText);
+                Log.d("Server", data.PrintCoords());
+                Log.d("Server", data.GetImageURL());
+                Log.d("Server", data.PrintAltitude());
+                Log.d("Server", requestText);
                 //Open Request
                 request = new DataOutputStream(urlConnection.getOutputStream());
 
-                Log.e("Server","Opening Data Connection");
+                Log.d("Server","Opening Data Connection");
                 //Write data to the request
                 request.writeBytes(requestText);
                 request.flush();
                 request.close();
+                Log.d("Server","Sent Classification Data to Server");
 
-                Log.e("Server","Sent Classification Data to Server");
                 //Read data from the response
                 String status = urlConnection.getResponseMessage();
-                //String contentEncoding = urlConnection.getHeaderField("Content-Encoding");
-                //String contentType = urlConnection.getContentType();
                 Log.e("status", status);
-                //Log.e("Encoding", contentEncoding);
-                //Log.e("Content", contentType);
-
                 InputStream responseStream = urlConnection.getInputStream();
                 BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream, "utf-8"));
                 String line;
@@ -155,7 +166,7 @@ public class SendImageDataService extends Service {
                     Log.e("response", line);
                     responseText += line;
                 }
-                Log.e("Server","Received Response from Server");
+                Log.d("Server","Received Response from Server");
 
                 JSONObject jsonResponse = new JSONObject(responseText);
 
@@ -176,19 +187,18 @@ public class SendImageDataService extends Service {
 
     private static class SendImageTask extends AsyncTask<Bitmap, Void, String> {
 
-        String attachmentName = "test";
-        String attachmentFileName = "test.jpg";
-        String crlf = "\r\n";
-        String twoHyphens = "--";
-        String boundary = "*****";
-        private String serverUrl = "https://pinpointr-test.azurewebsites.net";
-        private String postImageUrl = "/api/Submission/PostImage";
+
+
         private SendImageDataService caller;
 
         SendImageTask(SendImageDataService caller) {
             this.caller = caller;
         }
 
+        @Override
+        protected void onPostExecute(String s) {
+            caller.GetRemoteClassificationInfo(s);
+        }
 
         protected String doInBackground(Bitmap... imgs) {
             try {
@@ -203,7 +213,7 @@ public class SendImageDataService extends Service {
 
         private String SendImage(Bitmap img) throws IOException {
             HttpsURLConnection urlConnection = null;
-            URL url = new URL(serverUrl + postImageUrl);
+            URL url = new URL(DB_SERVER + DB_POST_IMAGE_API);
             DataOutputStream request = null;
 
             try {
@@ -218,23 +228,23 @@ public class SendImageDataService extends Service {
                 urlConnection.setRequestProperty("Cache-Control", "no-cache");
                 urlConnection.setRequestProperty("Accept-encoding", "gzip, deflate, br");
                 urlConnection.setRequestProperty("Accept-Language", "en-GB,en-US;q=0.9,en;q=0.8,ja;q=0.7");
-                urlConnection.setRequestProperty("content-type", "multipart/form-data; boundary=" + this.boundary);
+                urlConnection.setRequestProperty("content-type", "multipart/form-data; boundary=" + BOUNDARY);
 
                 //Open Request
                 request = new DataOutputStream(urlConnection.getOutputStream());
 
 
                 //Write data to the request
-                request.writeBytes(this.twoHyphens + this.boundary + this.crlf);
-                request.writeBytes("Content-Disposition: form-data; name=\"file\";filename=\"testingimage.jpg\"");
-                request.writeBytes(this.crlf);
+                request.writeBytes(TWOHYPHENS + BOUNDARY + CRLF);
+                request.writeBytes("Content-Disposition: form-data; name=\"" + IMG_NAME + "\";filename=\"" + IMG_FILE_NAME + "\"");
+                request.writeBytes(CRLF);
                 request.writeBytes("Content-Type: image/jpeg");
-                request.writeBytes(this.crlf);
-                request.writeBytes(this.crlf);
+                request.writeBytes(CRLF);
+                request.writeBytes(CRLF);
                 byte[] pixels = getImageBytes(img);
                 request.write(pixels);
-                request.writeBytes(this.crlf);
-                request.writeBytes(this.twoHyphens + this.boundary + this.twoHyphens + this.crlf);
+                request.writeBytes(CRLF);
+                request.writeBytes(TWOHYPHENS + BOUNDARY + TWOHYPHENS + CRLF);
                 request.flush();
                 request.close();
 
@@ -265,10 +275,105 @@ public class SendImageDataService extends Service {
             }
             return null;
         }
+    }
+
+    private static class GetRemoteClassificationInfoTask extends AsyncTask<Void, Void, String> {
+
+        private SendImageDataService caller;
+        GetRemoteClassificationInfoTask(SendImageDataService caller) {
+            this.caller = caller;
+        }
+
+        protected String doInBackground(Void...voids) {
+            return SendImageURL();
+        }
 
         @Override
         protected void onPostExecute(String s) {
-            caller.SendClassificationData(s);
+            caller.imgServiceCallbacks.SetLabels();
+            caller.SendClassificationData();
+        }
+
+        private String SendImageURL() {
+            HttpsURLConnection urlConnection = null;
+            URL url = null;
+            try {
+                url = new URL(PREDICTION_SERVER + PREDICTION_API);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            DataOutputStream request = null;
+
+
+            try {
+                Log.e("Server", "Sending Classification Data to Server");
+                urlConnection = (HttpsURLConnection) url.openConnection();
+                urlConnection.setUseCaches(false);
+                urlConnection.setDoOutput(true);
+                urlConnection.setDoInput(true);
+                urlConnection.setRequestProperty("Prediction-Key", PREDICTION_KEY);
+                urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0");
+                urlConnection.setRequestProperty("Cache-Control", "no-cache");
+                urlConnection.setRequestProperty("Accept-encoding", "gzip, deflate");
+                urlConnection.setRequestProperty("content-type", "application/json");
+
+                String imgUrl = S3_BUCKET_URL + caller.imgData.GetImageURL();
+
+                JSONObject urlInfo = new JSONObject();
+                urlInfo.put("Url", imgUrl);
+                String requestText = urlInfo.toString();
+
+                request = new DataOutputStream(urlConnection.getOutputStream());
+                Log.e("Server", "Opening Data Connection");
+                //Write data to the request
+                request.writeBytes(requestText);
+                request.flush();
+                request.close();
+                String status = urlConnection.getResponseMessage();
+                //String contentEncoding = urlConnection.getHeaderField("Content-Encoding");
+                //String contentType = urlConnection.getContentType();
+                Log.e("status", status);
+                //Log.e("Encoding", contentEncoding);
+                //Log.e("Content", contentType);
+
+                InputStream responseStream = urlConnection.getInputStream();
+                BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream, "utf-8"));
+                String line;
+                String responseText = "";
+                while ((line = responseStreamReader.readLine()) != null) {
+                    Log.e("response", line);
+                    responseText += line;
+                }
+                Log.e("Server", "Received Response from Server");
+
+                JSONObject jsonResponse = new JSONObject(responseText);
+                String predictionID = jsonResponse.getString("id");
+                String projectID = jsonResponse.getString("project");
+                String iterationID = jsonResponse.getString("iteration");
+                JSONArray predictions = jsonResponse.getJSONArray("predictions");
+                Map.Entry<String, Float> tag;
+
+                for (int i = 0; i < predictions.length(); i++) {
+                    JSONObject prediction = predictions.getJSONObject(i);
+                    String tagName = prediction.getString("tagName");
+                    float probability = (float) prediction.getDouble("probability");
+                    JSONObject boundingBox = prediction.getJSONObject("boundingBox");
+                    if (probability > PREDICTION_THRESHOLD) {
+                        tag = new AbstractMap.SimpleEntry<String, Float>(tagName, probability);
+                        caller.imgData.SortedLabels.add(tag);
+                    }
+                }
+
+                responseStreamReader.close();
+                responseStream.close();
+                urlConnection.disconnect();
+                return jsonResponse.toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 

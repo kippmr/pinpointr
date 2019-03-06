@@ -28,7 +28,7 @@ public class ImageData {
 
     public long ClassificationTimeMs;
 
-    public PriorityQueue<Map.Entry<String, Float>> SortedLabels;
+    public PriorityQueue<Map.Entry<String, Float>> SortedLabels = new PriorityQueue<>();
     public String errorString;
 
 

@@ -63,6 +63,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -677,6 +679,28 @@ public class Camera2BasicFragment extends Fragment
       //bitmap.recycle();
     }
 
+    return imgData;
+  }
+
+  public ImageData getImageData() {
+    ImageData imgData = new ImageData();
+    if (getActivity() == null || cameraDevice == null) {
+      imgData.errorString = "Error classifying frame in Camera2BasicFragment";
+    } else {
+      configureTransform(previewSize.getWidth(), previewSize.getHeight());
+      Bitmap bitmap = textureView.getBitmap(ImageClassifier.DIM_IMG_SIZE_X, ImageClassifier.DIM_IMG_SIZE_Y);
+      imgData = new ImageData() {{
+        image = bitmap;
+        SortedLabels = new PriorityQueue<>(
+                3,
+                new Comparator<Map.Entry<String, Float>>() {
+                  @Override
+                  public int compare(Map.Entry<String, Float> o1, Map.Entry<String, Float> o2) {
+                    return (o1.getValue()).compareTo(o2.getValue());
+                  }
+                });
+      }};
+    }
     return imgData;
   }
 
