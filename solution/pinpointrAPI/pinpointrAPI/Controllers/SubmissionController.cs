@@ -74,6 +74,19 @@ namespace pinpointrAPI.Controllers
         }
 
         /// <summary>
+        /// Gets list of all submissions that have not expired and are not completed
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public IEnumerable<Submission> GetCurrentSubmissions()
+        {
+            var now = DateTime.Now;
+            var submissions = _context.Submission.Where(s => s.obs_est >= now && !s.is_completed).ToList();
+
+            return submissions;
+        }
+
+        /// <summary>
         /// Get tags for a single submission
         /// </summary>
         /// <param name="id">id of submission</param>
@@ -165,5 +178,35 @@ namespace pinpointrAPI.Controllers
 
             return CreatedAtAction("GetSubmission", new { submission.id }, submission);
         }
+
+        /// <summary>
+        /// Mark a submission as completed
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Completed submission</returns>
+        [HttpPut("[action]")]
+        public async Task<IActionResult> PutCompleted([FromHeader] int id)
+        {
+            Submission submission = await _context.Submission.FindAsync(id);
+
+            if (submission == null)
+                return BadRequest("Invalid id");
+            else if (submission.is_completed == true)
+                return BadRequest("Already completed");
+            else
+                submission.is_completed = true;
+
+            try
+            {
+                _context.Update(submission);
+                _context.SaveChanges();
+            } catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+            return CreatedAtAction("GetSubmission", new { id }, submission);
+        }
+
     }
 }
