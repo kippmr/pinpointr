@@ -6,7 +6,7 @@ var __activatedLayers = [];
 var __debug = true;
 var __points = [];
 var singleSubmissionURL = "/api/Submission/GetSubmission/"
-var allSubmissionURL = "/api/Submission/GetAllSubmissions"
+var allSubmissionURL = "/api/Submission/GetCurrentSubmissions"
 var getTagsURL = "/api/Submission/GetTags/"
 var lastSelected;
 
