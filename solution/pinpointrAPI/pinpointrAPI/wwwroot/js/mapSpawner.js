@@ -104,7 +104,7 @@ function plotPoint(submissionData) {
 
         var newPoint = L.marker(pos);
 
-        imgurl = makeImgUrl(currentPoint["image_url"]);
+        var imgurl = makeImgUrl(currentPoint["image_url"]);
         tagPromise = getTags(currentPoint["id"]);
         var realPromise = Promise.resolve(tagPromise);
 
