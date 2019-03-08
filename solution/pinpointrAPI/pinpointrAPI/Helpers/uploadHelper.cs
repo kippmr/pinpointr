@@ -19,7 +19,7 @@ namespace pinpointrAPI.Helpers
             CloudBlobClient blobClient = null;
             CloudBlockBlob blockBlob = null;
             bool uploadStatus = false;
-            bool checkStatus = false;
+            //bool checkStatus = false;
 
             Console.WriteLine("Recieved request to upload blob");
             string connectionString = getAZBConnectionString();
