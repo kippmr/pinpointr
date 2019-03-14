@@ -28,12 +28,11 @@ public class ImageData {
 
     public long ClassificationTimeMs;
 
-    public PriorityQueue<Map.Entry<String, Float>> SortedLabels;
+    public PriorityQueue<Map.Entry<String, Float>> SortedLabels = new PriorityQueue<>();
     public String errorString;
 
 
-
-    public ImageData(Bitmap img, double lon, double lat, double alt, List<String> modelLabels, List<String> userLabels, boolean verified){
+    public ImageData(Bitmap img, double lon, double lat, double alt, List<String> modelLabels, List<String> userLabels, boolean verified) {
         this.image = img;
         this.longitude = lon;
         this.latitude = lat;
@@ -47,17 +46,18 @@ public class ImageData {
         this(img, 0, 0, 0, modelLabels, userLabels, verified);
     }
 
-    public ImageData(Bitmap img, double lon, double lat, double alt){
+    public ImageData(Bitmap img, double lon, double lat, double alt) {
         this(img, lon, lat, alt, new ArrayList<String>(), new ArrayList<String>(), false);
 
     }
 
-    public ImageData(Bitmap img){
+    public ImageData(Bitmap img) {
         this(img, 0, 0, 0, new ArrayList<String>(), new ArrayList<String>(), false);
 
     }
 
-    public ImageData(){}
+    public ImageData() {
+    }
 
     public void SetURL(String url) {
         this.URL = url;
@@ -82,6 +82,4 @@ public class ImageData {
     public String GetImageURL() {
         return URL;
     }
-
-
 }

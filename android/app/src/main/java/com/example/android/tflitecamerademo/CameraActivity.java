@@ -49,7 +49,7 @@ import androidx.core.content.ContextCompat;
 
 
 /** Main {@code Activity} class for the Camera app. */
-public class CameraActivity extends AppCompatActivity {
+public class CameraActivity extends AppCompatActivity implements ImageServiceCallbacks {
 
     /* Screen Controls */
 
@@ -75,12 +75,17 @@ public class CameraActivity extends AppCompatActivity {
     //TODO - should not be global
     ImageData imageData;
 
+
+
     // Request permission codes
     public static final int REQUEST_IMAGE = 100;
     public static final int REQUEST_PERMISSION = 200;
 
     // Tag for error logging
     private static final String TAG = CameraActivity.class.getSimpleName();
+
+    public boolean classifyLocally = false;
+
 
     // (1.5) private String imageFilePath = "";
 
@@ -140,6 +145,7 @@ public class CameraActivity extends AppCompatActivity {
             locationService = ((LocationService.LocationServiceBinder)service).getService();
             locationService.StartLocationServices();
             locationServiceBound = true;
+            sendImageDataService.setCallbacks(CameraActivity.this);
         }
 
         @Override
@@ -315,16 +321,25 @@ public class CameraActivity extends AppCompatActivity {
 
         // TODO - implement actual object clone OR clone useful object attributes
         Camera2BasicFragment camera2BasicFragment_copy = camera2BasicFragment;
-        // Instantiate the ImageData object
-        imageData = camera2BasicFragment_copy.getImageClassificationData();
+        //If we are classifying remotely, we don't want to call local classification and we don't want to set the labels until we have received the classification data
+        if (classifyLocally) {
+            imageData = camera2BasicFragment_copy.getImageClassificationData();
+            // TODO - replace with filltagsmenu
+            SetLabels();
+        } else {
+            imageData = camera2BasicFragment_copy.getImageData();
+            ResetLabels();
+        }
+
+
         setReviewScreenImage(camera2BasicFragment_copy);
         //TODO - make Location property of ImageData
         //Get the last known location for the photo
         Location photoLocation = locationService.getLocation();
 
         //TODO - move to btnNavBar_Send.setOnClickListener()
-//        savePhotoLocally();
-//        sendPhotoToServer(photoLocation);
+        savePhotoLocally();
+        sendPhotoToServer(photoLocation);
     }
 
     private void setReviewScreenImage(Camera2BasicFragment c2bf){
@@ -337,6 +352,28 @@ public class CameraActivity extends AppCompatActivity {
         screenLayout_Review.setBackground(d);
 
     }
+
+    @Override
+    public void SetLabels() {
+        String textToShow = "";
+        PriorityQueue<Map.Entry<String, Float>> sortedLabels = imageData.SortedLabels;
+        Iterator labelIterator = sortedLabels.iterator();
+        while(labelIterator.hasNext()) {
+            Map.Entry<String, Float> label = (Map.Entry<String, Float>)labelIterator.next();
+            String tag = label.getKey() + ", " + label.getValue();
+            textToShow += "\n"+tag;
+        }
+        tvLabels.setText(textToShow);
+    }
+
+    public void ResetLabels() {
+        if (this.imageData != null && this.imageData.SortedLabels != null) {
+            this.imageData.SortedLabels.clear();
+        }
+        String textToShow = "";
+        tvLabels.setText(textToShow);
+    }
+
 
 
 
