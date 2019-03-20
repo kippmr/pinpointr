@@ -39,7 +39,7 @@ public class SendImageDataService extends Service {
     private final static Float PREDICTION_THRESHOLD = 0.20f;
 
     //Pinpointr Database Connection Strings
-    private final static String DB_SERVER = "https://pinpointr-test.azurewebsites.net";
+    private final static String DB_SERVER = "https://pinpointr.azurewebsites.net";
     private final static String DB_POST_IMAGE_API = "/api/Submission/PostImage";
     private final static String DB_POST_SUBMISSION_API = "/api/Submission/PostSubmission";
 

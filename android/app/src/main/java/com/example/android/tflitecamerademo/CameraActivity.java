@@ -94,48 +94,6 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
         ToPreview
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //sets the screen to activity_camera.xml screen
-        setContentView(R.layout.activity_camera);
-        if (null == savedInstanceState) {
-            camera2BasicFragment = Camera2BasicFragment.newInstance();
-            getFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.screenLayout_Camera, camera2BasicFragment)
-                    .commit();
-        }
-
-        locateControls();
-        checkUserPermissions();
-        setSupportActionBar(bottomAppBar);
-        setButtonEventListeners();
-    }
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        //Start App Services
-        startLocationService();
-        startSaveImageService();
-        startSendImageDataService();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (locationServiceConnection != null) {
-            unbindService(locationServiceConnection);
-        }
-        if (saveImageServiceConnection!= null) {
-            unbindService(saveImageServiceConnection);
-        }
-        if (sendImageDataServiceConnection!= null) {
-            unbindService(sendImageDataServiceConnection);
-        }
-    }
-
     //Location Service Variables
     private Boolean locationServiceBound = false;
     private LocationService locationService; //Reference to the location service
@@ -145,7 +103,6 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
             locationService = ((LocationService.LocationServiceBinder)service).getService();
             locationService.StartLocationServices();
             locationServiceBound = true;
-            sendImageDataService.setCallbacks(CameraActivity.this);
         }
 
         @Override
@@ -178,6 +135,7 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
         public void onServiceConnected(ComponentName name, IBinder service) {
             sendImageDataService = ((SendImageDataService.SendImageDataServiceBinder)service).getService();
             sendImageDataServiceBound = true;
+            sendImageDataService.setCallbacks(CameraActivity.this);
         }
 
         @Override
@@ -185,6 +143,51 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
             sendImageDataServiceBound = false;
         }
     };
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        //Start App Services
+        startLocationService();
+        startSaveImageService();
+        startSendImageDataService();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (locationServiceConnection != null) {
+            unbindService(locationServiceConnection);
+        }
+        if (saveImageServiceConnection!= null) {
+            unbindService(saveImageServiceConnection);
+        }
+        if (sendImageDataServiceConnection!= null) {
+            unbindService(sendImageDataServiceConnection);
+        }
+    }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //sets the screen to activity_camera.xml screen
+        setContentView(R.layout.activity_camera);
+        if (null == savedInstanceState) {
+            camera2BasicFragment = Camera2BasicFragment.newInstance();
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.screenLayout_Camera, camera2BasicFragment)
+                    .commit();
+        }
+
+        locateControls();
+        checkUserPermissions();
+        setSupportActionBar(bottomAppBar);
+        setButtonEventListeners();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
