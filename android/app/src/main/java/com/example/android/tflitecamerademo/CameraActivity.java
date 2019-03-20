@@ -201,36 +201,16 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
 
         switch(item.getItemId()){
             case android.R.id.home:
-                fillandShowTagsMenu();
                 break;
 
         }
         return true;
     }
 
-    private void fillandShowTagsMenu(){
-        bottomSheet = new TagListBottomSheetDialogFragment();
-        bottomSheet.showNow(getSupportFragmentManager(), "TAG");
+    private void fillTagsMenu(){
 
-        String textToShow = "";
-        PriorityQueue<Map.Entry<String, Float>> sortedLabels = imageData.SortedLabels;
-        Iterator labelIterator = sortedLabels.iterator();
-        final int size = sortedLabels.size();
-        // TODO - the tags should be ordered by probability
-        while(labelIterator.hasNext()) {
-            Map.Entry<String, Float> label = (Map.Entry<String, Float>)labelIterator.next();
-            String tag = label.getKey();
-            String tagLong = tag + ", "+ label.getValue();
 
-            textToShow += "\n"+ tagLong;
-
-            bottomSheet.tagListBottomFragment.addGeneratedTag(tag);
-        }
-        tvLabels.setText(textToShow);
     }
-
-
-
 
 
 
@@ -328,7 +308,7 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
         if (classifyLocally) {
             imageData = camera2BasicFragment_copy.getImageClassificationData();
             // TODO - replace with filltagsmenu
-            SetLabels();
+            fillTagsMenu();
         } else {
             imageData = camera2BasicFragment_copy.getImageData();
             ResetLabels();
@@ -358,18 +338,25 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
 
     @Override
     public void SetLabels() {
+        bottomSheet = new TagListBottomSheetDialogFragment();
+        bottomSheet.showNow(getSupportFragmentManager(), "TAG");
+
         String textToShow = "";
         PriorityQueue<Map.Entry<String, Float>> sortedLabels = imageData.SortedLabels;
         Iterator labelIterator = sortedLabels.iterator();
+        final int size = sortedLabels.size();
+        // TODO - the tags should be ordered by probability
         while(labelIterator.hasNext()) {
             Map.Entry<String, Float> label = (Map.Entry<String, Float>)labelIterator.next();
-            String tag = label.getKey() + ", " + label.getValue();
-            textToShow += "\n"+tag;
+            String tag = label.getKey();
+            String tagLong = tag + ", "+ label.getValue();
+
+            bottomSheet.tagListBottomFragment.addGeneratedTag(tag);
         }
-        tvLabels.setText(textToShow);
     }
 
     public void ResetLabels() {
+        //TODO - clear tags from menu
         if (this.imageData != null && this.imageData.SortedLabels != null) {
             this.imageData.SortedLabels.clear();
         }
