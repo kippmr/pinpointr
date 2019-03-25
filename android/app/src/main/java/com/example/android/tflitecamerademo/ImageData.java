@@ -32,8 +32,7 @@ public class ImageData {
     public String errorString;
 
 
-
-    public ImageData(Bitmap img, double lon, double lat, double alt, List<String> modelLabels, List<String> userLabels, boolean verified){
+    public ImageData(Bitmap img, double lon, double lat, double alt, List<String> modelLabels, List<String> userLabels, boolean verified) {
         this.image = img;
         this.longitude = lon;
         this.latitude = lat;
@@ -47,17 +46,18 @@ public class ImageData {
         this(img, 0, 0, 0, modelLabels, userLabels, verified);
     }
 
-    public ImageData(Bitmap img, double lon, double lat, double alt){
+    public ImageData(Bitmap img, double lon, double lat, double alt) {
         this(img, lon, lat, alt, new ArrayList<String>(), new ArrayList<String>(), false);
 
     }
 
-    public ImageData(Bitmap img){
+    public ImageData(Bitmap img) {
         this(img, 0, 0, 0, new ArrayList<String>(), new ArrayList<String>(), false);
 
     }
 
-    public ImageData(){}
+    public ImageData() {
+    }
 
     public void SetURL(String url) {
         this.URL = url;
@@ -68,7 +68,6 @@ public class ImageData {
         this.longitude = lon;
         this.altitude = alt;
     }
-
 
     //For setting headers of request
     public String PrintCoords() {
@@ -83,5 +82,12 @@ public class ImageData {
         return URL;
     }
 
-
+    //Returns true if the Image has the required information to be sent in as a service request
+    public boolean CheckComplete() {
+        if (this.latitude == 0.0 || this.longitude == 0.0 || this.SortedLabels == null || this.SortedLabels.isEmpty() || this.URL == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

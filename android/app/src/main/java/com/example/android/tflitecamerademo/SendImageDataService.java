@@ -39,7 +39,8 @@ public class SendImageDataService extends Service {
     private final static Float PREDICTION_THRESHOLD = 0.20f;
 
     //Pinpointr Database Connection Strings
-    private final static String DB_SERVER = "https://pinpointr-test.azurewebsites.net";
+
+    private final static String DB_SERVER = "https://pinpointr.azurewebsites.net";
     private final static String DB_POST_IMAGE_API = "/api/Submission/PostImage";
     private final static String DB_POST_SUBMISSION_API = "/api/Submission/PostSubmission";
 
@@ -56,6 +57,15 @@ public class SendImageDataService extends Service {
 
     private ImageServiceCallbacks imgServiceCallbacks;
 
+
+    //Check if we received enough classification and location data to make a service request
+    public boolean CheckImageDataComplete(){
+        if (this.imgData.CheckComplete()) {
+            return true;
+        }
+        return false;
+    }
+
     public SendImageDataService() {
 
     }
@@ -66,10 +76,18 @@ public class SendImageDataService extends Service {
         AsyncTask sendImgTask = new SendImageTask(this).execute(this.imgData.image);
         return true;
     }
+
+    //Called when the user hits the submit button
     public boolean SendClassificationData() {
-        log.d("ClassificationData","Received response " + this.imgData.GetImageURL());
-        AsyncTask sendImageClassDataTask = new SendImageClassDataTask(imgData).execute();
-        return true;
+        if (CheckImageDataComplete()) {
+            log.d("ClassificationData","Received response " + this.imgData.GetImageURL());
+            AsyncTask sendImageClassDataTask = new SendImageClassDataTask(imgData).execute();
+            return true;
+        }
+        else {
+            log.d("ClassificationData", "Insufficient data to send request");
+        }
+        return false;
     }
 
     public boolean GetRemoteClassificationInfo(String imgUrl) {
@@ -100,7 +118,7 @@ public class SendImageDataService extends Service {
         }
 
         protected String doInBackground(Void...voids) {
-                return SendClassificationData();
+            return SendClassificationData();
         }
 
         private String SendClassificationData() {
@@ -291,7 +309,6 @@ public class SendImageDataService extends Service {
         @Override
         protected void onPostExecute(String s) {
             caller.imgServiceCallbacks.SetLabels();
-            caller.SendClassificationData();
         }
 
         private String SendImageURL() {
@@ -385,5 +402,4 @@ public class SendImageDataService extends Service {
         return imageBytes;
     }
 }
-
 

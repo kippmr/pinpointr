@@ -682,6 +682,13 @@ public class Camera2BasicFragment extends Fragment
     return imgData;
   }
 
+
+
+
+  public Matrix getTransformMatrix(){
+    return transformMatrix;
+  }
+
   public ImageData getImageData() {
     ImageData imgData = new ImageData();
     if (getActivity() == null || cameraDevice == null) {
@@ -705,9 +712,6 @@ public class Camera2BasicFragment extends Fragment
   }
 
 
-  public Matrix getTransformMatrix(){
-    return transformMatrix;
-  }
 
   public AutoFitTextureView getTextureView(){
     return textureView;
