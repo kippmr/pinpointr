@@ -1,6 +1,7 @@
 package com.example.android.tflitecamerademo;
 
 import android.graphics.Bitmap;
+import android.location.Location;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -26,13 +27,22 @@ public class ImageData {
     //Blank if the user has not uploaded the image
     public String URL = "";
 
+    public Location photoLocation;
+
     public long ClassificationTimeMs;
 
     public PriorityQueue<Map.Entry<String, Float>> SortedLabels = new PriorityQueue<>();
     public String errorString;
 
 
-    public ImageData(Bitmap img, double lon, double lat, double alt, List<String> modelLabels, List<String> userLabels, boolean verified) {
+    public ImageData(Bitmap img,
+                     double lon,
+                     double lat,
+                     double alt,
+                     List<String> modelLabels,
+                     List<String> userLabels,
+                     boolean verified)
+    {
         this.image = img;
         this.longitude = lon;
         this.latitude = lat;

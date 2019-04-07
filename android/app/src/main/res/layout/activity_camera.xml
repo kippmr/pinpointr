@@ -46,24 +46,24 @@
     <RelativeLayout
         android:id="@+id/screenLayout_Review"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:background="@color/layout_background"
-        android:visibility="invisible"
         android:elevation="13dp"
-        android:layout_alignParentTop="true">
+        android:visibility="invisible">
 
 
         <ImageButton
             android:id="@+id/btnBack"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:src="@drawable/close_2_96"
-            android:layout_alignParentTop="true"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
+            android:background="@null"
             android:clickable="true"
-            android:background="@null"/>
+            android:src="@drawable/close_2_96" />
 
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -78,7 +78,7 @@
                 android:layout_gravity="bottom"
                 android:backgroundTint="@color/bottomNavigationBarColor"
                 android:tint="@android:color/white"
-                app:navigationIcon="@drawable/tags_white_96"/>
+                app:navigationIcon="@drawable/tags_white_96" />
 
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -87,21 +87,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="28dp"
                 android:src="@drawable/send_96"
-                app:layout_anchor="@id/bottom_app_bar"
-                app:backgroundTint="@color/navBarSecondary"/>
+                app:backgroundTint="@color/navBarSecondary"
+                app:layout_anchor="@id/bottom_app_bar" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <TextView
             android:id="@+id/labels"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:background="@color/colorPrimary"
-            android:textColor="#000000"
             android:text="[FOR TESTING ONLY]"
-            />
+            android:textColor="#000000" />
 
     </RelativeLayout>
 

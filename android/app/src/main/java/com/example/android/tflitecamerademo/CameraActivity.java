@@ -18,6 +18,7 @@ package com.example.android.tflitecamerademo;
 import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -43,12 +44,15 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 
-/** Main {@code Activity} class for the Camera app. */
+/**
+ * Main {@code Activity} class for the Camera app.
+ */
 public class CameraActivity extends AppCompatActivity implements ImageServiceCallbacks {
 
     /* Screen Controls */
@@ -72,10 +76,12 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
     TagListBottomSheetDialogFragment bottomSheet;
 
     Camera2BasicFragment camera2BasicFragment;
+
+
     //TODO - should not be global
     ImageData imageData;
-
-
+    //TODO - remove
+    Location photoLocation;
 
     // Request permission codes
     public static final int REQUEST_IMAGE = 100;
@@ -86,10 +92,9 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
 
     public boolean classifyLocally = false;
 
-
     // (1.5) private String imageFilePath = "";
 
-    private enum ScreenTransition{
+    private enum ScreenTransition {
         ToReview,
         ToPreview
     }
@@ -99,8 +104,8 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
     private LocationService locationService; //Reference to the location service
     private ServiceConnection locationServiceConnection = new ServiceConnection() { //Bind to the location service
         @Override
-        public void onServiceConnected(ComponentName name, IBinder service){
-            locationService = ((LocationService.LocationServiceBinder)service).getService();
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            locationService = ((LocationService.LocationServiceBinder) service).getService();
             locationService.StartLocationServices();
             locationServiceBound = true;
         }
@@ -133,7 +138,7 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
     private ServiceConnection sendImageDataServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            sendImageDataService = ((SendImageDataService.SendImageDataServiceBinder)service).getService();
+            sendImageDataService = ((SendImageDataService.SendImageDataServiceBinder) service).getService();
             sendImageDataServiceBound = true;
             sendImageDataService.setCallbacks(CameraActivity.this);
         }
@@ -161,10 +166,10 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
         if (locationServiceConnection != null) {
             unbindService(locationServiceConnection);
         }
-        if (saveImageServiceConnection!= null) {
+        if (saveImageServiceConnection != null) {
             unbindService(saveImageServiceConnection);
         }
-        if (sendImageDataServiceConnection!= null) {
+        if (sendImageDataServiceConnection != null) {
             unbindService(sendImageDataServiceConnection);
         }
     }
@@ -183,36 +188,12 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
                     .commit();
         }
 
+        bottomSheet = new TagListBottomSheetDialogFragment();
         locateControls();
         checkUserPermissions();
         setSupportActionBar(bottomAppBar);
         setButtonEventListeners();
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = this.getMenuInflater();
-        inflater.inflate(R.menu.bottomappbar_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch(item.getItemId()){
-            case android.R.id.home:
-                break;
-
-        }
-        return true;
-    }
-
-    private void fillTagsMenu(){
-
-
-    }
-
-
 
     //Bind Location services
     private void startLocationService() {
@@ -224,19 +205,21 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
 
     //Bind Image saving for file I/O
     private void startSaveImageService() {
-        if (saveImageServiceBound == false ) {
+        if (saveImageServiceBound == false) {
             Intent imgSaveIntent = new Intent(this, SaveImageService.class);
             bindService(imgSaveIntent, saveImageServiceConnection, Context.BIND_AUTO_CREATE);
         }
     }
+
     //Bind Image saving for file I/O
     private void startSendImageDataService() {
-        if (sendImageDataServiceBound == false ) {
+        if (sendImageDataServiceBound == false) {
             Intent imgSaveIntent = new Intent(this, SendImageDataService.class);
             bindService(imgSaveIntent, sendImageDataServiceConnection, Context.BIND_AUTO_CREATE);
         }
     }
-    private void locateControls(){
+
+    private void locateControls() {
         // locate controls
         try {
             bottomAppBar = findViewById(R.id.bottom_app_bar);
@@ -247,31 +230,32 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
             buttonPanel = findViewById(R.id.buttonPanel);
             btnNavBar_Send = findViewById(R.id.btnNavBar_Send);
             tvLabels = findViewById(R.id.labels);
-        } catch(Exception ex){
+        } catch (Exception ex) {
             Log.e(TAG, "Exception caught when locating CameraActivity View's controls.");
             ex.printStackTrace();
         }
 
     }
 
-    private void setButtonEventListeners(){
+    private void setButtonEventListeners() {
         // set button onclick events
         btnCamera.setOnClickListener((View v) -> {
             takePhoto();
             switchScreen(ScreenTransition.ToReview);
+            ShowLabels();
         });
         btnBack.setOnClickListener((View v) -> {
             switchScreen(ScreenTransition.ToPreview);
         });
         btnNavBar_Send.setOnClickListener((View v) -> {
-
+            sendPhoto();
         });
     }
 
-    private void checkUserPermissions(){
+    private void checkUserPermissions() {
         // check permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-                PackageManager.PERMISSION_GRANTED  ||
+                PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) !=
                         PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
@@ -283,13 +267,31 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = this.getMenuInflater();
+        inflater.inflate(R.menu.bottomappbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                ShowLabels();
+                break;
+
+        }
+        return true;
+    }
+
     // TODO - this should be a View transition, if sending an object to a new View is efficient enough (yikes)
-    private void switchScreen(ScreenTransition transition){
-        if(transition == ScreenTransition.ToReview){
+    private void switchScreen(ScreenTransition transition) {
+        if (transition == ScreenTransition.ToReview) {
             screenLayout_Review.setVisibility(View.VISIBLE);
             screenLayout_Camera.setVisibility(View.INVISIBLE);
-        }
-        else if(transition == ScreenTransition.ToPreview){
+        } else if (transition == ScreenTransition.ToPreview) {
             screenLayout_Camera.setVisibility(View.VISIBLE);
             screenLayout_Review.setVisibility(View.INVISIBLE);
         }
@@ -300,32 +302,56 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
      * Captures photo, initializes the ImageData object (classification, location), and switches
      * the screen to Review mode.
      **/
-    private void takePhoto(){
-
+    private void takePhoto() {
+        ResetLabels();
         // TODO - implement actual object clone OR clone useful object attributes
         Camera2BasicFragment camera2BasicFragment_copy = camera2BasicFragment;
         //If we are classifying remotely, we don't want to call local classification and we don't want to set the labels until we have received the classification data
         if (classifyLocally) {
             imageData = camera2BasicFragment_copy.getImageClassificationData();
-            // TODO - replace with filltagsmenu
-            fillTagsMenu();
         } else {
             imageData = camera2BasicFragment_copy.getImageData();
-            ResetLabels();
+
         }
 
 
         setReviewScreenImage(camera2BasicFragment_copy);
         //TODO - make Location property of ImageData
         //Get the last known location for the photo
-        Location photoLocation = locationService.getLocation();
-
-        //TODO - move to btnNavBar_Send.setOnClickListener()
-        savePhotoLocally();
-        sendPhotoToServer(photoLocation);
+        photoLocation = locationService.getLocation();
+        if (photoLocation != null) {
+            //ImageData data = new ImageData(imageData.image, photoLocation.getLongitude(), photoLocation.getLatitude(), photoLocation.getAltitude());
+            // TODO - add to ImageData constructor
+            imageData.SetLocation(photoLocation.getLatitude(), photoLocation.getLongitude(), photoLocation.getAltitude());
+        }
     }
 
-    private void setReviewScreenImage(Camera2BasicFragment c2bf){
+    private void sendPhoto() {
+        showConfirmationDialog(savePhotoLocally() && sendPhotoToServer());
+    }
+
+    private void showConfirmationDialog(boolean sentSuccessfully){
+        AlertDialog alertDialog = new AlertDialog.Builder(CameraActivity.this).create();
+        if(sentSuccessfully){
+            alertDialog.setTitle("Success!");
+            alertDialog.setMessage("Your image was sent successfully.");
+        }
+        else{
+            alertDialog.setTitle("Oops!");
+            alertDialog.setMessage("There was a problem sending your image. Please check your network status and try again.");
+        }
+        // Thanks for helping keep McMaster Clean ?
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
+    private void setReviewScreenImage(Camera2BasicFragment c2bf) {
+        //TODO - fix screen squishing issue
         AutoFitTextureView textureView = c2bf.getTextureView();
         //Matrix m = c2bf.getTransformMatrix();
         //textureView.setTransform(m);
@@ -337,61 +363,45 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
     }
 
     @Override
-    public void SetLabels() {
-        bottomSheet = new TagListBottomSheetDialogFragment();
-        bottomSheet.showNow(getSupportFragmentManager(), "TAG");
+    public void ShowLabels() {
 
-        String textToShow = "";
+
         PriorityQueue<Map.Entry<String, Float>> sortedLabels = imageData.SortedLabels;
         Iterator labelIterator = sortedLabels.iterator();
         final int size = sortedLabels.size();
         // TODO - the tags should be ordered by probability
-        while(labelIterator.hasNext()) {
-            Map.Entry<String, Float> label = (Map.Entry<String, Float>)labelIterator.next();
+        while (labelIterator.hasNext()) {
+            Map.Entry<String, Float> label = (Map.Entry<String, Float>) labelIterator.next();
             String tag = label.getKey();
-            String tagLong = tag + ", "+ label.getValue();
-
+            String tagLong = tag + ", " + label.getValue();
             bottomSheet.tagListBottomFragment.addGeneratedTag(tag);
         }
+        bottomSheet.showNow(getSupportFragmentManager(), "TAG");
     }
 
     public void ResetLabels() {
-        //TODO - clear tags from menu
-        if (this.imageData != null && this.imageData.SortedLabels != null) {
-            this.imageData.SortedLabels.clear();
-        }
-        String textToShow = "";
-        tvLabels.setText(textToShow);
+        bottomSheet = new TagListBottomSheetDialogFragment();
     }
 
 
-
-
-    private void savePhotoLocally(){
+    private boolean savePhotoLocally() {
         if (imageData.image != null) {
             String outputPhotoPath = saveImageService.SaveImage(imageData.image);
             if (outputPhotoPath != null) {
-                Log.d("FileSaving","Saved Photo successfully");
+                Log.d("FileSaving", "Saved Photo successfully");
+                return true;
             }
         }
+        return false;
     }
 
-    // TODO - photoLocation should be part of ImageData
-    private void sendPhotoToServer(Location photoLocation){
+    // TODO - return boolean success
+    private boolean sendPhotoToServer() {
         //Send the photo with or without location
-        if (photoLocation != null) {
-            //ImageData data = new ImageData(imageData.image, photoLocation.getLongitude(), photoLocation.getLatitude(), photoLocation.getAltitude());
-            imageData.SetLocation(photoLocation.getLatitude(), photoLocation.getLongitude(), photoLocation.getAltitude());
-            sendImageDataService.SendImageData(imageData);
-        } else {
-            sendImageDataService.SendImageData(imageData);
-        }
+        return sendImageDataService.SendImageData(imageData);
     }
-
-//    private Bitmap ARGBBitmap(Bitmap img) {
-//        return img.copy(Bitmap.Config.ARGB_8888,true);
-//    }
 
 }
+
 
 

@@ -14,7 +14,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -290,7 +289,7 @@ public class SendImageDataService extends Service {
 
         @Override
         protected void onPostExecute(String s) {
-            caller.imgServiceCallbacks.SetLabels();
+            caller.imgServiceCallbacks.ShowLabels();
             caller.SendClassificationData();
         }
 
