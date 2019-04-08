@@ -385,6 +385,7 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
         bottomSheet.showNow(getSupportFragmentManager(), "TAG");
 
         String textToShow = "";
+        bottomSheet.setImageData(imageData);
         PriorityQueue<Map.Entry<String, Float>> sortedLabels = imageData.SortedLabels;
         Iterator labelIterator = sortedLabels.iterator();
         final int size = sortedLabels.size();
@@ -393,7 +394,6 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
             Map.Entry<String, Float> label = (Map.Entry<String, Float>)labelIterator.next();
             String tag = label.getKey();
             String tagLong = tag + ", "+ label.getValue();
-
             bottomSheet.tagListBottomFragment.addGeneratedTag(tag);
         }
     }

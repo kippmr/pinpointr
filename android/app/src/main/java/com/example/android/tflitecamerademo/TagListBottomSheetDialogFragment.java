@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.util.Map;
+import java.util.PriorityQueue;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -28,6 +31,10 @@ public class TagListBottomSheetDialogFragment extends BottomSheetDialogFragment 
         super.onViewCreated(view, savedInstanceState);
         tagListBottomFragment = new TagListBottomFragment();
         getChildFragmentManager().beginTransaction().add(R.id.frmContent, tagListBottomFragment).commit();
+    }
+
+    public void setImageData(ImageData imgData) {
+        tagListBottomFragment.adapter.imgData = imgData;
     }
 
 

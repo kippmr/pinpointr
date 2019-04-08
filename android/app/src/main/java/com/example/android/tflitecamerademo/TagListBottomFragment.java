@@ -13,12 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class TagListBottomFragment extends Fragment {
 
-    private TagListBottomAdapter adapter;
+    protected TagListBottomAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         adapter = new TagListBottomAdapter();
         super.onCreate(savedInstanceState);
+    }
+
+    public void SetImageData(ImageData imgData) {
+        adapter.imgData = imgData;
     }
 
     @Nullable

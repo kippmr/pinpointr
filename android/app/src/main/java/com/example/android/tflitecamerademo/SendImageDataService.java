@@ -157,7 +157,12 @@ public class SendImageDataService extends Service {
                     tagsArray.put(testTag);
                 }
 
-                String requestText = tagsArray.toString();
+                String requestText = "";
+                if (tagsArray.length() > 0) {
+                    requestText = tagsArray.toString();
+                }
+
+
 
                 Log.d("Server", data.PrintCoords());
                 Log.d("Server", data.GetImageURL());

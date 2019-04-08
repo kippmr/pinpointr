@@ -9,7 +9,8 @@
         android:layout_height="wrap_content"
         android:background="#EEEEEE"
         android:padding="16dp"
-        android:text="Tags"/>
+        android:text="Tags"
+        android:maxLines="1"/>
 
     <FrameLayout
         android:id="@+id/frmContent"
