@@ -32,6 +32,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,6 +40,8 @@ import android.widget.TextView;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.AbstractMap;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -69,10 +72,14 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
     BottomAppBar bottomAppBar;
     ImageButton btnCamera;
     ImageButton btnBack;
-    ImageButton btnSend;
+
     FloatingActionButton btnNavBar_Send;
     TextView tvLabels;
+
+    //Tag Fragment views;
     TagListBottomSheetDialogFragment bottomSheet;
+    Button btnNext;
+    Button btnAddTag;
 
     Camera2BasicFragment camera2BasicFragment;
     //TODO - should not be global
@@ -286,6 +293,7 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
 
     }
 
+    // TODO - Move this to a separate class
     private void setButtonEventListeners(){
         // set button onclick events
         btnCamera.setOnClickListener((View v) -> {
@@ -300,7 +308,45 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
                 switchScreen(ScreenTransition.ToPreview);
             }
         });
+
     }
+
+    //Retrieve all current tags from the adapter and update the image Data list accordingly
+    private void updateTagList() {
+        PriorityQueue<Map.Entry<String, Float>> newLabels = new PriorityQueue<>(                3,
+                new Comparator<Map.Entry<String, Float>>() {
+                    @Override
+                    public int compare(Map.Entry<String, Float> o1, Map.Entry<String, Float> o2) {
+                        return (o1.getValue()).compareTo(o2.getValue());
+                    }
+                });
+        if (bottomSheet != null) {
+            if (bottomSheet.tagListBottomFragment.adapter.getItemCount() > 0) {
+                PriorityQueue<Map.Entry<String, Float>> sortedLabels = imageData.SortedLabels;
+                Iterator labelIterator = sortedLabels.iterator();
+
+                //We iterate over all the tags in our list, only adding tags that were not deleted from the original SortedLabels, or were added by the user
+                for (String tag : bottomSheet.tagListBottomFragment.adapter.mTagListItems) {
+                    boolean foundEntry = false;
+                    while (labelIterator.hasNext()) {
+                        Map.Entry<String, Float> labelEntry = (Map.Entry<String, Float>) labelIterator.next();
+                        if (labelEntry.getKey() == tag) {
+                            newLabels.add(labelEntry);
+                            foundEntry = true;
+                            break;
+                        }
+                    }
+                    if (!foundEntry) {
+                        Map.Entry<String, Float> newTag = new AbstractMap.SimpleEntry<String, Float>(tag, 100.0f);
+                        newLabels.add(newTag);
+                    }
+                }
+            }
+        }
+        imageData.SortedLabels.clear();
+        imageData.SortedLabels = newLabels;
+    }
+
 
     private void checkUserPermissions(){
         // check permissions
@@ -342,16 +388,6 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
         if (classifyLocally) {
             imageData = camera2BasicFragment_copy.getImageClassificationData();
             // TODO - replace with filltagsmenu
-            fillTagsMenu();
-        } else {
-            imageData = camera2BasicFragment_copy.getImageData();
-            ResetLabels();
-        }
-
-        //If we are classifying remotely, we don't want to call local classification and we don't want to set the labels until we have received the classification data
-        if (classifyLocally) {
-            imageData = camera2BasicFragment_copy.getImageClassificationData();
-            // TODO - replace with filltagsmenu
             SetLabels();
         } else {
             imageData = camera2BasicFragment_copy.getImageData();
@@ -359,12 +395,14 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
 
         }
         setReviewScreenImage(camera2BasicFragment_copy);
-        //TODO - make Location property of ImageData
+
         //Get the last known location for the photo
         Location photoLocation = locationService.getLocation();
 
         //TODO - move to btnNavBar_Send.setOnClickListener()
-        savePhotoLocally();
+
+        //We don't need to save photos on the users device
+        //savePhotoLocally();
         sendPhotoToServer(photoLocation);
     }
 
@@ -381,22 +419,29 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
 
     @Override
     public void SetLabels() {
-        bottomSheet = new TagListBottomSheetDialogFragment();
-        bottomSheet.showNow(getSupportFragmentManager(), "TAG");
+        if (bottomSheet == null) {
+            bottomSheet = new TagListBottomSheetDialogFragment();
+            bottomSheet.showNow(getSupportFragmentManager(), "TAG");
 
-        String textToShow = "";
-        bottomSheet.setImageData(imageData);
-        PriorityQueue<Map.Entry<String, Float>> sortedLabels = imageData.SortedLabels;
-        Iterator labelIterator = sortedLabels.iterator();
-        final int size = sortedLabels.size();
-        // TODO - the tags should be ordered by probability
-        while(labelIterator.hasNext()) {
-            Map.Entry<String, Float> label = (Map.Entry<String, Float>)labelIterator.next();
-            String tag = label.getKey();
-            String tagLong = tag + ", "+ label.getValue();
-            bottomSheet.tagListBottomFragment.addGeneratedTag(tag);
+            //Get Reference to the buttons in the tag menu fragment
+            locateControlsInTagMenu();
+            PriorityQueue<Map.Entry<String, Float>> sortedLabels = imageData.SortedLabels;
+            Iterator labelIterator = sortedLabels.iterator();
+            final int size = sortedLabels.size();
+            // TODO - the tags should be ordered by probability
+            while(labelIterator.hasNext()) {
+                Map.Entry<String, Float> label = (Map.Entry<String, Float>)labelIterator.next();
+                String tag = label.getKey();
+                String tagLong = tag + ", "+ label.getValue();
+                bottomSheet.tagListBottomFragment.addGeneratedTag(tag);
+            }
+
+            //Get references to the buttons in the bottom sheet
+
         }
     }
+
+
 
     public void ResetLabels() {
         //TODO - clear tags from menu
@@ -405,6 +450,28 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
         }
         String textToShow = "";
         tvLabels.setText(textToShow);
+    }
+
+
+    //Get a reference to the buttons in the tag menu if they exist
+    public void locateControlsInTagMenu() {
+        if (bottomSheet != null) {
+            btnNext = bottomSheet.tagListBottomFragment.getNextButton();
+            btnAddTag = bottomSheet.tagListBottomFragment.getAddTagButton();
+
+            //Set the listener for going to the next menu fragment
+            btnNext.setOnClickListener((View v) -> {
+                updateTagList();
+                if (!imageData.SortedLabels.isEmpty()) {
+                    // TODO - Switch to next menu
+                    switchScreen(ScreenTransition.ToPreview);
+
+                    //Remove the fragment
+                    bottomSheet.dismiss();
+                    bottomSheet = null;
+                }
+            });
+        }
     }
 
     private void savePhotoLocally(){
@@ -416,7 +483,6 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
         }
     }
 
-    // TODO - photoLocation should be part of ImageData
     private void sendPhotoToServer(Location photoLocation){
         //Send the photo with or without location
         if (photoLocation != null) {

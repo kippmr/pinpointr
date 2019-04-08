@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import java.util.AbstractMap;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 public class TagListBottomFragment extends Fragment {
 
     protected TagListBottomAdapter adapter;
+    private Button mBtnNext;
+    private Button mBtnAddTag;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -21,9 +27,6 @@ public class TagListBottomFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public void SetImageData(ImageData imgData) {
-        adapter.imgData = imgData;
-    }
 
     @Nullable
     @Override
@@ -36,6 +39,9 @@ public class TagListBottomFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mBtnAddTag = view.findViewById(R.id.btnAddMoreItems);
+        mBtnNext = view.findViewById(R.id.btnTagMenuNext);
+
         view.findViewById(R.id.btnAddMoreItems).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,14 +50,32 @@ public class TagListBottomFragment extends Fragment {
         });
 
         ((RecyclerView) view.findViewById(R.id.rclItems)).setAdapter(adapter);
+
     }
 
+    //Add a new tag to the recycler view adapter
     private void addNewTagToList() {
         adapter.addItem("New Tag");
     }
 
+
     public void addGeneratedTag(String tag){
         adapter.addItem(tag);
     }
+
+    public List<String> getTagList() {
+        return adapter.mTagListItems;
+    }
+
+    public Button getNextButton() {
+        return mBtnNext;
+    }
+
+    public Button getAddTagButton() {
+        return mBtnAddTag;
+    }
+
+
+
 
 }

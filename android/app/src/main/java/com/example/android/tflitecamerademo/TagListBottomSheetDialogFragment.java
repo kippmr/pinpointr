@@ -24,6 +24,7 @@ public class TagListBottomSheetDialogFragment extends BottomSheetDialogFragment 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_dialog_tag, container, false);
+
     }
 
     @Override
@@ -32,11 +33,5 @@ public class TagListBottomSheetDialogFragment extends BottomSheetDialogFragment 
         tagListBottomFragment = new TagListBottomFragment();
         getChildFragmentManager().beginTransaction().add(R.id.frmContent, tagListBottomFragment).commit();
     }
-
-    public void setImageData(ImageData imgData) {
-        tagListBottomFragment.adapter.imgData = imgData;
-    }
-
-
 }
 
