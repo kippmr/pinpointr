@@ -149,6 +149,13 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
         }
     };
 
+    private void openEnterLocationActivity(){
+        // Start NewActivity.class
+        Intent myIntent = new Intent(CameraActivity.this,
+                EnterLocationActivity.class);
+        startActivity(myIntent);
+    }
+
 
     @Override
     protected void onStart() {
@@ -248,7 +255,7 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
             switchScreen(ScreenTransition.ToPreview);
         });
         btnNavBar_Send.setOnClickListener((View v) -> {
-            sendPhoto();
+            openEnterLocationActivity();
         });
     }
 
@@ -364,8 +371,6 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
 
     @Override
     public void ShowLabels() {
-
-
         PriorityQueue<Map.Entry<String, Float>> sortedLabels = imageData.SortedLabels;
         Iterator labelIterator = sortedLabels.iterator();
         final int size = sortedLabels.size();

@@ -1,0 +1,22 @@
+<mcmaster>
+    <building id="HSL" name="Health Sciences Library">
+        <floor id="1">
+            <room id="B110"></room>
+            <room id="B111"></room>
+        </floor>
+        <floor id="2">
+            <room id="B110"></room>
+            <room id="B111"></room>
+        </floor>
+    </building>
+    <building id="THD" name="H.G. Thode Library">
+        <floor id="1">
+            <room id="100"></room>
+            <room id="101"></room>
+        </floor>
+        <floor id="2">
+            <room id="200"></room>
+            <room id="201"></room>
+        </floor>
+    </building>
+</mcmaster>
