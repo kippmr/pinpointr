@@ -44,10 +44,9 @@
 
     <style name="TextInput" parent="CameraTheme">
         <!-- active field floating label -->
-        <item name="colorPrimary">@color/grayText</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
 
         <item name="android:editTextBackground">@color/inputBg</item>
-        <item name="android:textColorSecondary">@color/bluejaytest</item>
 
 
         <!-- active field underline -->

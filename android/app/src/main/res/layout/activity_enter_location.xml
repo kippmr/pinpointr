@@ -5,162 +5,183 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context="com.example.android.tflitecamerademo.EnterLocationActivity">
+    tools:context="com.example.android.tflitecamerademo.EnterLocationActivity"
+    android:layout_gravity="center_vertical">
 
-    <TableLayout
-        android:id="@+id/tableLayout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center|center_horizontal"
-        android:stretchColumns="*"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal|center_vertical"
+        android:orientation="vertical">
 
-        <TableRow
+        <TableLayout
+            android:id="@+id/tableLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minHeight="60dp"
-            android:orientation="horizontal">
+            android:gravity="center|center_horizontal"
+            android:stretchColumns="*"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/textView"
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Confirm your location"
-                android:textAlignment="center"
-                android:textSize="30sp" />
-        </TableRow>
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:minHeight="60dp">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="60dp"
-            android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:text="Confirm Your Location"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="30sp" />
+            </TableRow>
+
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:background="@color/inputBg"
-                android:orientation="vertical"
-                android:theme="@style/Spinner">
+                android:layout_height="wrap_content"
+                android:minHeight="60dp"
+                android:orientation="horizontal">
 
-                <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-                    android:id="@+id/mbsBuilding"
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Building"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/inputBg"
+                    android:orientation="vertical"
+                    android:theme="@style/Spinner">
 
-                    android:padding="5dp"
-                    android:textColorHint="#05ab9a"
-                    app:met_floatingLabel="normal" />
-            </LinearLayout>
+                    <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                        android:id="@+id/mbsBuilding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/inputBg"
+                        android:backgroundTint="@color/inputBg"
+                        android:hint="Building"
 
-        </TableRow>
+                        android:textColorHint="@color/colorAccent"
+                        app:met_floatingLabel="normal" />
+                </LinearLayout>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="60dp"
-            android:orientation="horizontal">
+            </TableRow>
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:background="@color/inputBg"
-                android:orientation="vertical"
-                android:theme="@style/Spinner">
+                android:layout_height="wrap_content"
+                android:minHeight="60dp"
+                android:orientation="horizontal">
 
-                <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-                    android:id="@+id/mbsFloor"
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Floor"
-                    android:padding="5dp"
-                    android:textColorHint="#05ab9a"
-                    app:met_floatingLabel="normal" />
-            </LinearLayout>
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/inputBg"
+                    android:orientation="vertical"
+                    android:theme="@style/Spinner">
 
-        </TableRow>
+                    <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                        android:id="@+id/mbsFloor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Floor"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:textColorHint="@color/colorAccent"
+                        app:met_floatingLabel="normal" />
+                </LinearLayout>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="60dp"
-            android:orientation="horizontal">
+            </TableRow>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilRoom"
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1.5"
-                android:background="#00FFFFFF"
-                android:theme="@style/Widget.Design.TextInputLayout">
+                android:layout_height="wrap_content"
+                android:minHeight="60dp"
+                android:orientation="horizontal">
 
-                <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
-                    android:id="@+id/mactvRoom"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilRoom"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#00FFFFFF"
-                    android:hint="Room"
-                    android:padding="5dp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/inputBg"
+                    android:theme="@style/TextInput">
 
-        </TableRow>
+                    <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+                        android:id="@+id/mactvRoom"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#00FFFFFF"
+                        android:hint="Room"
+                         />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="60dp"
-            android:orientation="horizontal">
+            </TableRow>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilDescription"
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1.5"
-                android:background="#00FFFFFF"
-                android:theme="@style/Widget.Design.TextInputLayout">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:minHeight="60dp"
+                android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/mactvDescription"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilDescription"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#00FFFFFF"
-                    android:hint="Description"
-                    android:inputType="textMultiLine"
-                    android:padding="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/inputBg"
+                    android:theme="@style/Widget.Design.TextInputLayout">
 
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/mactvDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#00FFFFFF"
+                        android:hint="Description"
+                        android:inputType="textMultiLine"
+                        android:padding="5dp"
 
-        </TableRow>
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minHeight="60dp"
-            android:orientation="horizontal">
+            </TableRow>
 
-            <Button
-                android:id="@+id/btnSubmit"
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Submit"
-                android:textAlignment="center"
-                android:textSize="30sp" />
-        </TableRow>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:minHeight="60dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnSubmit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/colorAccent"
+                    android:backgroundTint="@color/colorAccent"
+                    android:text="Submit"
+                    android:textAlignment="center"
+                    android:textSize="30sp" />
+            </TableRow>
 
 
-    </TableLayout>
+        </TableLayout>
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,8 +24,8 @@
     <color name="colorPrimaryDark">#840644</color>
     <color name="colorPrimary">#840644</color>
     <color name="colorAccent">#F6BD5D</color>
-    <color name="colorTextInputBg">#CCCCCC</color>
-    <color name="inputBg">#C5FFFFFF</color>
+    <color name="colorTextInputBg">#FFFFFFFF</color>
+    <color name="inputBg">#FFFFFFFF</color>
     <color name="grayText">#414141</color>
     <color name="bluejaytest">#002AFF</color>
 </resources>
