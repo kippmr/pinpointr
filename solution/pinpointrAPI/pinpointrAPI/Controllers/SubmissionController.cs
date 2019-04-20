@@ -129,7 +129,7 @@ namespace pinpointrAPI.Controllers
         /// <param name="image_url">image id from url</param>
         /// <param name="altitude">in metres</param>
         /// <returns>Building number and Room number is found, else null</returns>
-        [HttpPost("[action]")]
+        [HttpGet("[action]")]
         public async Task<IActionResult> VerifyLocation(List<double> coordinates, string image_url, double? altitude = null)
         {
             if (locationHelper.isInMcMaster(coordinates[0], coordinates[1]))
