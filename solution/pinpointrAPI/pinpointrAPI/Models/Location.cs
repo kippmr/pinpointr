@@ -9,7 +9,7 @@ namespace pinpointrAPI.Models
 {
     public class Location
     {
-        public string building_no { get; set; }
-        public string room_no { get; set; }
+        public string building_no { get; set; } = null;
+        public string room_no { get; set; } = null;
     }
 }
