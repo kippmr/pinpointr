@@ -43,6 +43,8 @@ public class SendImageDataService extends Service {
     private final static String DB_SERVER = "https://pinpointr.azurewebsites.net";
     private final static String DB_POST_IMAGE_API = "/api/Submission/PostImage";
     private final static String DB_POST_SUBMISSION_API = "/api/Submission/PostSubmission";
+    private final static String DB_VERIFY_LOCATION_API = "/api/Submission/VerifyLocation";
+
 
     private final static String S3_BUCKET_URL = "https://s3.us-east-2.amazonaws.com/pinpointrbucket/";
 
@@ -97,6 +99,17 @@ public class SendImageDataService extends Service {
         return true;
     }
 
+    public boolean GetLocationDatafromCoordinates() {
+        log.d("Coordinate data","Sending coordinate data " + this.imgData.PrintCoords());
+        AsyncTask getLocationDataTask = new GetLocationDataFromCoordinatesTask(this).execute();
+        return true;
+    }
+
+    public boolean SetLocationOnCampus(String location) {
+        log.d("Location data","Setting location data " + location);
+        return true;
+    };
+
     @Override
     public IBinder onBind(Intent intent) {
         return new SendImageDataService.SendImageDataServiceBinder();
@@ -108,6 +121,86 @@ public class SendImageDataService extends Service {
 
     public class SendImageDataServiceBinder extends Binder {
         public SendImageDataService getService() {return SendImageDataService.this; }
+    }
+
+    private static class GetLocationDataFromCoordinatesTask extends AsyncTask<Void, Void, String> {
+        private SendImageDataService caller;
+
+        GetLocationDataFromCoordinatesTask(SendImageDataService caller) {
+            this.caller = caller;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            caller.SetLocationOnCampus(s);
+        }
+
+        protected String doInBackground(Void... voids) { return GetLocationData();}
+
+        private String GetLocationData() {
+            HttpsURLConnection urlConnection = null;
+            URL url = null;
+            try {
+                String urlString = DB_SERVER + DB_VERIFY_LOCATION_API;
+                urlString += "?coordinates=" + caller.imgData.PrintLatitude() + "&coordinates=" + caller.imgData.PrintLongitude();
+                urlString += "&image_url=" + caller.imgData.GetImageURL();
+                urlString += "&altitude=" + caller.imgData.PrintAltitude();
+                url = new URL(urlString);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            DataOutputStream request = null;
+            try {
+
+                Log.e("Server","Sending Location Data to Server");
+                urlConnection = (HttpsURLConnection) url.openConnection();
+                urlConnection.setUseCaches(false);
+                urlConnection.setDoOutput(false);
+                urlConnection.setDoInput(true);
+
+                urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0");
+                urlConnection.setRequestProperty("Cache-Control", "no-cache");
+                urlConnection.setRequestProperty("Accept-encoding", "gzip, deflate, br");
+
+
+                Log.d("Server", caller.imgData.PrintCoords());
+                Log.d("Server", caller.imgData.GetImageURL());
+                Log.d("Server", caller.imgData.PrintAltitude());
+
+                Log.d("Server","Opening Data Connection");
+                urlConnection.connect();
+
+
+                Log.d("Server","Sent Location Data to Server");
+
+                //Read data from the response
+                String status = urlConnection.getResponseMessage();
+                Log.e("status", status);
+               InputStream responseStream = urlConnection.getInputStream();
+                BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream, "utf-8"));
+                String line;
+                String responseText = "";
+                while ((line = responseStreamReader.readLine()) != null) {
+                    Log.e("response", line);
+                    responseText += line;
+                }
+                Log.d("Server","Received Response from Server");
+
+                JSONObject jsonResponse = new JSONObject(responseText);
+
+                responseStreamReader.close();
+                responseStream.close();
+                urlConnection.disconnect();
+                return jsonResponse.toString();
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 
     private static class SendImageClassDataTask extends AsyncTask<Void, Void, String> {
@@ -181,7 +274,7 @@ public class SendImageDataService extends Service {
                 //Read data from the response
                 String status = urlConnection.getResponseMessage();
                 Log.e("status", status);
-                InputStream responseStream = urlConnection.getInputStream();
+                InputStream responseStream = new GZIPInputStream(urlConnection.getInputStream());
                 BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream, "utf-8"));
                 String line;
                 String responseText = "";

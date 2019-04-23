@@ -304,6 +304,7 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
             switchScreen(ScreenTransition.ToPreview);
         });
         btnNavBar_Send.setOnClickListener((View v) -> {
+            sendImageDataService.GetLocationDatafromCoordinates();
             if (sendImageDataService.SendClassificationData()) {
                 switchScreen(ScreenTransition.ToPreview);
             }
