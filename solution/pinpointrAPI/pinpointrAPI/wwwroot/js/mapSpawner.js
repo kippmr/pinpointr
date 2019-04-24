@@ -6,7 +6,7 @@ var __activatedLayers = [];
 var __debug = true;
 var __points = [];
 var singleSubmissionURL = "/api/Submission/GetSubmission/"
-var allSubmissionURL = "/api/Submission/GetAllSubmissions"
+var allSubmissionURL = "/api/Submission/GetCurrentSubmissions"
 var getTagsURL = "/api/Submission/GetTags/"
 var lastSelected;
 
@@ -100,11 +100,11 @@ function plotPoint(submissionData) {
 
     if (!currentPoint["is_completed"]) {
         var pointCoords = currentPoint["coordinates"];
-        var pos = [pointCoords["y"], pointCoords["x"]];
+        var pos = [pointCoords["x"], pointCoords["y"]];
 
         var newPoint = L.marker(pos);
 
-        imgurl = makeImgUrl(currentPoint["image_url"]);
+        var imgurl = makeImgUrl(currentPoint["image_url"]);
         tagPromise = getTags(currentPoint["id"]);
         var realPromise = Promise.resolve(tagPromise);
 

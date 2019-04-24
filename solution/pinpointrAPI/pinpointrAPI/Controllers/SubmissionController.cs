@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using pinpointrAPI.Models;
 using pinpointrAPI.Helpers;
+using System.Net;
+using System.Net.Mail;
 
 namespace pinpointrAPI.Controllers
 {
@@ -22,6 +24,8 @@ namespace pinpointrAPI.Controllers
         // initialize database connection
         private readonly RDSContext _context;
         private readonly BucketConnection _bucket;
+
+        private string emailBody;
 
         /// <summary>
         /// Create database connection and AWS S3 Bucket connection
@@ -71,6 +75,19 @@ namespace pinpointrAPI.Controllers
         public IEnumerable<Submission> GetAllSubmissions()
         {
             return _context.Submission.ToList();
+        }
+
+        /// <summary>
+        /// Gets list of all submissions that have not expired and are not completed
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public IEnumerable<Submission> GetCurrentSubmissions()
+        {
+            var now = DateTime.Now;
+            var submissions = _context.Submission.Where(s => s.obs_est >= now && !s.is_completed).ToList();
+
+            return submissions;
         }
 
         /// <summary>
@@ -139,6 +156,7 @@ namespace pinpointrAPI.Controllers
                 is_completed = is_completed
             };
             
+
             _context.Submission.Add(submission);
 
             try 
@@ -163,7 +181,71 @@ namespace pinpointrAPI.Controllers
                 return BadRequest(ex);
             }
 
+
+            emailBody = "New submission sent from user" + submission.user_id + "\n"
+                + "With image url: " + submission.image_url + "\n"
+                + "At coordinates: " + coordinates[0] + "," + coordinates[1] + "\n";
+
+            sendEmail();
+
             return CreatedAtAction("GetSubmission", new { submission.id }, submission);
         }
+
+        /// <summary>
+        /// Mark a submission as completed
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Completed submission</returns>
+        [HttpPut("[action]")]
+        public async Task<IActionResult> PutCompleted([FromHeader] int id)
+        {
+            Submission submission = await _context.Submission.FindAsync(id);
+
+            if (submission == null)
+                return BadRequest("Invalid id");
+            else if (submission.is_completed == true)
+                return BadRequest("Already completed");
+            else
+                submission.is_completed = true;
+
+            try
+            {
+                _context.Update(submission);
+                _context.SaveChanges();
+            } catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+            return CreatedAtAction("GetSubmission", new { id }, submission);
+        }
+
+        public void sendEmail()
+        {
+            var fromAddress = new MailAddress("redrocketman117@gmail.com", "pinpointrSubmission");
+            var toAddress = new MailAddress("redrocketman117@gmail.com", "pinpointrSubmission");
+            const string fromPassword = "mcmasterpinpointr";
+            const string subject = "new Pinpointr Submission";
+
+            var smtp = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+            };
+
+            using (var message = new MailMessage(fromAddress, toAddress)
+            {
+                Subject = subject,
+                Body = emailBody
+            })
+            {
+                smtp.Send(message);
+            }
+        }
+
     }
 }
