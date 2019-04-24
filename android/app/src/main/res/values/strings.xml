@@ -30,4 +30,12 @@
     <string name="title_activity_photo_review">PhotoReviewActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string-array name="buildings">
+        <item>Thode</item>
+        <item>HSL</item>
+        <item>HSL</item>
+    </string-array>
+
+
 </resources>

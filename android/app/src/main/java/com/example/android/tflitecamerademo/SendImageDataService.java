@@ -14,7 +14,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -100,9 +99,15 @@ public class SendImageDataService extends Service {
     }
 
     public boolean GetLocationDatafromCoordinates() {
-        log.d("Coordinate data","Sending coordinate data " + this.imgData.PrintCoords());
-        AsyncTask getLocationDataTask = new GetLocationDataFromCoordinatesTask(this).execute();
-        return true;
+        if (this.imgData.PrintCoords() != "") {
+            log.d("Coordinate data","Sending coordinate data " + this.imgData.PrintCoords());
+            AsyncTask getLocationDataTask = new GetLocationDataFromCoordinatesTask(this).execute();
+            return true;
+        }
+        else {
+            log.d("Unable to send Coordinate data","Location not set");
+            return false;
+        }
     }
 
     public boolean SetLocationOnCampus(String location) {
@@ -176,7 +181,7 @@ public class SendImageDataService extends Service {
                 //Read data from the response
                 String status = urlConnection.getResponseMessage();
                 Log.e("status", status);
-               InputStream responseStream = urlConnection.getInputStream();
+               InputStream responseStream =  new GZIPInputStream(urlConnection.getInputStream());
                 BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream, "utf-8"));
                 String line;
                 String responseText = "";
@@ -274,7 +279,7 @@ public class SendImageDataService extends Service {
                 //Read data from the response
                 String status = urlConnection.getResponseMessage();
                 Log.e("status", status);
-                InputStream responseStream = new GZIPInputStream(urlConnection.getInputStream());
+                InputStream responseStream =(urlConnection.getInputStream());
                 BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream, "utf-8"));
                 String line;
                 String responseText = "";

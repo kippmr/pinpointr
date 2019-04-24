@@ -15,14 +15,59 @@
 -->
 <resources>
 
+
     <style name="CameraTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-    <!-- Customize your theme here. -->
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!-- Customize your theme here. -->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:windowActionBar">false</item>
         <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="android:navigationBarColor">@color/navigationBarColor</item>
-    <item name="android:textColorSecondary">@android:color/white</item>
-</style>
+    </style>
+
+
+    <style name="Spinner" parent="CameraTheme">
+        <!--<item name="hintTextAppearance">@style/CameraTheme.TextFloatLabelAppearance</item>-->
+        <!--<item name="errorTextAppearance">@style/CameraTheme.TextErrorAppearance</item>-->
+        <!--<item name="counterTextAppearance">@style/TextAppearance.Design.Counter</item>-->
+        <!--<item name="counterOverflowTextAppearance">@style/TextAppearance.Design.Counter.Overflow</item>-->
+        <!--<item name="colorControlHighlight">#AB05A8</item>-->
+        <!--<item name="colorAccent">#B61515</item>-->
+        <!--<item name="colorControlNormal">#c5c5c5</item>-->
+        <!--<item name="colorControlActivated">#052FAB</item>-->
+
+        <!-- active field underline -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@android:color/white</item>
+
+    </style>
+
+    <style name="TextInput" parent="CameraTheme">
+        <!-- active field floating label -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+
+        <item name="android:editTextBackground">@color/inputBg</item>
+
+
+        <!-- active field underline -->
+        <item name="colorAccent">@color/colorAccent</item>
+
+
+    </style>
+
+
+    <style name="CameraTheme.TextFloatLabelAppearance" parent="TextAppearance.Design.Hint">
+        <!-- Floating label appearance here -->
+        <item name="android:textColor">#B61515</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="CameraTheme.TextErrorAppearance" parent="TextAppearance.Design.Error">
+        <!-- Error message appearance here -->
+        <item name="android:textColor">#ff0000</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
 
     <style name="Base.Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light">
         <item name="android:windowNoTitle">true</item>
