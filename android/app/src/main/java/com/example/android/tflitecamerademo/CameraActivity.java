@@ -72,7 +72,6 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
     ImageButton btnCamera;
     ImageButton btnBack;
     FloatingActionButton btnNavBar_Send;
-    TextView tvLabels;
     TagListBottomSheetDialogFragment bottomSheet;
 
     Camera2BasicFragment camera2BasicFragment;
@@ -236,7 +235,6 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
             btnBack = findViewById(R.id.btnBack);
             buttonPanel = findViewById(R.id.buttonPanel);
             btnNavBar_Send = findViewById(R.id.btnNavBar_Send);
-            tvLabels = findViewById(R.id.labels);
         } catch (Exception ex) {
             Log.e(TAG, "Exception caught when locating CameraActivity View's controls.");
             ex.printStackTrace();

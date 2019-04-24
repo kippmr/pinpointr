@@ -18,12 +18,12 @@
     <color name="layout_background">#FFFFFFFF</color>
     <color name="black_overlay">#66000000</color>
     <color name="navigationBarColor">#d8545454</color>
-    <color name="bottomNavigationBarColor">#840644</color>
+    <color name="bottomNavigationBarColor">#1f6b6d</color>
     <color name="testingTagBar">#f49b42</color>
     <color name="navBarSecondary">#f6bd5d</color>
-    <color name="colorPrimaryDark">#840644</color>
-    <color name="colorPrimary">#840644</color>
-    <color name="colorAccent">#F6BD5D</color>
+    <color name="colorPrimaryDark">#1f6b6d</color>
+    <color name="colorPrimary">#1f6b6d</color>
+    <color name="colorAccent">#56bbbc</color>
     <color name="colorTextInputBg">#FFFFFFFF</color>
     <color name="inputBg">#FFFFFFFF</color>
     <color name="grayText">#414141</color>
