@@ -41,9 +41,14 @@ import android.widget.TextView;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
@@ -80,8 +85,6 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
     ImageButton btnBack;
 
     FloatingActionButton btnNavBar_Send;
-    TextView tvLabels;
-
     //Tag Fragment views;
     TagListBottomSheetDialogFragment bottomSheet;
     Button btnNext;
@@ -89,10 +92,10 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
 
     Camera2BasicFragment camera2BasicFragment;
 
-
+    private static List<PointBuilding> Buildings = new ArrayList<PointBuilding>();
     public boolean classifyLocally = false;
     //TODO - should not be global
-    ImageData imageData;
+    public static ImageData imageData;
     //TODO - remove
     Location photoLocation;
 
@@ -302,6 +305,7 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
             sendImageDataService = ((SendImageDataService.SendImageDataServiceBinder) service).getService();
             sendImageDataServiceBound = true;
             sendImageDataService.setCallbacks(CameraActivity.this);
+            GetBuildingDataFromFile();
         }
 
         @Override
@@ -346,7 +350,39 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
         }
     }
     //endregion
+    public String GetLocalLocationDataFromCoordinates(double latitude, double longitude) {
+        for (PointBuilding p : Buildings) {
+            if (p.collidesWith(latitude, longitude)) {
+                return p.getName();
+            }
+        }
+        return "";
+    }
 
+    public void GetLocalLocationData() {
+        imageData.SetCampusLocation(GetLocalLocationDataFromCoordinates(this.imageData.GetLat(), this.imageData.GetLong()));
+        if (imageData.GetBuildingName() == "") {
+            imageData.SetCampusLocation("ETB");
+        }
+    }
+    public void GetBuildingDataFromFile() {
+        String[] buildingFiles = null;
+        try {
+            buildingFiles = getAssets().list("buildings");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < buildingFiles.length; i++) {
+            InputStream stream = null;
+            try {
+                stream = getAssets().open("buildings/" +  buildingFiles[i]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            PointBuilding building = new PointBuilding(buildingFiles[i].replaceFirst("[.][^.]+$", ""), stream);
+            this.Buildings.add(building);
+        }
+    }
     //region Fragment and View binding
     /**
      * Locate views and fragments referenced by the activity e.g. when updating the label list
@@ -361,7 +397,6 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
             btnBack = findViewById(R.id.btnBack);
             buttonPanel = findViewById(R.id.buttonPanel);
             btnNavBar_Send = findViewById(R.id.btnNavBar_Send);
-            tvLabels = findViewById(R.id.labels);
         } catch (Exception ex) {
             Log.e(TAG, "Exception caught when locating CameraActivity View's controls.");
             ex.printStackTrace();
@@ -383,7 +418,8 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
                 UpdateLabelsFromView();
                 if (!imageData.SortedLabels.isEmpty()) {
                     // TODO - Switch to next menu
-                    sendImageDataService.GetLocationDatafromCoordinates();
+                    // TODO - SWITCH to remote
+                    GetLocalLocationData();
                     openEnterLocationActivity();
                     //Remove the fragment
                     bottomSheet.dismiss();
@@ -392,7 +428,7 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
             });
         }
     }
-
+    public boolean debugging = false;
 
     /**
      * Set the listeners for the camera button, back button, and send button
@@ -401,7 +437,13 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
         btnCamera.setOnClickListener((View v) -> {
             takePhoto();
             switchScreen(ScreenTransition.ToReview);
-            sendPhoto();
+            if (debugging) {
+                GetLocalLocationData();
+                openEnterLocationActivity();
+            } else {
+                sendPhoto();
+            }
+
         });
         btnBack.setOnClickListener((View v) -> {
             switchScreen(ScreenTransition.ToPreview);

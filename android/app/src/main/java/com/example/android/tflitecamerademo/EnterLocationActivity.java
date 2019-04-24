@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Camera;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,13 +22,14 @@ import java.util.List;
 
 public class EnterLocationActivity extends AppCompatActivity {
 
+    public static ImageData imageData;
 
     MaterialBetterSpinner mbsBuilding;
     MaterialBetterSpinner mbsFloor;
     MultiAutoCompleteTextView mactvRoom;
     Button btnSubmitRequest;
 
-    /* arrays for populating dropdowns */
+    /* arrays for populating Dropdowns */
     List<String> buildingsArray =  new ArrayList<String>();
     List<String> floorsArray =  new ArrayList<String>();
     List<String> roomsArray =  new ArrayList<String>();
@@ -42,8 +44,19 @@ public class EnterLocationActivity extends AppCompatActivity {
         fillBuildingList();
         fillFloorList();
         fillRoomList();
+
+        setBuildingNameFromImageData();
+
         // TODO set the event listeners
         setOnClickListeners();
+
+    }
+
+    private void setBuildingNameFromImageData() {
+        if (CameraActivity.imageData.GetBuildingName() != "") {
+            this.mbsBuilding.setSelection(getIndex(mbsBuilding, CameraActivity.imageData.GetBuildingName()));
+            mbsBuilding.setText(CameraActivity.imageData.GetBuildingName());
+        }
     }
 
     private void getControls() {
@@ -75,9 +88,9 @@ public class EnterLocationActivity extends AppCompatActivity {
 
         btnSubmitRequest.setOnClickListener((View v) -> {
             if (CameraActivity.sendImageDataService.SendClassificationData()) {
-                //If request was sent sucessfully, alert the user and switch back to the camera activity
+                //If request was sent successfully, alert the user and switch back to the camera activity
                 showConfirmationDialog(true);
-                openCameraActivity();
+
             } else {
                 showConfirmationDialog(false);
             }
@@ -85,7 +98,7 @@ public class EnterLocationActivity extends AppCompatActivity {
     }
     /**
      * Alert the user to the status of the submission
-     * @param sentSuccessfully
+     * @param sentSuccessfully true if the submission was able to be sent to the server, false otherwise
      */
     private void showConfirmationDialog(boolean sentSuccessfully){
         AlertDialog alertDialog = new AlertDialog.Builder(EnterLocationActivity.this).create();
@@ -101,6 +114,7 @@ public class EnterLocationActivity extends AppCompatActivity {
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        openCameraActivity();
                         dialog.dismiss();
                     }
                 });
@@ -108,8 +122,8 @@ public class EnterLocationActivity extends AppCompatActivity {
     }
 
         /**
-         * Switch to a separate screen allowing the user to input their location
-         * after the user has taken a photo and hit the next button
+         * Switch back to the camera screen after the user has submitted their submission
+         *
          */
         private void openCameraActivity(){
             // Start NewActivity.class
@@ -144,12 +158,17 @@ public class EnterLocationActivity extends AppCompatActivity {
 //        });
     private void fillBuildingList(){
         // fill the array
-        buildingsArray.add("building1");
-        buildingsArray.add("building2");
+        buildingsArray.add("ETB");
+        buildingsArray.add("Hatch");
+        buildingsArray.add("IAHS");
+        buildingsArray.add("ITB");
+        buildingsArray.add("JHE");
+        buildingsArray.add("Thode");
         // Initialize the ArrayAdapter
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this,R.layout.spinner_item,buildingsArray);
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
         mbsBuilding.setAdapter(spinnerArrayAdapter);
+
 
     }
     private void fillFloorList(){
@@ -163,6 +182,16 @@ public class EnterLocationActivity extends AppCompatActivity {
         mbsFloor.setAdapter(spinnerArrayAdapter);
 
     }
+
+    private int getIndex(MaterialBetterSpinner spinner, String searchString) {
+        for (int i=0;i<spinner.getAdapter().getCount();i++){
+            if (spinner.getAdapter().getItem(i).toString().equalsIgnoreCase(searchString)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
     private void fillRoomList() {
         // fill the array
         roomsArray.add("B100");

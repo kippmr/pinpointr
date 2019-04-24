@@ -3,6 +3,7 @@ package com.example.android.tflitecamerademo;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
@@ -15,13 +16,16 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
@@ -57,6 +61,8 @@ public class SendImageDataService extends Service {
     private final static String BOUNDARY = "*****";
 
     private ImageServiceCallbacks imgServiceCallbacks;
+
+
 
 
     //Check if we received enough classification and location data to make a service request
@@ -101,7 +107,9 @@ public class SendImageDataService extends Service {
     public boolean GetLocationDatafromCoordinates() {
         if (this.imgData.PrintCoords() != "") {
             log.d("Coordinate data","Sending coordinate data " + this.imgData.PrintCoords());
-            AsyncTask getLocationDataTask = new GetLocationDataFromCoordinatesTask(this).execute();
+            // TODO Remote location, for now location is checked against local files
+/*            AsyncTask getLocationDataTask = new GetLocationDataFromCoordinatesTask(this).execute();
+            return true;*/
             return true;
         }
         else {
@@ -109,6 +117,8 @@ public class SendImageDataService extends Service {
             return false;
         }
     }
+
+
 
     public boolean SetLocationOnCampus(String location) {
         log.d("Location data","Setting location data " + location);

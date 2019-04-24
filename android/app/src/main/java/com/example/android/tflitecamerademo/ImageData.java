@@ -20,7 +20,7 @@ public class ImageData {
     private double altitude;
 
     //Campus location
-    private int roomnNumber;
+    private int roomNumber;
     private int floorNumber;
     private String buildingName;
 
@@ -79,8 +79,14 @@ public class ImageData {
         this.altitude = alt;
     }
 
-    public void SetCampusLocation() {
+    public void SetCampusLocation(String buildName) {
+        this.buildingName = buildName;
+    }
 
+    public void SetCampusLocation(String buildName, int floorNumber, int RoomNumber) {
+        this.buildingName = buildName;
+        this.roomNumber = roomNumber;
+        this.floorNumber = floorNumber;
     }
 
     //For setting headers of request
@@ -118,7 +124,12 @@ public class ImageData {
     public String GetImageURL() {
         return URL;
     }
-
+    public Double GetLong() {return longitude;}
+    public Double GetLat() {return latitude;}
+    public Double GetAlt() {return altitude;}
+    public String GetBuildingName() {return buildingName;}
+    public int GetFloorNumber(){ return floorNumber;}
+    public int GetRoomNumber() {return roomNumber;}
 
     //Returns true if the Image has the required information to be sent in as a service request
     public boolean CheckComplete() {
