@@ -19,7 +19,7 @@ namespace pinpointrAPI.Helpers
             CloudBlobClient blobClient = null;
             CloudBlockBlob blockBlob = null;
             bool uploadStatus = false;
-            bool checkStatus = false;
+            //bool checkStatus = false;
 
             Console.WriteLine("Recieved request to upload blob");
             string connectionString = getAZBConnectionString();
@@ -36,13 +36,6 @@ namespace pinpointrAPI.Helpers
                 {
                     Task.Run(async () => { return await listBlobs(blobContainer); });
                 }
-<<<<<<< Updated upstream:solution/pinpointrAPI/pinpointrAPI/Helpers/uploadHelper.cs
-=======
-                Console.WriteLine("Uploading to blob storage as '{0}'", localFileName);
-                CloudBlockBlob blockBlob = blobContainer.GetBlockBlobReference(localFileName);
-                bool status = Task.Run(async () => { return await uploadFile(blockBlob, localPath + localFileName); }).Result;
-                status = Task.Run(async () => { return await listBlobs(blobContainer); }).Result;
->>>>>>> Stashed changes:solution/pinpointr4/pinpointr4/Models/uploadHelper.cs
             } else
             {
                 Console.WriteLine("Invalid connection string");
