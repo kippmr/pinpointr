@@ -36,12 +36,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.AbstractMap;
@@ -84,7 +82,7 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
     ImageButton btnCamera;
     ImageButton btnBack;
 
-    FloatingActionButton btnNavBar_Send;
+    FloatingActionButton btnNavBar_OpenTags;
     //Tag Fragment views;
     TagListBottomSheetDialogFragment bottomSheet;
     Button btnNext;
@@ -232,12 +230,12 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                SetLabels();
-                break;
-
-        }
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                SetLabels();
+//                break;
+//
+//        }
         return true;
     }
     //endregion
@@ -396,7 +394,7 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
             btnCamera = findViewById(R.id.btnCamera);
             btnBack = findViewById(R.id.btnBack);
             buttonPanel = findViewById(R.id.buttonPanel);
-            btnNavBar_Send = findViewById(R.id.btnNavBar_Send);
+            btnNavBar_OpenTags = findViewById(R.id.btnNavBar_OpenTags);
         } catch (Exception ex) {
             Log.e(TAG, "Exception caught when locating CameraActivity View's controls.");
             ex.printStackTrace();
@@ -448,8 +446,8 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
         btnBack.setOnClickListener((View v) -> {
             switchScreen(ScreenTransition.ToPreview);
         });
-        btnNavBar_Send.setOnClickListener((View v) -> {
-
+        btnNavBar_OpenTags.setOnClickListener((View v) -> {
+            SetLabels();
         });
 
     }

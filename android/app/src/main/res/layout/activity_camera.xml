@@ -34,8 +34,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:src="@drawable/camera_icon_96"
+            android:layout_marginBottom="40dp"
+            android:src="@drawable/camera_button_160"
             android:clickable="true"
             android:background="@null"
             android:elevation="100dp"/>
@@ -63,7 +63,9 @@
             android:layout_marginTop="20dp"
             android:background="@null"
             android:clickable="true"
-            android:src="@drawable/close_2_96" />
+            android:elevation="15dp"
+            android:src="@drawable/close_icon"
+            android:outlineAmbientShadowColor="@color/grayText"/>
 
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -78,15 +80,15 @@
                 android:layout_gravity="bottom"
                 android:backgroundTint="@color/colorPrimary"
                 android:tint="@color/colorAccent"
-                app:navigationIcon="@drawable/tags_white_96" />
+                />
 
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnNavBar_Send"
+                android:id="@+id/btnNavBar_OpenTags"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="28dp"
-                android:src="@drawable/send_96"
+                android:src="@drawable/tags_white_96"
                 app:backgroundTint="@color/colorAccent"
                 app:layout_anchor="@id/bottom_app_bar" />
 
