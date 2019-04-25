@@ -187,10 +187,13 @@ namespace pinpointrAPI.Controllers
             }
 
 
-            emailBody = "New submission sent from user" + submission.user_id + "\n"
-                + "With image url: " + submission.image_url + "\n"
+            emailBody = "New submission with image url: " + submission.image_url + "\n"
                 + "At coordinates: " + coordinates[0] + "," + coordinates[1] + "\n"
-                + "In building: " + building_name + ", room: " + room_number + "\n";
+                + "In building: " + building_name + ", room: " + room_number + "\n" + "Tags: ";
+
+            foreach (var tag in distinct_tags)
+                emailBody += tag + ", ";
+            emailBody.Substring(emailBody.Length - 2);
 
             sendEmail();
 
