@@ -123,6 +123,33 @@ namespace pinpointrAPI.Controllers
         }
 
         /// <summary>
+        /// Checks if location is within McMaster then determines if the location is in a building and tries determine a list of room numbers
+        /// </summary>
+        /// <param name="coordinates">lat/lon doubles</param>
+        /// <param name="image_url">image id from url</param>
+        /// <param name="altitude">in metres</param>
+        /// <returns>Building number and Room number is found, else null</returns>
+        [HttpGet("[action]")]
+        public async Task<IActionResult> VerifyLocation(List<double> coordinates, string image_url, double? altitude = null)
+        {
+            if (locationHelper.isInMcMaster(coordinates[0], coordinates[1]))
+            {
+                string building = null;
+                string room = null;
+                //check for building collisions here
+
+                Location location = new Location();
+                location.room_no = room;
+                location.building_no = building;
+
+                return Ok(location);
+            } else
+            {
+                return BadRequest("Location outside of McMaster");
+            }
+        }
+
+        /// <summary>
         /// Post submission and link tags through foriegn key
         /// </summary>
         /// <param name="user_id">id of submitting user</param>
@@ -140,8 +167,6 @@ namespace pinpointrAPI.Controllers
             // Validate coord format
             if (coordinates.Count() != 2)
                 return BadRequest("Must have two coordinates");
-            if (tags.Count() == 0)
-                return BadRequest("Must have at least one tag");
 
             Submission submission = new Submission()
             {
@@ -163,17 +188,20 @@ namespace pinpointrAPI.Controllers
             }
 
             // give all distinct tags the submission_id
-            List<Tag> distinct_tags = tags.GroupBy(x => x.name).Select(y => y.First()).ToList();
-            distinct_tags.Distinct().AsParallel().ForAll( tag => { tag.submission_id = submission.id; });
-
-            _context.Tag.AddRange(distinct_tags);
-
-            try 
+            if (tags.Count() != 0)
             {
-                await _context.SaveChangesAsync();
-            } catch (Exception ex)
-            {
-                return BadRequest(ex);
+                List<Tag> distinct_tags = tags.GroupBy(x => x.name).Select(y => y.First()).ToList();
+                distinct_tags.Distinct().AsParallel().ForAll( tag => { tag.submission_id = submission.id; });
+
+                _context.Tag.AddRange(distinct_tags);
+
+                try 
+                {
+                    await _context.SaveChangesAsync();
+                } catch (Exception ex)
+                {
+                    return BadRequest(ex);
+                }
             }
 
             return CreatedAtAction("GetSubmission", new { submission.id }, submission);
