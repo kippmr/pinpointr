@@ -196,6 +196,8 @@ namespace pinpointrAPI.Controllers
                 emailBody += tag + ", ";
             emailBody.Substring(emailBody.Length - 2);
 
+            emailBody += "\n Comment: " + comment + "\n";
+
             sendEmail();
 
             return CreatedAtAction("GetSubmission", new { submission.id }, submission);
@@ -233,7 +235,7 @@ namespace pinpointrAPI.Controllers
         public void sendEmail()
         {
             var fromAddress = new MailAddress("redrocketman117@gmail.com", "pinpointrSubmission");
-            var toAddress = new MailAddress("redrocketman117@gmail.com", "pinpointrSubmission");
+            var toAddress = new MailAddress("mckaysm@mcmaster.ca", "pinpointrSubmission");
             const string fromPassword = "mcmasterpinpointr";
             const string subject = "new Pinpointr Submission";
 
