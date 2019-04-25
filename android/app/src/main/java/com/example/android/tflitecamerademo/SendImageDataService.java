@@ -36,7 +36,7 @@ import static com.loopj.android.http.AsyncHttpClient.log;
 public class SendImageDataService extends Service {
 
     //AWS Custom Vision Services Connection Strings
-    private final static String PREDICTION_SERVER = "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/ffdbd3a6-dda5-4c8c-9828-4b6653d17475";
+    private final static String PREDICTION_SERVER = "https://southcentralus.api.cognitive.microsoft.com/customvision/v3.0/Prediction/ffdbd3a6-dda5-4c8c-9828-4b6653d17475/detect/iterations/Iteration6";
     private final static String PREDICTION_API = "/url";
     private final static String PREDICTION_KEY = "611391a6e2b84ec89a68bed3492a7ffc";
     private final static Float PREDICTION_THRESHOLD = 0.20f;
