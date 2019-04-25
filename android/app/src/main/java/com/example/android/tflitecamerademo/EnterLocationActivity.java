@@ -56,7 +56,6 @@ public class EnterLocationActivity extends AppCompatActivity {
 
     private void setBuildingNameFromImageData() {
         if (CameraActivity.imageData.GetBuildingName() != "") {
-            this.mbsBuilding.setSelection(getIndex(mbsBuilding, CameraActivity.imageData.GetBuildingName()));
             mbsBuilding.setText(CameraActivity.imageData.GetBuildingName());
         }
     }

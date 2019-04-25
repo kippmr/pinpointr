@@ -359,6 +359,7 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
 
     public void GetLocalLocationData() {
         imageData.SetCampusLocation(GetLocalLocationDataFromCoordinates(this.imageData.GetLat(), this.imageData.GetLong()));
+
     }
     public void GetBuildingDataFromFile() {
         String[] buildingFiles = null;
