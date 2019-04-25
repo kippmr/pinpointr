@@ -20,9 +20,11 @@ public class ImageData {
     private double altitude;
 
     //Campus location
-    private int roomNumber;
+
     private int floorNumber;
-    private String buildingName;
+    private String roomNumber = "";
+    private String buildingName = "";
+    private String comment;
 
 
     // Did the user verify the labels (or just send?)
@@ -83,10 +85,12 @@ public class ImageData {
         this.buildingName = buildName;
     }
 
-    public void SetCampusLocation(String buildName, int floorNumber, int RoomNumber) {
+    public void SetCampusLocation(String buildName, String roomNumber) {
         this.buildingName = buildName;
         this.roomNumber = roomNumber;
-        this.floorNumber = floorNumber;
+    }
+    public void SetComment(String comment) {
+        this.comment = comment;
     }
 
     //For setting headers of request
@@ -129,14 +133,19 @@ public class ImageData {
     public Double GetAlt() {return altitude;}
     public String GetBuildingName() {return buildingName;}
     public int GetFloorNumber(){ return floorNumber;}
-    public int GetRoomNumber() {return roomNumber;}
+    public String GetRoomNumber() {return roomNumber;}
+    public String GetComment() {return comment;}
 
     //Returns true if the Image has the required information to be sent in as a service request
     public boolean CheckComplete() {
         if ( this.latitude == NULL || this.longitude == NULL || this.latitude == 0.0 || this.longitude == 0.0 || this.SortedLabels == null || this.SortedLabels.isEmpty() || this.URL == null) {
             return false;
         } else {
-            return true;
+            if (this.roomNumber == "" || this.buildingName == "") {
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 }

@@ -8,9 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#EEEEEE"
+        android:maxLines="1"
         android:padding="16dp"
-        android:text="Tags"
-        android:maxLines="1"/>
+        android:text="Tags - identify the issue (e.g. broken lightswitch)" />
 
     <FrameLayout
         android:id="@+id/frmContent"

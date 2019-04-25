@@ -249,6 +249,9 @@ public class SendImageDataService extends Service {
                 urlConnection.setRequestProperty("coordinates", data.PrintCoords());
                 urlConnection.setRequestProperty("image_url", data.GetImageURL());
                 urlConnection.setRequestProperty("altitude", data.PrintAltitude());
+                urlConnection.setRequestProperty("building_name", data.GetBuildingName());
+                urlConnection.setRequestProperty("room_number", data.GetRoomNumber());
+                urlConnection.setRequestProperty("comment", data.GetComment());
                 urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0");
                 urlConnection.setRequestProperty("Cache-Control", "no-cache");
                 urlConnection.setRequestProperty("Accept-encoding", "gzip, deflate");

@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
@@ -27,7 +28,8 @@ public class EnterLocationActivity extends AppCompatActivity {
     MaterialBetterSpinner mbsBuilding;
     MaterialBetterSpinner mbsFloor;
     MultiAutoCompleteTextView mactvRoom;
-    Button btnSubmitRequest;
+    TextInputEditText mactvDescription;
+    Button btnSubmit;
 
     /* arrays for populating Dropdowns */
     List<String> buildingsArray =  new ArrayList<String>();
@@ -62,10 +64,12 @@ public class EnterLocationActivity extends AppCompatActivity {
     private void getControls() {
         // locate controls
         try {
+            btnSubmit = findViewById(R.id.btnSubmit);
+            mactvDescription = findViewById(R.id.mactvDescription);
             mbsBuilding = findViewById(R.id.mbsBuilding);
             mbsFloor = findViewById(R.id.mbsFloor);
             mactvRoom = findViewById(R.id.mactvRoom);
-            btnSubmitRequest = findViewById(R.id.btnSubmit);
+
         } catch (Exception ex) {
            // TODO
             ex.printStackTrace();
@@ -86,7 +90,8 @@ public class EnterLocationActivity extends AppCompatActivity {
 
         });
 
-        btnSubmitRequest.setOnClickListener((View v) -> {
+        btnSubmit.setOnClickListener((View v) -> {
+            UpdateImageData();
             if (CameraActivity.sendImageDataService.SendClassificationData()) {
                 //If request was sent successfully, alert the user and switch back to the camera activity
                 showConfirmationDialog(true);
@@ -96,6 +101,18 @@ public class EnterLocationActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void UpdateImageData() {
+        String building = mbsBuilding.getText().toString();
+        String floor = mbsFloor.getText().toString();
+        String room = mactvRoom.getText().toString();
+        String comment = mactvDescription.getText().toString();
+        CameraActivity.imageData.SetCampusLocation(building, room);
+        CameraActivity.imageData.SetComment(comment);
+        Log.e("Updating img data info", building + " " + room);
+        Log.e("Updating img data info", comment);
+    }
+
     /**
      * Alert the user to the status of the submission
      * @param sentSuccessfully true if the submission was able to be sent to the server, false otherwise
@@ -176,6 +193,9 @@ public class EnterLocationActivity extends AppCompatActivity {
         floorsArray.add("B1");
         floorsArray.add("1");
         floorsArray.add("2");
+        floorsArray.add("3");
+        floorsArray.add("4");
+        floorsArray.add("5");
         // Initialize the ArrayAdapter
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this,R.layout.spinner_item,floorsArray);
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
@@ -202,8 +222,6 @@ public class EnterLocationActivity extends AppCompatActivity {
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, roomsArray);
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
         mactvRoom.setAdapter(spinnerArrayAdapter);
-
-
         mactvRoom.setThreshold(1);
         mactvRoom.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 

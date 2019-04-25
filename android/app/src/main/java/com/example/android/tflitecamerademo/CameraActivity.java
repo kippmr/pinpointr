@@ -359,9 +359,6 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
 
     public void GetLocalLocationData() {
         imageData.SetCampusLocation(GetLocalLocationDataFromCoordinates(this.imageData.GetLat(), this.imageData.GetLong()));
-        if (imageData.GetBuildingName() == "") {
-            imageData.SetCampusLocation("ETB");
-        }
     }
     public void GetBuildingDataFromFile() {
         String[] buildingFiles = null;
@@ -427,7 +424,6 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
         }
     }
     public boolean debugging = false;
-
     /**
      * Set the listeners for the camera button, back button, and send button
      */
@@ -603,7 +599,7 @@ public class CameraActivity extends AppCompatActivity implements ImageServiceCal
         AlertDialog alertDialog = new AlertDialog.Builder(CameraActivity.this).create();
         if(sentSuccessfully){
             alertDialog.setTitle("Success!");
-            alertDialog.setMessage("Your image was sent successfully.");
+            alertDialog.setMessage("Your image was sent successfully. Please wait a couple seconds for your image to be classified");
         }
         else{
             alertDialog.setTitle("Oops!");

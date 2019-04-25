@@ -55,7 +55,7 @@ public class TagListBottomFragment extends Fragment {
 
     //Add a new tag to the recycler view adapter
     private void addNewTagToList() {
-        adapter.addItem("New Tag");
+        adapter.addItem("");
     }
 
 
