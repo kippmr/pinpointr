@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using pinpointrAPI.Models;
 using pinpointrAPI.Helpers;
+using System.Net;
+using System.Net.Mail;
 
 namespace pinpointrAPI.Controllers
 {
@@ -22,6 +24,8 @@ namespace pinpointrAPI.Controllers
         // initialize database connection
         private readonly RDSContext _context;
         private readonly BucketConnection _bucket;
+
+        private string emailBody;
 
         /// <summary>
         /// Create database connection and AWS S3 Bucket connection
@@ -70,6 +74,8 @@ namespace pinpointrAPI.Controllers
         [HttpGet("[action]")]
         public IEnumerable<Submission> GetAllSubmissions()
         {
+            this.emailBody = "test";
+            sendEmail();
             return _context.Submission.ToList();
         }
 
@@ -123,33 +129,6 @@ namespace pinpointrAPI.Controllers
         }
 
         /// <summary>
-        /// Checks if location is within McMaster then determines if the location is in a building and tries determine a list of room numbers
-        /// </summary>
-        /// <param name="coordinates">lat/lon doubles</param>
-        /// <param name="image_url">image id from url</param>
-        /// <param name="altitude">in metres</param>
-        /// <returns>Building number and Room number is found, else null</returns>
-        [HttpGet("[action]")]
-        public async Task<IActionResult> VerifyLocation(List<double> coordinates, string image_url, double? altitude = null)
-        {
-            if (locationHelper.isInMcMaster(coordinates[0], coordinates[1]))
-            {
-                string building = null;
-                string room = null;
-                //check for building collisions here
-
-                Location location = new Location();
-                location.room_no = room;
-                location.building_no = building;
-
-                return Ok(location);
-            } else
-            {
-                return BadRequest("Location outside of McMaster");
-            }
-        }
-
-        /// <summary>
         /// Post submission and link tags through foriegn key
         /// </summary>
         /// <param name="user_id">id of submitting user</param>
@@ -167,6 +146,8 @@ namespace pinpointrAPI.Controllers
             // Validate coord format
             if (coordinates.Count() != 2)
                 return BadRequest("Must have two coordinates");
+            if (tags.Count() == 0)
+                return BadRequest("Must have at least one tag");
 
             Submission submission = new Submission()
             {
@@ -177,6 +158,7 @@ namespace pinpointrAPI.Controllers
                 is_completed = is_completed
             };
             
+
             _context.Submission.Add(submission);
 
             try 
@@ -188,21 +170,25 @@ namespace pinpointrAPI.Controllers
             }
 
             // give all distinct tags the submission_id
-            if (tags.Count() != 0)
+            List<Tag> distinct_tags = tags.GroupBy(x => x.name).Select(y => y.First()).ToList();
+            distinct_tags.Distinct().AsParallel().ForAll( tag => { tag.submission_id = submission.id; });
+
+            _context.Tag.AddRange(distinct_tags);
+
+            try 
             {
-                List<Tag> distinct_tags = tags.GroupBy(x => x.name).Select(y => y.First()).ToList();
-                distinct_tags.Distinct().AsParallel().ForAll( tag => { tag.submission_id = submission.id; });
-
-                _context.Tag.AddRange(distinct_tags);
-
-                try 
-                {
-                    await _context.SaveChangesAsync();
-                } catch (Exception ex)
-                {
-                    return BadRequest(ex);
-                }
+                await _context.SaveChangesAsync();
+            } catch (Exception ex)
+            {
+                return BadRequest(ex);
             }
+
+
+            emailBody = "New submission sent from user" + submission.user_id + "\n"
+                + "With image url: " + submission.image_url + "\n"
+                + "At coordinates: " + coordinates[0] + "," + coordinates[1] + "\n";
+
+            sendEmail();
 
             return CreatedAtAction("GetSubmission", new { submission.id }, submission);
         }
@@ -234,6 +220,33 @@ namespace pinpointrAPI.Controllers
             }
 
             return CreatedAtAction("GetSubmission", new { id }, submission);
+        }
+
+        public void sendEmail()
+        {
+            var fromAddress = new MailAddress("redrocketman117@gmail.com", "pinpointrSubmission");
+            var toAddress = new MailAddress("redrocketman117@gmail.com", "pinpointrSubmission");
+            const string fromPassword = "mcmasterpinpointr";
+            const string subject = "new Pinpointr Submission";
+
+            var smtp = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+            };
+
+            using (var message = new MailMessage(fromAddress, toAddress)
+            {
+                Subject = subject,
+                Body = emailBody
+            })
+            {
+                smtp.Send(message);
+            }
         }
 
     }
