@@ -193,7 +193,7 @@ namespace pinpointrAPI.Controllers
                 + "In building: " + building_name + ", room: " + room_number + "\n" + "Tags: ";
 
             foreach (var tag in distinct_tags)
-                emailBody += tag + ", ";
+                emailBody += tag.name + ", ";
             emailBody.Substring(emailBody.Length - 2);
 
             emailBody += "\n Comment: " + comment + "\n";
