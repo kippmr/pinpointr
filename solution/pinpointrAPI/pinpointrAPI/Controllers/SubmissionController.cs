@@ -141,7 +141,8 @@ namespace pinpointrAPI.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> PostSubmission([FromHeader] int user_id, [FromHeader] List<double> coordinates, 
         [FromBody] List<Tag> tags,
-        [FromHeader] string image_url = null, [FromHeader] double altitude = 0, [FromHeader] bool is_completed = false)
+        [FromHeader] string image_url = null, [FromHeader] double altitude = 0, [FromHeader] bool is_completed = false, 
+        [FromHeader] string building_name = null, [FromHeader] string room_number = null)
         {
             // Validate coord format
             if (coordinates.Count() != 2)
@@ -155,7 +156,9 @@ namespace pinpointrAPI.Controllers
                 image_url = image_url,
                 coordinates = new NpgsqlTypes.NpgsqlPoint(coordinates[0], coordinates[1]),
                 altitude = altitude,
-                is_completed = is_completed
+                is_completed = is_completed,
+                building_name = building_name,
+                room_number = room_number
             };
             
 
@@ -186,7 +189,8 @@ namespace pinpointrAPI.Controllers
 
             emailBody = "New submission sent from user" + submission.user_id + "\n"
                 + "With image url: " + submission.image_url + "\n"
-                + "At coordinates: " + coordinates[0] + "," + coordinates[1] + "\n";
+                + "At coordinates: " + coordinates[0] + "," + coordinates[1] + "\n"
+                + "In building: " + building_name + ", room: " + room_number + "\n";
 
             sendEmail();
 
