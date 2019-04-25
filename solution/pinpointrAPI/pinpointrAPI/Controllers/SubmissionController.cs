@@ -142,7 +142,7 @@ namespace pinpointrAPI.Controllers
         public async Task<IActionResult> PostSubmission([FromHeader] int user_id, [FromHeader] List<double> coordinates, 
         [FromBody] List<Tag> tags,
         [FromHeader] string image_url = null, [FromHeader] double altitude = 0, [FromHeader] bool is_completed = false, 
-        [FromHeader] string building_name = null, [FromHeader] string room_number = null)
+        [FromHeader] string building_name = null, [FromHeader] string room_number = null, [FromHeader] string comment = null)
         {
             // Validate coord format
             if (coordinates.Count() != 2)
@@ -158,7 +158,8 @@ namespace pinpointrAPI.Controllers
                 altitude = altitude,
                 is_completed = is_completed,
                 building_name = building_name,
-                room_number = room_number
+                room_number = room_number,
+                comment = comment
             };
             
 

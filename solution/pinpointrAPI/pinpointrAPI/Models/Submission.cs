@@ -13,6 +13,7 @@ namespace pinpointrAPI.Models
         public string image_url { get; set; }
         public string building_name { get; set; } = null;
         public string room_number { get; set; } = null;
+        public string comment { get; set; } = null;
         public NpgsqlPoint coordinates { get; set; }
         public double? altitude { get; set; } = 0;
         public bool is_completed { get; set; } = false;
