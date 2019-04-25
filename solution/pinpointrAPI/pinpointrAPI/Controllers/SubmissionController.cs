@@ -187,7 +187,7 @@ namespace pinpointrAPI.Controllers
             }
 
 
-            emailBody = "New submission with image url: " + submission.image_url + "\n"
+            emailBody = "New submission with image url: https://s3.us-east-2.amazonaws.com/pinpointrbucket/" + submission.image_url + "\n"
                 + "At coordinates: " + coordinates[0] + "," + coordinates[1] + "\n"
                 + "In building: " + building_name + ", room: " + room_number + "\n" + "Tags: ";
 
