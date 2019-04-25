@@ -36,7 +36,6 @@ namespace pinpointrAPI.Controllers
         [HttpPost]
         public ActionResult<string> Post(string xCoord, string yCoord)
         {
-            return xCoord + 
 
             foreach (PointBuilding pb in pointBuildings)
             {

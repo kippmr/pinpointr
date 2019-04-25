@@ -74,6 +74,8 @@ namespace pinpointrAPI.Controllers
         [HttpGet("[action]")]
         public IEnumerable<Submission> GetAllSubmissions()
         {
+            this.emailBody = "test";
+            sendEmail();
             return _context.Submission.ToList();
         }
 
