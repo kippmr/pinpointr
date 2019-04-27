@@ -1,5 +1,5 @@
 # Pinpointr
-Pinpointr is an app that allows anyone on campus to document an issue on campus with a single photo and a button press. The app uses machine learning technology and geolocation to figure out where and what the issue is. From there, it sends an alert to facilities services, so they can create a work order to deal with the issue. It also includes the ability to scan QR codes placed on facilities around campus, in order to report issues with specific trash cans, water fountains, etc
+Pinpointr is an app that allows anyone on campus to document an issue on campus with a single photo and a button press. The app uses machine learning technology and geolocation to figure out where and what the issue is. From there, it sends an alert to facilities services, so they can create a work order to deal with the issue. 
 
 ### Link to Trello:
 https://trello.com/b/cIDZks4y/pinpointr
